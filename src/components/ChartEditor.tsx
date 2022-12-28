@@ -5,6 +5,7 @@ import { FieldDataType } from '../../sharedTypes';
 import XYChart from './charts/BasicChart';
 import PieChart from './charts/PieChart';
 import { sampleData } from '../constants';
+import Papa from 'papaparse';
 
 type PropTypes = {
   ctx: RenderFieldExtensionCtx;
@@ -29,24 +30,37 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   function uploadFile(event) {
     let file = event.target.files[0];
-    console.log(file);
-    if (file) {
-      let formData = new FormData();
-      formData.append('file', file);
-      console.log(formData);
-      // format file
-    }
+
+    // Papa.parse(file, {
+    //   header: true,
+    //   skipEmptyLines: true,
+    //   complete: function (results) {
+    //     console.log('RESULTS DATA', results.data);
+    //     const rowsArray = [];
+    //     const valuesArray = [];
+
+    //     // Iterating data to get column name and their values
+    //     results.data.map((d) => {
+    //       rowsArray.push(Object.keys(d));
+    //       valuesArray.push(Object.values(d));
+    //     });
+    //     console.log('ROWS', rowsArray);
+    //     console.log('VALUES', valuesArray);
+    //   },
+    // });
   }
 
   return (
     <Canvas ctx={ctx}>
       <div>
-        <input
-          type="file"
-          name="file"
-          accept=".csv"
-          onChange={(e) => uploadFile(e)}
-        />
+        <div style={{ margin: '10px 0', display: 'block' }}>
+          <input
+            type="file"
+            name="file"
+            accept=".csv"
+            onChange={(e) => uploadFile(e)}
+          />
+        </div>
         <select
           value={chartKind}
           onChange={(e) => handleChangeChartKind(e.target.value)}
