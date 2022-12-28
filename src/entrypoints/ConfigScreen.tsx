@@ -25,7 +25,6 @@ export default function ConfigScreen({ ctx }: Props) {
           ctx.notice('Settings updated successfully!');
         }}
       />
-
       <div className={s.inspector}>
         <ContextInspector />
       </div>

@@ -32,3 +32,6 @@ export type FieldDataType = {
     series: SerieType[];
   };
 };
+
+
+
