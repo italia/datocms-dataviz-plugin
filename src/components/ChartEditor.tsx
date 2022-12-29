@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RenderFieldExtensionCtx } from 'datocms-plugin-sdk';
 import { Canvas, Button, SwitchField } from 'datocms-react-ui';
-import { FieldDataType } from '../../sharedTypes';
+// import { FieldDataType } from '../../sharedTypes';
 import XYChart from './charts/BasicChart';
 import PieChart from './charts/PieChart';
 import { sampleData } from '../constants';
