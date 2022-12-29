@@ -13,6 +13,7 @@ type PropTypes = {
 
 export default function ChartEditor({ ctx }: PropTypes) {
   let currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string);
+  const [loadedData, setLoadedData] = useState(null);
   const [chartKind, setChartKind] = useState(
     currentValue?.config?.kind || null
   );
@@ -31,28 +32,69 @@ export default function ChartEditor({ ctx }: PropTypes) {
   function uploadFile(event) {
     let file = event.target.files[0];
 
-    // Papa.parse(file, {
-    //   header: true,
-    //   skipEmptyLines: true,
-    //   complete: function (results) {
-    //     console.log('RESULTS DATA', results.data);
-    //     const rowsArray = [];
-    //     const valuesArray = [];
+    Papa.parse(file, {
+      header: false,
+      skipEmptyLines: true,
+      complete: (results) => {
+        console.log('RESULTS DATA', results.data);
+        setLoadedData(results.data);
+        const data = toDataSource(results.data);
+        saveData(JSON.stringify(data));
+      },
+    });
+  }
+  function transpose() {
+    const transposed = loadedData[0].map((_, colIndex) =>
+      loadedData.map((row) => row[colIndex])
+    );
+    setLoadedData(transposed);
+    const data = toDataSource(transposed);
+    saveData(JSON.stringify(data));
+  }
 
-    //     // Iterating data to get column name and their values
-    //     results.data.map((d) => {
-    //       rowsArray.push(Object.keys(d));
-    //       valuesArray.push(Object.values(d));
-    //     });
-    //     console.log('ROWS', rowsArray);
-    //     console.log('VALUES', valuesArray);
-    //   },
-    // });
+  function toDataSource(parsed) {
+    const categories = parsed[0].slice(1);
+    const series = parsed.slice(1).map((row) => {
+      const [name, ...data] = row;
+      return {
+        type: 'bar',
+        name,
+        data,
+      };
+    });
+    const dataSource = {
+      categories,
+      series,
+    };
+    console.log('dataSource', dataSource);
+
+    return { ...sampleData, dataSource };
   }
 
   return (
     <Canvas ctx={ctx}>
       <div>
+        <table style={{ border: '1px solid lightgray' }}>
+          {loadedData &&
+            loadedData.map((row, index) => {
+              return (
+                <tr key={index}>
+                  {row.map((cell, ii) => (
+                    <td
+                      key={cell}
+                      style={{
+                        borderLeft: ii ? '1px solid black' : '',
+                        borderBottom: '1px solid black',
+                      }}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+        </table>
+        {loadedData && <button onClick={() => transpose()}>transpose</button>}
         <div style={{ margin: '10px 0', display: 'block' }}>
           <input
             type="file"
@@ -82,13 +124,13 @@ export default function ChartEditor({ ctx }: PropTypes) {
                   >
                     Reset
                   </Button>
-                  <Button
+                  {/* <Button
                     type="button"
                     onClick={() => saveData(JSON.stringify(sampleData))}
                     buttonSize="xxs"
                   >
                     Set Sample data
-                  </Button>
+                  </Button> */}
                 </div>
                 {currentValue?.config && (
                   <div>
