@@ -30,13 +30,23 @@ function BasicChart({ data }: ChartPropsType) {
   const options = {
     color: data.config.colors,
     ...axis,
-    series: data.dataSource.series,
+    series: data.dataSource.series.map((serie) => {
+      return {
+        ...serie,
+        smooth: true,
+      };
+    }),
     textStyle: {
       //  fontFamily: 'Roboto Mono',
       fontWeight: 'bold',
       fontSize: 12,
     },
-    tooltip: {},
+    tooltip: {
+      // trigger: 'axis',
+      // axisPointer: {
+      //   type: 'cross',
+      // },
+    },
     legend: {
       left: 'center',
       top: 'top',
@@ -56,7 +66,11 @@ function BasicChart({ data }: ChartPropsType) {
   return (
     <ReactEcharts
       option={options}
-      style={{ width: '100%', maxWidth: data.config.w, height: data.config.h }}
+      style={{
+        width: data.config.w,
+        height: data.config.h,
+        maxWidth: '100%',
+      }}
     />
   );
 }

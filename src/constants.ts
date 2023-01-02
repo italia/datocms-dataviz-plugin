@@ -5,7 +5,7 @@ export const sampleData: FieldDataType = {
     titles: [],
     colors: ['#5c6f82', '#BFDFFF', '#207BD6', '#004D99', '#6AAAEB'],
     direction: 'vertical',
-    h: 300,
+    h: 500,
     w: 900,
     kind: 'xy',
     serieKind: 'bar',

@@ -81,7 +81,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
         categories: [],
         series: {
           type: 'pie',
-          radius: ['40%', '70%'],
+          radius: ['50%', '85%'],
           avoidLabelOverlap: false,
           label: {
             show: true,

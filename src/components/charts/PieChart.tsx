@@ -57,7 +57,11 @@ function PieChart({ data }: ChartPropsType) {
   return (
     <ReactEcharts
       option={options}
-      style={{ width: '100%', maxWidth: data.config.w, height: data.config.h }}
+      style={{
+        width: data.config.w,
+        height: data.config.h,
+        maxWidth: '100%',
+      }}
     />
   );
 }
