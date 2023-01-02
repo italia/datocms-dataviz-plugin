@@ -26,12 +26,10 @@ export type FieldDataType = {
     w: number;
     kind: string;
     serieKind: string;
+    titles: string[];
   };
   dataSource: {
     categories: string[];
     series: SerieType[];
   };
 };
-
-
-

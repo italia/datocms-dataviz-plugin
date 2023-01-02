@@ -2,6 +2,7 @@ import type { FieldDataType } from '../sharedTypes';
 
 export const sampleData: FieldDataType = {
   config: {
+    titles: [],
     colors: ['#5c6f82', '#BFDFFF', '#207BD6', '#004D99', '#6AAAEB'],
     direction: 'vertical',
     h: 300,

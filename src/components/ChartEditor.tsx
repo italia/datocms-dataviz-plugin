@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { RenderFieldExtensionCtx } from 'datocms-plugin-sdk';
 import { Canvas, Button, SwitchField } from 'datocms-react-ui';
-// import { FieldDataType } from '../../sharedTypes';
 import XYChart from './charts/BasicChart';
 import PieChart from './charts/PieChart';
 import { sampleData } from '../constants';
@@ -19,7 +18,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
   );
   const saveData = (data: string | null) => {
     ctx.setFieldValue(ctx.fieldPath, data);
-    ctx.notice(`${ctx.fieldPath} Saved`);
+    // ctx.notice(`${ctx.fieldPath} Saved`);
   };
 
   function handleChangeChartKind(kind) {
@@ -44,6 +43,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
     });
   }
   function transpose() {
+    reset();
     const transposed = loadedData[0].map((_, colIndex) =>
       loadedData.map((row) => row[colIndex])
     );
@@ -52,8 +52,11 @@ export default function ChartEditor({ ctx }: PropTypes) {
     saveData(JSON.stringify(data));
   }
 
+  function reset() {
+    saveData(null);
+  }
   function toDataSource(parsed) {
-    const categories = parsed[0].slice(1);
+    const categories = parsed[0].slice(1) || [];
     const series = parsed.slice(1).map((row) => {
       const [name, ...data] = row;
       return {
@@ -69,6 +72,30 @@ export default function ChartEditor({ ctx }: PropTypes) {
     console.log('dataSource', dataSource);
 
     return { ...sampleData, dataSource };
+  }
+
+  function getPieValues(data) {
+    return {
+      ...data,
+      dataSource: {
+        categories: [],
+        series: {
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: 'inside',
+          },
+          labelLine: {
+            show: false,
+          },
+          data: data.dataSource.series.map((row) => {
+            return { name: row.name, value: row.data[0] };
+          }),
+        },
+      },
+    };
   }
 
   return (
@@ -103,6 +130,18 @@ export default function ChartEditor({ ctx }: PropTypes) {
             onChange={(e) => uploadFile(e)}
           />
         </div>
+        <div>
+          <Button type="button" onClick={() => reset()} buttonSize="xxs">
+            Reset
+          </Button>
+          {/* <Button
+                    type="button"
+                    onClick={() => saveData(JSON.stringify(sampleData))}
+                    buttonSize="xxs"
+                  >
+                    Set Sample data
+                  </Button> */}
+        </div>
         <select
           value={chartKind}
           onChange={(e) => handleChangeChartKind(e.target.value)}
@@ -113,71 +152,59 @@ export default function ChartEditor({ ctx }: PropTypes) {
         </select>
         {chartKind && (
           <>
-            {chartKind === 'pie' && <PieChart />}
-            {chartKind === 'xy' && (
-              <>
-                <div>
-                  <Button
-                    type="button"
-                    onClick={() => saveData(null)}
-                    buttonSize="xxs"
-                  >
-                    Reset
-                  </Button>
-                  {/* <Button
-                    type="button"
-                    onClick={() => saveData(JSON.stringify(sampleData))}
-                    buttonSize="xxs"
-                  >
-                    Set Sample data
-                  </Button> */}
-                </div>
-                {currentValue?.config && (
-                  <div>
-                    <SwitchField
-                      id="01"
-                      name="Direction"
-                      label="Switch direction?"
-                      hint="off = horizontal, on = vertical"
-                      value={
-                        currentValue.config.direction
-                          ? currentValue.config.direction === 'vertical'
-                          : false
-                      }
-                      onChange={(newValue) => {
-                        currentValue.config.direction = newValue
-                          ? 'vertical'
-                          : 'horizontal';
-
-                        saveData(JSON.stringify(currentValue));
-                      }}
-                    />
-                    <SwitchField
-                      id="02"
-                      name="SerieKind"
-                      label="Bars or Lines"
-                      hint="off = bars, on = lines"
-                      value={
-                        currentValue.config.serieKind
-                          ? currentValue.config.serieKind === 'line'
-                          : false
-                      }
-                      onChange={(newValue) => {
-                        const selection = newValue ? 'line' : 'bar';
-                        currentValue.config.serieKind = selection;
-                        currentValue.dataSource.series = currentValue.dataSource.series.map(
-                          (s) => {
-                            s.type = selection;
-                            return s;
-                          }
-                        );
-                        saveData(JSON.stringify(currentValue));
-                      }}
-                    />
-                  </div>
+            {chartKind === 'pie' && currentValue?.config && (
+              <div>
+                {currentValue?.dataSource && (
+                  <PieChart data={getPieValues(currentValue)} />
                 )}
+              </div>
+            )}
+            {chartKind === 'xy' && currentValue?.config && (
+              <div>
+                <div>
+                  <SwitchField
+                    id="01"
+                    name="Direction"
+                    label="Switch direction?"
+                    hint="off = horizontal, on = vertical"
+                    value={
+                      currentValue.config.direction
+                        ? currentValue.config.direction === 'vertical'
+                        : false
+                    }
+                    onChange={(newValue) => {
+                      currentValue.config.direction = newValue
+                        ? 'vertical'
+                        : 'horizontal';
+
+                      saveData(JSON.stringify(currentValue));
+                    }}
+                  />
+                  <SwitchField
+                    id="02"
+                    name="SerieKind"
+                    label="Bars or Lines"
+                    hint="off = bars, on = lines"
+                    value={
+                      currentValue.config.serieKind
+                        ? currentValue.config.serieKind === 'line'
+                        : false
+                    }
+                    onChange={(newValue) => {
+                      const selection = newValue ? 'line' : 'bar';
+                      currentValue.config.serieKind = selection;
+                      currentValue.dataSource.series = currentValue.dataSource.series.map(
+                        (s) => {
+                          s.type = selection;
+                          return s;
+                        }
+                      );
+                      saveData(JSON.stringify(currentValue));
+                    }}
+                  />
+                </div>
                 {currentValue?.dataSource && <XYChart data={currentValue} />}
-              </>
+              </div>
             )}
           </>
         )}
