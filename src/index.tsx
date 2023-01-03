@@ -35,7 +35,6 @@ connect({
     switch (fieldExtensionId) {
       case 'chartEditor':
         return render(<ChartEditor ctx={ctx} />);
-
       // case 'loremIpsumGenerator':
       //   return render(<LoremIpsumGenerator ctx={ctx} />);
     }
