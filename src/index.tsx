@@ -12,11 +12,15 @@ import ConfigScreen from './entrypoints/ConfigScreen';
 import 'datocms-react-ui/styles.css';
 import ChartEditor from './components/ChartEditor';
 import { Canvas } from 'datocms-react-ui';
-// import LoremIpsumGenerator from './components/LoremIpsumGenerator';
+import Kpi from './components/Kpi';
+import './index.css';
 
+import 'bootstrap-italia/dist/css/bootstrap-italia.min.css';
 connect({
   itemFormOutlets(itemType: ItemType, ctx: IntentCtx) {
-    // if (itemType.attributes.api_key !== 'kpi_element') {return [];}
+    if (itemType.attributes.api_key !== 'kpi_element') {
+      return [];
+    }
     return [
       {
         id: 'myOutlet',
@@ -25,7 +29,13 @@ connect({
     ];
   },
   renderItemFormOutlet(outletId: string, ctx: RenderItemFormOutletCtx) {
-    return render(<Canvas ctx={ctx}>Hello from the outlet!</Canvas>);
+    return render(
+      <Canvas ctx={ctx}>
+        <div>
+          <Kpi el={ctx.formValues} />
+        </div>
+      </Canvas>
+    );
   },
   renderConfigScreen(ctx) {
     return render(<ConfigScreen ctx={ctx} />);
