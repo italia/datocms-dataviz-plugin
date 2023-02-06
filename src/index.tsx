@@ -1,16 +1,32 @@
 import {
   connect,
   FieldIntentCtx,
+  IntentCtx,
   Field,
   RenderFieldExtensionCtx,
+  RenderItemFormOutletCtx,
+  ItemType,
 } from 'datocms-plugin-sdk';
 import { render } from './utils/render';
 import ConfigScreen from './entrypoints/ConfigScreen';
 import 'datocms-react-ui/styles.css';
 import ChartEditor from './components/ChartEditor';
+import { Canvas } from 'datocms-react-ui';
 // import LoremIpsumGenerator from './components/LoremIpsumGenerator';
 
 connect({
+  itemFormOutlets(itemType: ItemType, ctx: IntentCtx) {
+    // if (itemType.attributes.api_key !== 'kpi_element') {return [];}
+    return [
+      {
+        id: 'myOutlet',
+        initialHeight: 100,
+      },
+    ];
+  },
+  renderItemFormOutlet(outletId: string, ctx: RenderItemFormOutletCtx) {
+    return render(<Canvas ctx={ctx}>Hello from the outlet!</Canvas>);
+  },
   renderConfigScreen(ctx) {
     return render(<ConfigScreen ctx={ctx} />);
   },
