@@ -35,7 +35,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
       header: false,
       skipEmptyLines: true,
       complete: (results) => {
-        console.log('RESULTS DATA', results.data);
         setLoadedData(results.data);
         const data = toDataSource(results.data);
         saveData(JSON.stringify(data));
