@@ -17,7 +17,7 @@ export function transposeData(data) {
   return data[0].map((_, colIndex) => data.map((row) => row[colIndex]));
 }
 
-export function toDataSource(parsed, config = {}) {
+export function toDataSource(parsed, config = {}, chart = 'bar') {
   const categories = parsed[0].slice(1) || [];
   const series = parsed.slice(1).map((row) => {
     const [name, ...data] = row;
@@ -32,9 +32,13 @@ export function toDataSource(parsed, config = {}) {
     series,
   };
   const cfg = { config: { ...sampleData.config, ...config } };
-  const transformed = { ...sampleData, ...cfg, dataSource };
+  const transformed = {
+    ...sampleData,
+    ...cfg,
+    dataSource,
+  };
   // console.log('transformed', transformed);
-  return transformed;
+  return { ...transformed, data: parsed, chart };
 }
 
 export function getBarValues(data) {

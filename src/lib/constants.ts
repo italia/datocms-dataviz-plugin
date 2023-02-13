@@ -1,4 +1,4 @@
-import type { FieldDataType } from 'sharedTypes';
+import type { FieldDataType } from '../sharedTypes';
 /*
 sample: ['#5c6f82', '#BFDFFF', '#207BD6', '#004D99', '#6AAAEB'],
 blue: ['#4392E0', '#207AD5', '#0066CC', '#004D99', '#004080', '#003366'],
@@ -91,6 +91,8 @@ export const sampleData: FieldDataType = {
     zoom: 'none',
     axisPointer: 'line',
   },
+  data: null,
+  chart: 'bar',
   dataSource: {
     categories: [],
     series: [

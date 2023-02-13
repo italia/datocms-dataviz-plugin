@@ -12,27 +12,13 @@ function UploadCSV({ setData }) {
       complete: (results) => {
         console.log('RESULTS DATA', results.data);
         setData(results.data);
-        // const data = results.data.map((row, i) => {
-        //   if (i === 0) {
-        //     return row;
-        //   } else {
-        //     return row.map((cell, index) => {
-        //       if (index === 0) {
-        //         return cell;
-        //       } else {
-        //         return Number(cell);
-        //       }
-        //     });
-        //   }
-        // });
-        // setData(data);
       },
     });
   }
 
   return (
-    <div className="w-full px-10">
-      <div className="m-10 border-2">
+    <div>
+      <div>
         <p>Upload a csv</p>
         <input
           className="input"

@@ -1,24 +1,5 @@
 import ReactEcharts from 'echarts-for-react';
-import { FieldDataType } from '../../../sharedTypes';
-
-// const options = {
-//   series: [
-//     {
-//       name: 'Access From',
-//       type: 'pie',
-//       radius: ['40%', '70%'],
-//       avoidLabelOverlap: false,
-//       label: {
-//         show: true,
-//         position: 'inside',
-//       },
-//       labelLine: {
-//         show: false,
-//       },
-//       data: myData,
-//     },
-//   ],
-// };
+import { FieldDataType } from '../../sharedTypes';
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -34,25 +15,27 @@ function PieChart({ data }: ChartPropsType) {
     color: data.config.colors,
     series: data.dataSource.series,
     textStyle: {
-      //  fontFamily: 'Roboto Mono',
-      fontWeight: 'bold',
-      fontSize: 12,
+      fontWeight: '600',
+      fontSize: 14,
     },
-    tooltip: {},
+    tooltip: {
+      show: data.config.tooltip,
+    },
     legend: {
       left: 'center',
       top: 'top',
+      show: data.config.legend,
     },
-    toolbox: {
-      show: true,
-      left: 'right',
-      top: 'top',
-      feature: {
-        // dataView: {},
-        // restore: {},
-        saveAsImage: {},
-      },
-    },
+    // toolbox: {
+    //   show: data.config.toolbox,
+    //   left: 'right',
+    //   top: 'top',
+    //   feature: {
+    //     // dataView: {},
+    //     // restore: {},
+    //     saveAsImage: {},
+    //   },
+    // },
   };
   return (
     <ReactEcharts

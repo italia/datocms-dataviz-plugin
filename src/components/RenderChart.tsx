@@ -10,19 +10,23 @@ import {
   getPalette,
 } from '../lib/utils';
 
-function RenderChart({ chart, data, config }) {
-  function transformData(d, cfg) {
+function RenderChart({ chart, data, config, saveData }) {
+  function transformData(d, cfg, c) {
     if (!d) return null;
     // console.log('add config');
-    return toDataSource(d, cfg);
+    return toDataSource(d, cfg, c);
   }
 
-  const [currentValue, setCurrentValue] = useState(transformData(data, config));
+  const [currentValue, setCurrentValue] = useState(
+    transformData(data, config, chart)
+  );
 
   useEffect(() => {
     // console.log('CHANGE');
     if (chart && data && config) {
-      setCurrentValue(transformData(data, config));
+      let value = transformData(data, config, chart);
+      setCurrentValue(value);
+      saveData(JSON.stringify(value));
     }
   }, [chart, data, config]);
 

@@ -15,14 +15,21 @@ function TransformSource({ setData, rawData }) {
     watch,
     formState: { errors },
   } = useForm();
+
+  type ItemType = {
+    value: number;
+    x: string;
+    y: string;
+  };
+
   const onSubmit = (data) => {
     console.log(data);
 
     const { value, x, y } = data;
-    const items = rawData.map((r) => {
+    const items: ItemType[] = rawData.map((r: any) => {
       return {
-        x: r[x],
-        y: r[y],
+        x: r[x] as string,
+        y: r[y] as string,
         value: Number(r[value]),
       };
     });
@@ -31,6 +38,7 @@ function TransformSource({ setData, rawData }) {
     //   x: items.map((i) => i.x).sort(),
     //   y: items.map((i) => i.y).sort(),
     // });
+
     const xLabels = [...new Set(items.map((i) => i.x))].sort();
     console.log('x', xLabels, xLabels.length);
     const yLabels = [...new Set(items.map((i) => i.y))].sort();

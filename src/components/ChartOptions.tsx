@@ -1,16 +1,21 @@
-import { Button } from 'datocms-react-ui';
+import { Canvas, Button } from 'datocms-react-ui';
 import { useForm } from 'react-hook-form';
 import { palettes } from '../lib/constants';
 import { getAvailablePalettes } from '../lib/utils';
 
 function ShowPalette({ palette }) {
   return (
-    <div className="flex flex-wrap">
+    <div style={{ display: 'flex', flexWrap: 'wrap', margin: '10px 0' }}>
       {palette.map((p, i) => (
         <div
           key={i}
-          className="w-4 h-4 m-1 rounded-full"
-          style={{ backgroundColor: p }}
+          style={{
+            width: 8,
+            height: 8,
+            margin: 2,
+            borderRadius: 10,
+            backgroundColor: p,
+          }}
         ></div>
       ))}
     </div>
@@ -45,6 +50,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
       defaultValue: defaultPalette,
+      layout: 'single',
     },
     {
       label: 'Chart Height',
@@ -56,6 +62,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       },
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
+      layout: '',
     },
     {
       label: 'Chart Width',
@@ -67,6 +74,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       },
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
+      layout: '',
     },
     {
       label: 'Show Legend',
@@ -76,6 +84,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
       otherProps: {},
+      layout: '',
     },
     {
       label: 'Show tooltip',
@@ -85,15 +94,18 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
       otherProps: {},
+      layout: '',
     },
     {
-      label: 'Cross Pointer',
-      name: 'axisPointer',
+      label: 'Direction',
+      name: 'direction',
       type: 'select',
-      options: ['line', 'cross', 'shadow', 'none'],
-      required: false,
-      chartType: ['bar', 'line'],
+      options: ['vertical', 'horizontal'],
       otherProps: {},
+      required: false,
+      placeholder: 'Chart Direction',
+      chartType: ['bar', 'line'],
+      layout: '',
     },
     {
       label: 'Data Zoom',
@@ -105,16 +117,6 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       otherProps: {},
     },
     {
-      label: 'Direction',
-      name: 'direction',
-      type: 'select',
-      options: ['vertical', 'horizontal'],
-      otherProps: {},
-      required: false,
-      placeholder: 'Chart Direction',
-      chartType: ['bar', 'line'],
-    },
-    {
       label: 'Smooth Lines',
       name: 'smooth',
       type: 'checkbox',
@@ -122,6 +124,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       required: false,
       chartType: ['line'],
       otherProps: {},
+      layout: '',
     },
   ];
 
@@ -138,62 +141,86 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
     return <div my-10>Please choose a chart type</div>;
   }
   return (
-    <div className="w-full my-10">
-      <div>NUMERO SERIE : {numSeries}</div>
+    <div>
+      {/* <div>NUMERO SERIE : {numSeries}</div> */}
       {watchPalette && <ShowPalette palette={palettes[watchPalette]} />}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {fields
-          .filter((field) => field.chartType.includes(chart))
-          .map((field) => {
-            if (['text', 'email', 'number'].includes(field.type)) {
-              return (
-                <div className="my-2 grid grid-cols-2 gap-2" key={field.name}>
-                  <label>{field.label}</label>
-                  <input
-                    type={field.type}
-                    {...register(field.name, { required: field.required })}
-                    {...field.otherProps}
-                  />
-                  {errors[field.name] && <span>This field is required</span>}
-                </div>
-              );
-            } else if (['checkbox'].includes(field.type)) {
-              return (
-                <div className="my-2 grid grid-cols-2 gap-2" key={field.name}>
-                  <label>{field.label}</label>
-                  <div className="px-4">
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gridGap: 10,
+          }}
+        >
+          {fields
+            .filter((field) => field.chartType.includes(chart))
+            .map((field) => {
+              if (['text', 'email', 'number'].includes(field.type)) {
+                let style = {};
+                if (field.layout === 'single') {
+                  style = { gridColumn: 'span 2' };
+                }
+                return (
+                  <div key={field.name} style={style}>
+                    <label>{field.label}</label>
                     <input
-                      type="checkbox"
+                      type={field.type}
                       {...register(field.name, { required: field.required })}
+                      {...field.otherProps}
                     />
+                    {errors[field.name] && <span>This field is required</span>}
                   </div>
-                  {errors[field.name] && <span>This field is required</span>}
-                </div>
-              );
-            } else if (['select'].includes(field.type)) {
-              return (
-                <div className="my-2 grid grid-cols-2 gap-2" key={field.name}>
-                  <label>{field.label}</label>
-                  <select
-                    {...register(field.name, { required: field.required })}
-                  >
-                    {field.options.map((option) => {
-                      return (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  {errors[field.name] && <span>This field is required</span>}
-                </div>
-              );
-            } else {
-              return <div>{field.name}</div>;
-            }
-          })}
+                );
+              } else if (['checkbox'].includes(field.type)) {
+                let style = {};
+                if (field.layout === 'single') {
+                  style = { gridColumn: 'span 2' };
+                }
+                return (
+                  <div key={field.name} style={style}>
+                    <label>{field.label}</label>
+                    <div>
+                      <input
+                        type="checkbox"
+                        {...register(field.name, { required: field.required })}
+                      />
+                    </div>
+                    {errors[field.name] && <span>This field is required</span>}
+                  </div>
+                );
+              } else if (['select'].includes(field.type)) {
+                let style = {};
+                if (field.layout === 'single') {
+                  style = { gridColumn: 'span 2' };
+                }
+                return (
+                  <div key={field.name} style={style}>
+                    <div>{field.label}</div>
+                    <select
+                      {...register(field.name, { required: field.required })}
+                    >
+                      {field.options.map((option) => {
+                        return (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    {errors[field.name] && <span>This field is required</span>}
+                  </div>
+                );
+              } else {
+                let style = {};
+                if (field.layout === 'single') {
+                  style = { gridColumn: 'span 2' };
+                }
+                return <div style={style}>{field.name}</div>;
+              }
+            })}
+        </div>
         <div className="my-2">
-          <input type="submit" value="Submit" className="btn" />
+          <Button type="submit">Applica</Button>
         </div>
       </form>
     </div>
