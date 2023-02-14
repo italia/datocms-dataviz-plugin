@@ -8,6 +8,7 @@ import {
   ToolbarStack,
   ButtonGroup,
   ButtonGroupButton,
+  Section,
 } from 'datocms-react-ui';
 import { useMachine } from '@xstate/react';
 
@@ -34,6 +35,8 @@ export default function ChartEditor({ ctx }: PropTypes) {
     ctx.setFieldValue(ctx.fieldPath, data);
     // ctx.notice(`${ctx.fieldPath} Saved`);
   };
+  const [isTableOpen, setTableOpen] = useState<boolean>(false);
+  const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
 
   const [state, send] = useMachine(stateMachine);
   const config = useStoreState((state) => state.config);
@@ -59,6 +62,12 @@ export default function ChartEditor({ ctx }: PropTypes) {
     setData(null);
     saveData(null);
   }
+
+  function handleUploadData(data) {
+    reset();
+    setData(data);
+  }
+
   function transpose() {
     setData(null);
     const transposed = transposeData(data);
@@ -84,69 +93,84 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   return (
     <Canvas ctx={ctx}>
-      <div>
+      <>
         {data != null && data[0] && (
-          <div>
+          <Section
+            title="Data Table"
+            collapsible={{
+              isOpen: isTableOpen,
+              onToggle: () => setTableOpen((v) => !v),
+            }}
+          >
             <center>
               <DataTable data={data} reset={reset} transpose={transpose} />
             </center>
-          </div>
+          </Section>
         )}
-        <Toolbar>
-          <ToolbarStack stackSize="l">
-            <ToolbarTitle>Setup Chart</ToolbarTitle>
-            <div style={{ flex: '1' }} />
-            <ButtonGroup>
-              <ButtonGroupButton
-                selected={state.matches('upload')}
-                onClick={() => send('UPLOAD')}
-              >
-                Upload
-              </ButtonGroupButton>
-              <ButtonGroupButton
-                selected={state.matches('choose')}
-                onClick={() => send('CHOOSE')}
-              >
-                Choose
-              </ButtonGroupButton>
-              <ButtonGroupButton
-                selected={state.matches('settings')}
-                onClick={() => send('SETTINGS')}
-              >
-                Configure
-              </ButtonGroupButton>
-            </ButtonGroup>
-          </ToolbarStack>
-        </Toolbar>
-        <div
-          style={{
-            flex: '1',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            background: 'var(--light-bg-color)',
-            padding: '10px',
+        <Section
+          title="Configure Chart"
+          collapsible={{
+            isOpen: isConfigOpen,
+            onToggle: () => setConfigOpen((v) => !v),
           }}
         >
-          <div>
-            {state.matches('upload') && (
-              <CSVUpload setData={(d) => setData(d)} />
-            )}
-            {state.matches('choose') && (
-              <SelectChart chart={chart} setChart={setChart} />
-            )}
-            {state.matches('settings') && (
-              <ChartOptions
-                config={config}
-                setConfig={setConfig}
-                chart={chart}
-                numSeries={data?.length - 1 || 0}
-              />
-            )}
+          <Toolbar>
+            <ToolbarStack stackSize="l">
+              <ToolbarTitle>Setup Chart</ToolbarTitle>
+              <div style={{ flex: '1' }} />
+              <ButtonGroup>
+                <ButtonGroupButton
+                  selected={state.matches('upload')}
+                  onClick={() => send('UPLOAD')}
+                >
+                  Upload
+                </ButtonGroupButton>
+                <ButtonGroupButton
+                  selected={state.matches('choose')}
+                  onClick={() => send('CHOOSE')}
+                >
+                  Choose
+                </ButtonGroupButton>
+                <ButtonGroupButton
+                  selected={state.matches('settings')}
+                  onClick={() => send('SETTINGS')}
+                >
+                  Configure
+                </ButtonGroupButton>
+              </ButtonGroup>
+            </ToolbarStack>
+          </Toolbar>
+          <div
+            style={{
+              flex: '1',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              background: '#fff', //'var(--light-bg-color)',
+              padding: '10px',
+            }}
+          >
+            <div>
+              {state.matches('upload') && (
+                <CSVUpload setData={(d) => handleUploadData(d)} />
+              )}
+              {state.matches('choose') && (
+                <SelectChart chart={chart} setChart={setChart} />
+              )}
+              {state.matches('settings') && (
+                <ChartOptions
+                  config={config}
+                  setConfig={setConfig}
+                  chart={chart}
+                  numSeries={data?.length - 1 || 0}
+                />
+              )}
+            </div>
           </div>
-        </div>
+        </Section>
+        <hr style={{ marginBottom: 10 }} />
         {data != null && data[0] && (
-          <div>
+          <div style={{ marginTop: 10 }}>
             <center>
               <RenderChart
                 chart={chart}
@@ -157,7 +181,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
             </center>
           </div>
         )}
-      </div>
+      </>
     </Canvas>
   );
 }

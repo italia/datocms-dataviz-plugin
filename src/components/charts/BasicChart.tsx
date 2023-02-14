@@ -9,19 +9,37 @@ type ChartPropsType = {
 
 function BasicChart({ data }: ChartPropsType, id: string) {
   const refCanvas = useRef<ReactEcharts>();
+
+  const zoom = data.config.zoom;
+  let optionals = { x: {}, y: {} };
+  if (zoom !== 'none') {
+    const dataZoom = [
+      {
+        show: data.config.zoom != 'none',
+        realtime: true,
+        start: 0,
+        end: 100,
+        xAxisIndex: [0, 1],
+        type: data.config.zoom === 'slider' ? 'slider' : 'inside',
+      },
+      {
+        show: data.config.zoom != 'none',
+        realtime: true,
+        start: 0,
+        end: 100,
+        yAxisIndex: [0, 1],
+        type: data.config.zoom === 'slider' ? 'slider' : 'inside',
+      },
+    ];
+    if (data.config.direction === 'vertical') {
+      optionals.x = { dataZoom };
+    } else {
+      optionals.y = { dataZoom };
+    }
+  }
   const axis =
     data.config.direction === 'vertical'
       ? {
-          dataZoom: [
-            {
-              show: data.config.zoom !== 'none',
-              realtime: true,
-              start: 0,
-              end: 100,
-              xAxisIndex: [0, 1],
-              type: data.config.zoom === 'slider' ? 'slider' : 'inside',
-            },
-          ],
           xAxis: {
             type: 'category',
             data: data.dataSource.categories,
@@ -42,16 +60,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           },
         }
       : {
-          dataZoom: [
-            {
-              show: data.config.zoom !== 'none',
-              realtime: true,
-              start: 0,
-              end: 100,
-              yAxisIndex: [0, 1],
-              type: data.config.zoom === 'slider' ? 'slider' : 'inside',
-            },
-          ],
           yAxis: {
             type: 'category',
             data: data.dataSource.categories,
