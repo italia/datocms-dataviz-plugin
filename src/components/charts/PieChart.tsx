@@ -6,43 +6,35 @@ type ChartPropsType = {
 };
 
 function PieChart({ data }: ChartPropsType) {
+  const { config, dataSource } = data;
+
   const options = {
     title: {
-      text: data.config?.titles?.join('\n') || 'PIE CHART',
+      text: config?.titles?.join('\n') || 'PIE CHART',
       left: 'center',
       top: 'center',
     },
-    color: data.config.colors,
-    series: data.dataSource.series,
+    color: config.colors,
+    series: dataSource.series,
     textStyle: {
       fontWeight: '600',
       fontSize: 14,
     },
     tooltip: {
-      show: data.config.tooltip,
+      show: config.tooltip,
     },
     legend: {
       left: 'center',
-      top: 'top',
-      show: data.config.legend,
+      top: 'bottom',
+      show: config.legend,
     },
-    // toolbox: {
-    //   show: data.config.toolbox,
-    //   left: 'right',
-    //   top: 'top',
-    //   feature: {
-    //     // dataView: {},
-    //     // restore: {},
-    //     saveAsImage: {},
-    //   },
-    // },
   };
   return (
     <ReactEcharts
       option={options}
       style={{
-        width: data.config.w,
-        height: data.config.h,
+        width: config.w,
+        height: config.h,
         maxWidth: '100%',
       }}
     />
