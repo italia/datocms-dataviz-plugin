@@ -17,12 +17,12 @@ export function transposeData(data) {
   return data[0].map((_, colIndex) => data.map((row) => row[colIndex]));
 }
 
-export function toDataSource(parsed, config = {}, chart = 'bar') {
+export function toDataSource(parsed, config = {}, chart) {
   const categories = parsed[0].slice(1) || [];
   const series = parsed.slice(1).map((row) => {
     const [name, ...data] = row;
     return {
-      type: 'bar',
+      type: chart,
       name,
       data,
     };
