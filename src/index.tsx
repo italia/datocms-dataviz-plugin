@@ -48,12 +48,21 @@ connect({
       return {
         editor: { id: 'chartEditor' },
       };
+    } else if (
+      field.attributes.field_type === 'json' &&
+      field.attributes.api_key === 'chart_datasource'
+    ) {
+      return {
+        editor: { id: 'emptyEditor' },
+      };
     }
   },
   renderFieldExtension(fieldExtensionId: string, ctx: RenderFieldExtensionCtx) {
     switch (fieldExtensionId) {
       case 'chartEditor':
         return render(<ChartEditor ctx={ctx} />);
+      case 'emptyEditor':
+        return render(<div />);
     }
   },
 });

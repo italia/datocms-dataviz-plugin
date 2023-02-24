@@ -34,31 +34,33 @@ function RenderChart({
       let value = transformData(data, config, chart);
       setCurrentValue(value);
       saveData(JSON.stringify(value));
+
+      const formatted =
+        chart === 'bar'
+          ? formattedData
+          : chart === 'line'
+          ? getLineValues(currentValue)
+          : chart === 'pie'
+          ? getPieValues(currentValue)
+          : null;
+
+      console.log('DATA', formatted);
+      // saveFormatted(JSON.stringify(formatted));
+    } else {
+      saveData(null);
+      // saveFormatted(null);
     }
   }, [chart, data, config]);
 
-  if (currentValue) {
-    const formatted =
-      chart === 'bar'
-        ? formattedData
-        : chart === 'line'
-        ? getLineValues(currentValue)
-        : chart === 'pie'
-        ? getPieValues(currentValue)
-        : null;
-
-    // console.log('DATA', formatted);
-    if (formattedData != JSON.stringify(formatted)) {
-      saveFormatted(JSON.stringify(formatted));
-    }
-  }
   return (
     <div className="w-full min-height-[800px]">
-      {formattedData && (
+      {currentValue?.dataSource && (
         <>
-          {chart === 'bar' && <BasicChart data={formattedData} />}
-          {chart === 'line' && <BasicChart data={formattedData} />}
-          {chart === 'pie' && <PieChart data={formattedData} />}
+          {chart === 'bar' && <BasicChart data={getBarValues(currentValue)} />}
+          {chart === 'line' && (
+            <BasicChart data={getLineValues(currentValue)} />
+          )}
+          {chart === 'pie' && <PieChart data={getPieValues(currentValue)} />}
         </>
       )}
     </div>
