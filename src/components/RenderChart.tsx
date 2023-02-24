@@ -10,7 +10,14 @@ import {
   getPalette,
 } from '../lib/utils';
 
-function RenderChart({ chart, data, config, saveData }) {
+function RenderChart({
+  chart,
+  data,
+  config,
+  saveData,
+  saveFormatted,
+  formattedData,
+}) {
   function transformData(d, cfg, c) {
     if (!d) return null;
     // console.log('add config');
@@ -33,7 +40,7 @@ function RenderChart({ chart, data, config, saveData }) {
   if (currentValue) {
     const formatted =
       chart === 'bar'
-        ? getBarValues(currentValue)
+        ? formattedData
         : chart === 'line'
         ? getLineValues(currentValue)
         : chart === 'pie'
@@ -41,16 +48,17 @@ function RenderChart({ chart, data, config, saveData }) {
         : null;
 
     // console.log('DATA', formatted);
+    if (formattedData != JSON.stringify(formatted)) {
+      saveFormatted(JSON.stringify(formatted));
+    }
   }
   return (
     <div className="w-full min-height-[800px]">
-      {currentValue?.dataSource && (
+      {formattedData && (
         <>
-          {chart === 'bar' && <BasicChart data={getBarValues(currentValue)} />}
-          {chart === 'line' && (
-            <BasicChart data={getLineValues(currentValue)} />
-          )}
-          {chart === 'pie' && <PieChart data={getPieValues(currentValue)} />}
+          {chart === 'bar' && <BasicChart data={formattedData} />}
+          {chart === 'line' && <BasicChart data={formattedData} />}
+          {chart === 'pie' && <PieChart data={formattedData} />}
         </>
       )}
     </div>

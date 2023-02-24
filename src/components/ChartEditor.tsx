@@ -32,11 +32,28 @@ type PropTypes = {
 export default function ChartEditor({ ctx }: PropTypes) {
   const currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string);
   const saveData = (data: string | null) => {
-    ctx.setFieldValue(ctx.fieldPath, data);
-    // ctx.notice(`${ctx.fieldPath} Saved`);
+    if (!currentValue || !data || JSON.stringify(currentValue) !== data) {
+      ctx.setFieldValue(ctx.fieldPath, data);
+      // ctx.notice(`${ctx.fieldPath} Saved`);
+      console.log(`${ctx.fieldPath} Saved`, data);
+    }
+  };
+  const currentFormatted = JSON.parse(
+    ctx.formValues['chart_datasource'] as string
+  );
+  const saveFormatted = (data: string | null) => {
+    if (
+      !currentFormatted ||
+      !data ||
+      JSON.stringify(currentFormatted) !== data
+    ) {
+      ctx.setFieldValue('chart_datasource', data);
+      // ctx.notice(`Formatted Datasource Saved`);
+      console.log('Formatted Datasource Saved', data);
+    }
   };
   const [isTableOpen, setTableOpen] = useState<boolean>(false);
-  const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
+  const [isConfigOpen, setConfigOpen] = useState<boolean>(true);
 
   const [state, send] = useMachine(stateMachine);
   const config = useStoreState((state) => state.config);
@@ -60,12 +77,14 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   function reset() {
     setData(null);
-    saveData(null);
+    // saveData(null);
   }
 
   function handleUploadData(data) {
     reset();
     setData(data);
+    setTableOpen(true);
+    send('CHOOSE');
   }
 
   function transpose() {
@@ -177,6 +196,8 @@ export default function ChartEditor({ ctx }: PropTypes) {
                 data={data}
                 config={config}
                 saveData={saveData}
+                saveFormatted={saveFormatted}
+                formattedData={currentFormatted}
               />
             </center>
           </div>

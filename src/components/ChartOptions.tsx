@@ -62,7 +62,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       },
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
-      layout: '',
+      layout: 'single',
     },
     {
       label: 'Chart Width',
@@ -73,7 +73,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
         step: 10,
       },
       required: false,
-      chartType: ['bar', 'line', 'pie', 'geo'],
+      chartType: [],
       layout: '',
     },
     {
@@ -104,7 +104,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       otherProps: {},
       required: false,
       placeholder: 'Chart Direction',
-      chartType: ['bar', 'line'],
+      chartType: ['bar'],
       layout: '',
     },
     {
@@ -113,7 +113,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       type: 'select',
       options: ['none', 'inside', 'slider'],
       required: false,
-      chartType: ['bar', 'line', 'pie', 'geo'],
+      chartType: ['bar', 'line', 'geo'],
       otherProps: {},
     },
     {

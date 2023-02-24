@@ -22,7 +22,7 @@ export function toDataSource(parsed, config = {}, chartType = 'bar') {
   const series = parsed.slice(1).map((row) => {
     const [name, ...data] = row;
     return {
-      type: chartType,
+      type: 'bar',
       name,
       data,
     };
