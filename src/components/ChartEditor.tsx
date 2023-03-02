@@ -56,7 +56,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const [isConfigOpen, setConfigOpen] = useState<boolean>(true);
 
   const [state, send] = useMachine(stateMachine);
-  const config = useStoreState((state) => state.config);
+  const config: any = useStoreState((state) => state.config);
   const setConfig = useStoreState((state) => state.setConfig);
   const chart = useStoreState((state) => state.chart);
   const setChart = useStoreState((state) => state.setChart);

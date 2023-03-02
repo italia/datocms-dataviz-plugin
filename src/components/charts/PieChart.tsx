@@ -6,8 +6,8 @@ type ChartPropsType = {
 };
 
 function PieChart({ data }: ChartPropsType) {
-  const { config, dataSource } = data;
-
+  const { dataSource } = data;
+  const config: any = data.config;
   const options = {
     title: {
       text: config?.titles?.join('\n') || 'PIE CHART',

@@ -25,7 +25,7 @@ function ShowPalette({ palette }) {
 function ChartOptions({ config, setConfig, chart, numSeries }) {
   const availabelPalettes = getAvailablePalettes(numSeries);
   const defaultPalette = availabelPalettes[0];
-
+  console.log('defaultValues', config);
   const {
     register,
     handleSubmit,
@@ -50,7 +50,58 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
       defaultValue: defaultPalette,
-      layout: 'single',
+      layout: '',
+    },
+    {
+      label: 'Show Legend',
+      name: 'legend',
+      type: 'checkbox',
+
+      options: [],
+      required: false,
+      chartType: ['bar', 'line', 'pie', 'geo'],
+      otherProps: { defaultChecked: true },
+      layout: '',
+    },
+    {
+      label: 'Show tooltip',
+      name: 'tooltip',
+      type: 'checkbox',
+      options: [],
+      required: false,
+      chartType: ['bar', 'line', 'pie', 'geo'],
+      otherProps: { defaultChecked: true },
+      layout: '',
+    },
+    {
+      label: 'valueFormatter',
+      name: 'valueFormatter',
+      type: 'text',
+      options: [],
+      required: false,
+      chartType: ['bar', 'line', 'pie', 'geo'],
+      otherProps: {},
+      layout: '',
+    },
+    {
+      label: 'Tooltip format',
+      name: 'tooltipFormatter',
+      type: 'select',
+      options: ['', 'number', 'currency', 'percentage'],
+      required: false,
+      chartType: ['bar', 'line', 'pie', 'geo'],
+      otherProps: {},
+      layout: '',
+    },
+    {
+      label: 'Tooltip add value',
+      name: 'tooltipAdditionalValue',
+      type: 'select',
+      options: ['', 'total', 'percentage'],
+      required: false,
+      chartType: ['bar', 'line', 'pie', 'geo'],
+      otherProps: {},
+      layout: '',
     },
     {
       label: 'Chart Height',
@@ -62,38 +113,38 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       },
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
-      layout: 'single',
+      layout: '',
     },
+    // {
+    //   label: 'Chart Width',
+    //   name: 'w',
+    //   type: 'number',
+    //   options: [],
+    //   otherProps: {
+    //     step: 10,
+    //   },
+    //   required: false,
+    //   chartType: [],
+    //   layout: '',
+    // },
     {
-      label: 'Chart Width',
-      name: 'w',
-      type: 'number',
+      label: 'X Axis Name',
+      name: 'xLabel',
+      type: 'text',
       options: [],
-      otherProps: {
-        step: 10,
-      },
+      otherProps: {},
       required: false,
-      chartType: [],
+      chartType: ['bar', 'line'],
       layout: '',
     },
     {
-      label: 'Show Legend',
-      name: 'legend',
-      type: 'checkbox',
+      label: 'Y Axis Name',
+      name: 'yLabel',
+      type: 'text',
       options: [],
-      required: false,
-      chartType: ['bar', 'line', 'pie', 'geo'],
       otherProps: {},
-      layout: '',
-    },
-    {
-      label: 'Show tooltip',
-      name: 'tooltip',
-      type: 'checkbox',
-      options: [],
       required: false,
-      chartType: ['bar', 'line', 'pie', 'geo'],
-      otherProps: {},
+      chartType: ['bar', 'line'],
       layout: '',
     },
     {
@@ -119,10 +170,30 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
     {
       label: 'Smooth Lines',
       name: 'smooth',
-      type: 'checkbox',
+      type: 'number',
       options: [],
       required: false,
       chartType: ['line'],
+      otherProps: { step: 0.1 },
+      layout: '',
+    },
+    {
+      label: 'Stacked',
+      name: 'stack',
+      type: 'checkbox',
+      options: [],
+      required: false,
+      chartType: ['bar'],
+      otherProps: {},
+      layout: '',
+    },
+    {
+      label: 'Total Label',
+      name: 'totalLabel',
+      type: 'text',
+      options: [],
+      required: false,
+      chartType: ['pie'],
       otherProps: {},
       layout: '',
     },
@@ -148,7 +219,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+            gridTemplateColumns: '1fr 1fr 1fr',
             gridGap: 10,
           }}
         >
@@ -158,7 +229,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
               if (['text', 'email', 'number'].includes(field.type)) {
                 let style = {};
                 if (field.layout === 'single') {
-                  style = { gridColumn: 'span 2' };
+                  style = { gridColumn: 'span 3' };
                 }
                 return (
                   <div key={field.name} style={style}>
@@ -174,7 +245,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
               } else if (['checkbox'].includes(field.type)) {
                 let style = {};
                 if (field.layout === 'single') {
-                  style = { gridColumn: 'span 2' };
+                  style = { gridColumn: 'span 3' };
                 }
                 return (
                   <div key={field.name} style={style}>
@@ -183,6 +254,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
                       <input
                         type="checkbox"
                         {...register(field.name, { required: field.required })}
+                        {...field.otherProps}
                       />
                     </div>
                     {errors[field.name] && <span>This field is required</span>}
@@ -191,13 +263,14 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
               } else if (['select'].includes(field.type)) {
                 let style = {};
                 if (field.layout === 'single') {
-                  style = { gridColumn: 'span 2' };
+                  style = { gridColumn: 'span 3' };
                 }
                 return (
                   <div key={field.name} style={style}>
                     <div>{field.label}</div>
                     <select
                       {...register(field.name, { required: field.required })}
+                      {...field.otherProps}
                     >
                       {field.options.map((option) => {
                         return (
@@ -213,14 +286,16 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
               } else {
                 let style = {};
                 if (field.layout === 'single') {
-                  style = { gridColumn: 'span 2' };
+                  style = { gridColumn: 'span 3' };
                 }
                 return <div style={style}>{field.name}</div>;
               }
             })}
         </div>
-        <div className="my-2">
-          <Button type="submit">Applica</Button>
+        <div className="mt-5">
+          <Button fullWidth type="submit">
+            Applica
+          </Button>
         </div>
       </form>
     </div>

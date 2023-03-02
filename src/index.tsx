@@ -50,7 +50,7 @@ connect({
       };
     } else if (
       field.attributes.field_type === 'json' &&
-      field.attributes.api_key === 'chart_datasource'
+      (field.attributes.api_key === 'chart_datasource'|| field.attributes.api_key === 'chart_config')
     ) {
       return {
         editor: { id: 'emptyEditor' },

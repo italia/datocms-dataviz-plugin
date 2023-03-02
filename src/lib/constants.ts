@@ -76,7 +76,7 @@ export const fixedSettings = {
 
 export const sampleData: FieldDataType = {
   config: {
-    titles: [],
+    totalLabel: '',
     palette: '',
     colors: [],
     direction: 'vertical',
@@ -84,10 +84,10 @@ export const sampleData: FieldDataType = {
     w: 900,
     // kind: 'xy',
     // serieKind: 'bar',
-    smooth: false,
-    tooltip: true,
-    legend: true,
-    toolbox: true,
+    smooth: 0,
+    tooltip: 1,
+    legend: 1,
+    stacked: false,
     zoom: 'none',
     axisPointer: 'line',
   },
