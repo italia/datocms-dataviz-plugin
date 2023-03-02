@@ -32,7 +32,9 @@ type PropTypes = {
 export default function ChartEditor({ ctx }: PropTypes) {
   const currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string);
   const saveData = (data: string | null) => {
+    console.log('???');
     if (JSON.stringify(currentValue) !== data) {
+      console.log('saveData');
       ctx.setFieldValue(ctx.fieldPath, data);
       // ctx.notice(`${ctx.fieldPath} Saved`);
       console.log(`${ctx.fieldPath} Saved`, data);
@@ -114,7 +116,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
     setData(d);
     send('CHOOSE');
   }
-  const stateValue = state.value as string;
+  // const stateValue = state.value as string;
 
   return (
     <Canvas ctx={ctx}>

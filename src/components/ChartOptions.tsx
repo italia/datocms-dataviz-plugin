@@ -25,7 +25,6 @@ function ShowPalette({ palette }) {
 function ChartOptions({ config, setConfig, chart, numSeries }) {
   const availabelPalettes = getAvailablePalettes(numSeries);
   const defaultPalette = availabelPalettes[0];
-  console.log('defaultValues', config);
   const {
     register,
     handleSubmit,
@@ -64,43 +63,13 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       layout: '',
     },
     {
-      label: 'Show tooltip',
+      label: 'Show Tooltip',
       name: 'tooltip',
       type: 'checkbox',
       options: [],
       required: false,
       chartType: ['bar', 'line', 'pie', 'geo'],
       otherProps: { defaultChecked: true },
-      layout: '',
-    },
-    {
-      label: 'valueFormatter',
-      name: 'valueFormatter',
-      type: 'text',
-      options: [],
-      required: false,
-      chartType: ['bar', 'line', 'pie', 'geo'],
-      otherProps: {},
-      layout: '',
-    },
-    {
-      label: 'Tooltip format',
-      name: 'tooltipFormatter',
-      type: 'select',
-      options: ['', 'number', 'currency', 'percentage'],
-      required: false,
-      chartType: ['bar', 'line', 'pie', 'geo'],
-      otherProps: {},
-      layout: '',
-    },
-    {
-      label: 'Tooltip add value',
-      name: 'tooltipAdditionalValue',
-      type: 'select',
-      options: ['', 'total', 'percentage'],
-      required: false,
-      chartType: ['bar', 'line', 'pie', 'geo'],
-      otherProps: {},
       layout: '',
     },
     {
@@ -127,6 +96,37 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
     //   chartType: [],
     //   layout: '',
     // },
+    {
+      label: 'Tooltip Value Suffix',
+      name: 'valueFormatter',
+      type: 'text',
+      options: [],
+      required: false,
+      chartType: ['bar', 'line', 'pie', 'geo'],
+      otherProps: {},
+      layout: '',
+    },
+    {
+      label: 'Tooltip Value Format',
+      name: 'tooltipFormatter',
+      type: 'select',
+      options: ['', 'number', 'currency', 'percentage'],
+      required: false,
+      chartType: ['bar', 'line', 'pie', 'geo'],
+      otherProps: {},
+      layout: '',
+    },
+    // {
+    //   label: 'Tooltip add value',
+    //   name: 'tooltipAdditionalValue',
+    //   type: 'select',
+    //   options: ['', 'total', 'percentage'],
+    //   required: false,
+    //   chartType: ['bar', 'line', 'pie', 'geo'],
+    //   otherProps: {},
+    //   layout: '',
+    // },
+
     {
       label: 'X Axis Name',
       name: 'xLabel',
@@ -280,6 +280,8 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
                   <div key={field.name} style={style}>
                     <div>{field.label}</div>
                     <select
+                      className="my-2 p-2"
+                      style={{ width: '80%' }}
                       {...register(field.name, { required: field.required })}
                       {...field.otherProps}
                     >

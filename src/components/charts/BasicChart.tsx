@@ -140,7 +140,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         return `${valueFormatted} ${valueFormatter ? valueFormatter : ''}`;
       },
       show: config.tooltip,
-      formatter: (params: any) => {},
+      // formatter: (params: any) => {},
     };
 
     const options = {
@@ -162,7 +162,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           rest = { ...rest, smooth };
         }
 
-        console.log('rest', rest);
+        // console.log('rest', rest);
         return {
           ...serie,
           ...rest,
@@ -187,7 +187,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
   useEffect(() => {
     if (data && refCanvas.current) {
       const options: any = getOptions(data);
-      console.log('basic chart options', options);
+      // console.log('basic chart options', options);
       refCanvas.current?.getEchartsInstance().setOption(options);
       setForceReload(forceReload + 1);
     }
@@ -195,12 +195,12 @@ function BasicChart({ data }: ChartPropsType, id: string) {
 
   async function downLoadImage(element: any, id: string) {
     const echartInstance = element.getEchartsInstance();
-    // console.log('echartInstance', echartInstance);
+    // // console.log('echartInstance', echartInstance);
     const base64DataUrl = echartInstance.getDataURL();
 
     try {
       const blob = await fetch(base64DataUrl).then((res) => res.blob());
-      // console.log('blob', blob);
+      // // console.log('blob', blob);
       saveAs(blob, `chart-${'' + Date.now()}.png`);
     } catch (error) {
       console.log('error', error);

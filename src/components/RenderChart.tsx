@@ -29,14 +29,16 @@ function RenderChart({
     transformData(data, config, chart)
   );
 
-  useCallback(() => {
-    // console.log('CHANGE');
+  useEffect(() => {
+    console.log('CHANGE');
     if (chart && data && config) {
       let value = transformData(data, config, chart);
+      const valueString = JSON.stringify(value);
+      const prevValue = JSON.stringify(prevData);
 
-      if (JSON.stringify(value) !== JSON.stringify(prevData)) {
+      if (valueString !== prevValue) {
         setCurrentValue(value);
-        saveData(JSON.stringify(value));
+        saveData(valueString);
       }
 
       // const formatted =
