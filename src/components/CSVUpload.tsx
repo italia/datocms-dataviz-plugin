@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import { Canvas, Button, SwitchField } from 'datocms-react-ui';
 import Papa from 'papaparse';
 
 function UploadCSV({ setData }) {

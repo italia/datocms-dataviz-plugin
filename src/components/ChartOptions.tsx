@@ -23,7 +23,6 @@ function ShowPalette({ palette }) {
 }
 
 function ChartOptions({ config, setConfig, chart, numSeries }) {
-  
   const availabelPalettes = getAvailablePalettes(numSeries);
   const defaultPalette = availabelPalettes[0];
   console.log('defaultValues', config);
@@ -221,7 +220,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
     setConfig(newConfig);
   };
   if (!chart) {
-    return <div my-10>Please choose a chart type</div>;
+    return <div className="my-5">Please choose a chart type</div>;
   }
   return (
     <div>

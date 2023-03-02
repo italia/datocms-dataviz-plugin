@@ -32,26 +32,26 @@ type PropTypes = {
 export default function ChartEditor({ ctx }: PropTypes) {
   const currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string);
   const saveData = (data: string | null) => {
-    if (!currentValue || !data || JSON.stringify(currentValue) !== data) {
+    if (JSON.stringify(currentValue) !== data) {
       ctx.setFieldValue(ctx.fieldPath, data);
       // ctx.notice(`${ctx.fieldPath} Saved`);
       console.log(`${ctx.fieldPath} Saved`, data);
     }
   };
-  const currentFormatted = JSON.parse(
-    ctx.formValues['chart_datasource'] as string
-  );
-  const saveFormatted = (data: string | null) => {
-    if (
-      !currentFormatted ||
-      !data ||
-      JSON.stringify(currentFormatted) !== data
-    ) {
-      ctx.setFieldValue('chart_datasource', data);
-      // ctx.notice(`Formatted Datasource Saved`);
-      console.log('Formatted Datasource Saved', data);
-    }
-  };
+  // const currentFormatted = JSON.parse(
+  //   ctx.formValues['chart_datasource'] as string
+  // );
+  // const saveFormatted = (data: string | null) => {
+  //   if (
+  //     !currentFormatted ||
+  //     !data ||
+  //     JSON.stringify(currentFormatted) !== data
+  //   ) {
+  //     ctx.setFieldValue('chart_datasource', data);
+  //     // ctx.notice(`Formatted Datasource Saved`);
+  //     console.log('Formatted Datasource Saved', data);
+  //   }
+  // };
   const [isTableOpen, setTableOpen] = useState<boolean>(false);
   const [isConfigOpen, setConfigOpen] = useState<boolean>(true);
 
@@ -66,14 +66,14 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const setData = useStoreState((state) => state.setData);
 
   useEffect(() => {
-    if (currentValue && !data) {
+    if (currentValue.data && !data) {
       setData(currentValue.data);
       setConfig(currentValue.config);
       setChart(currentValue.chart);
       send('SETTINGS');
       saveData(null);
     }
-  }, []);
+  }, [data]);
 
   // useCallback(() => {
   //   if (data) {
@@ -202,8 +202,9 @@ export default function ChartEditor({ ctx }: PropTypes) {
                 data={data}
                 config={config}
                 saveData={saveData}
-                saveFormatted={saveFormatted}
-                formattedData={currentFormatted}
+                prevData={currentValue}
+                // saveFormatted={saveFormatted}
+                // formattedData={currentFormatted}
               />
             </center>
           </div>

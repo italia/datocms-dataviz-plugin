@@ -15,8 +15,9 @@ function RenderChart({
   data,
   config,
   saveData,
-  saveFormatted,
-  formattedData,
+  prevData,
+  // saveFormatted,
+  // formattedData,
 }) {
   function transformData(d, cfg, c) {
     if (!d) return null;
@@ -32,25 +33,27 @@ function RenderChart({
     // console.log('CHANGE');
     if (chart && data && config) {
       let value = transformData(data, config, chart);
-      setCurrentValue(value);
-      saveData(JSON.stringify(value));
 
-      const formatted =
-        chart === 'bar'
-          ? formattedData
-          : chart === 'line'
-          ? getLineValues(currentValue)
-          : chart === 'pie'
-          ? getPieValues(currentValue)
-          : null;
+      if (JSON.stringify(value) !== JSON.stringify(prevData)) {
+        setCurrentValue(value);
+        saveData(JSON.stringify(value));
+      }
 
-      console.log('DATA', formatted);
+      // const formatted =
+      //   chart === 'bar'
+      //     ? getBarValues(currentValue)
+      //     : chart === 'line'
+      //     ? getLineValues(currentValue)
+      //     : chart === 'pie'
+      //     ? getPieValues(currentValue)
+      //     : null;
+      // console.log('DATA', formatted);
       // saveFormatted(JSON.stringify(formatted));
       // } else {
       //   saveData(null);
       // saveFormatted(null);
     }
-  }, [chart, data, config]);
+  }, [chart, data, config, prevData]);
 
   return (
     <div className="w-full min-height-[800px]">
