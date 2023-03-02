@@ -14,30 +14,47 @@ function BasicChart({ data }: ChartPropsType, id: string) {
   function getOptions(data: FieldDataType) {
     const config: any = data.config;
     const zoom = config.zoom;
-    let optionals = { x: {}, y: {} };
+    let dataZoom = [];
     if (zoom !== 'none') {
-      const dataZoom = [
+      const x = [
         {
-          show: config.zoom != 'none',
-          realtime: true,
-          start: 0,
+          show: true,
+          start: 1,
           end: 100,
-          xAxisIndex: [0, 1],
-          type: config.zoom === 'slider' ? 'slider' : 'inside',
+          xAxisIndex: [0],
+          type: 'inside',
         },
         {
-          show: config.zoom != 'none',
-          realtime: true,
-          start: 0,
+          show: true,
+          start: 1,
           end: 100,
-          yAxisIndex: [0, 1],
-          type: config.zoom === 'slider' ? 'slider' : 'inside',
+          yAxisIndex: [0],
+          type: 'inside',
         },
       ];
-      if (config.direction === 'vertical') {
-        optionals.x = { dataZoom };
-      } else {
-        optionals.y = { dataZoom };
+      const y = [
+        {
+          show: true,
+          start: 1,
+          end: 100,
+          xAxisIndex: [0],
+          type: 'slider',
+        },
+        {
+          show: true,
+          start: 1,
+          end: 100,
+          yAxisIndex: [0],
+          type: 'slider',
+        },
+      ];
+
+      if (zoom === 'both_axis') {
+        dataZoom = [...x, ...y];
+      } else if (zoom === 'x_axis') {
+        dataZoom = [...x];
+      } else if (zoom === 'y_axis') {
+        dataZoom = [...y];
       }
     }
 
@@ -123,6 +140,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         return `${valueFormatted} ${valueFormatter ? valueFormatter : ''}`;
       },
       show: config.tooltip,
+      formatter: (params: any) => {},
     };
 
     const options = {
@@ -161,16 +179,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         top: 'tbottomp',
         show: config.legend,
       },
-      // toolbox: {
-      //   show: config.toolbox,
-      //   left: 'right',
-      //   top: 'top',
-      //   feature: {
-      //     // dataView: {},
-      //     // restore: {},
-      //     saveAsImage: {},
-      //   },
-      // },
+      dataZoom,
     };
     return options;
   }

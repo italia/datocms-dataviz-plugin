@@ -23,7 +23,7 @@ import ChartOptions from '../components/ChartOptions';
 import SelectChart from '../components/SelectChart';
 
 import { MatrixType } from '../sharedTypes';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 type PropTypes = {
   ctx: RenderFieldExtensionCtx;
@@ -73,7 +73,13 @@ export default function ChartEditor({ ctx }: PropTypes) {
       send('SETTINGS');
       saveData(null);
     }
-  }, [data, currentValue]);
+  }, []);
+
+  // useCallback(() => {
+  //   if (data) {
+  //     saveData(JSON.stringify({ data, config, chart }));
+  //   }
+  // }, [data, config, chart]);
 
   function reset() {
     setData(null);

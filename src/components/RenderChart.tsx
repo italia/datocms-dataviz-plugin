@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import BasicChart from './charts/BasicChart';
 import PieChart from './charts/PieChart';
 import {
@@ -28,7 +28,7 @@ function RenderChart({
     transformData(data, config, chart)
   );
 
-  useEffect(() => {
+  useCallback(() => {
     // console.log('CHANGE');
     if (chart && data && config) {
       let value = transformData(data, config, chart);
@@ -46,8 +46,8 @@ function RenderChart({
 
       console.log('DATA', formatted);
       // saveFormatted(JSON.stringify(formatted));
-    } else {
-      saveData(null);
+      // } else {
+      //   saveData(null);
       // saveFormatted(null);
     }
   }, [chart, data, config]);

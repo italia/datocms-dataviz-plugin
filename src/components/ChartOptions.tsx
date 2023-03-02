@@ -23,6 +23,7 @@ function ShowPalette({ palette }) {
 }
 
 function ChartOptions({ config, setConfig, chart, numSeries }) {
+  
   const availabelPalettes = getAvailablePalettes(numSeries);
   const defaultPalette = availabelPalettes[0];
   console.log('defaultValues', config);
@@ -169,10 +170,20 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       layout: '',
     },
     {
+      label: 'Stacked',
+      name: 'stack',
+      type: 'checkbox',
+      options: [],
+      required: false,
+      chartType: ['bar'],
+      otherProps: {},
+      layout: '',
+    },
+    {
       label: 'Data Zoom',
       name: 'zoom',
       type: 'select',
-      options: ['none', 'both axis', 'x axis', 'y axis'],
+      options: ['none', 'both_axis', 'x_axis', 'y_axis'],
       required: false,
       chartType: ['line'],
       otherProps: {},
@@ -187,16 +198,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       otherProps: { step: 0.1 },
       layout: '',
     },
-    {
-      label: 'Stacked',
-      name: 'stack',
-      type: 'checkbox',
-      options: [],
-      required: false,
-      chartType: ['bar'],
-      otherProps: {},
-      layout: '',
-    },
+
     {
       label: 'Total Label',
       name: 'totalLabel',
