@@ -98,7 +98,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           };
 
     const tooltip = {
-      // trigger: 'axis',
+      trigger: config.tooltipTrigger || 'item',
       axisPointer: {
         type: config.axisPointer,
       },
@@ -202,7 +202,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
   const height = config?.h || 500;
   return (
     <>
-      {forceReload}
       <ReactEcharts
         // option={getOptions(data)}
         option={{}}

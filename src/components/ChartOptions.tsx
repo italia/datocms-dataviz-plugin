@@ -148,6 +148,16 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       layout: '',
     },
     {
+      label: 'Tooltip trigger',
+      name: 'tooltipTrigger',
+      type: 'select',
+      options: ['item', 'axis'],
+      required: false,
+      chartType: ['bar', 'line'],
+      otherProps: { defaultValue: 'item' },
+      layout: '',
+    },
+    {
       label: 'Direction',
       name: 'direction',
       type: 'select',
@@ -162,9 +172,9 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       label: 'Data Zoom',
       name: 'zoom',
       type: 'select',
-      options: ['none', 'inside', 'slider'],
+      options: ['none', 'both axis', 'x axis', 'y axis'],
       required: false,
-      chartType: ['bar', 'line', 'geo'],
+      chartType: ['line'],
       otherProps: {},
     },
     {
