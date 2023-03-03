@@ -5,12 +5,32 @@ type ChartPropsType = {
   data: FieldDataType;
 };
 
+function getTotal(data: any) {
+  return data.reduce((acc, v) => {
+    return acc + Number(v.value);
+  }, 0);
+}
+
 function PieChart({ data }: ChartPropsType) {
   const { dataSource } = data;
   const config: any = data.config;
+
+  console.log('dataSource', dataSource);
+  let total = 0;
+  try {
+    const serie: any = dataSource.series;
+    let serieData: any;
+    if (typeof serie === 'object' && !Array.isArray(serie)) {
+      serieData = serie.data;
+    } else if (Array.isArray(serie)) {
+      serieData = serie[0].data;
+    }
+    total = getTotal(serieData);
+  } catch (error) {}
+
   const options = {
     title: {
-      text: config?.titles?.join('\n') || 'PIE CHART',
+      text: `${config?.totalLabel || 'Total'}\n${total}`,
       left: 'center',
       top: 'center',
     },
