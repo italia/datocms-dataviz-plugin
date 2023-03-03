@@ -15,6 +15,35 @@ function PieChart({ data }: ChartPropsType) {
   const { dataSource } = data;
   const config: any = data.config;
 
+  const tooltip = {
+    trigger: config.tooltipTrigger || 'item',
+    axisPointer: {
+      type: config.axisPointer,
+    },
+    valueFormatter: (value) => {
+      const formatter = config.tooltipFormatter;
+      const valueFormatter = config.valueFormatter;
+      let valueFormatted = value;
+      if (formatter) {
+        if (formatter === 'percentage') {
+          valueFormatted = `${value}%`;
+        } else if (formatter === 'currency') {
+          valueFormatted = new Intl.NumberFormat('it-IT', {
+            style: 'currency',
+            currency: 'EUR',
+          }).format(value);
+        } else if (formatter === 'number') {
+          valueFormatted = new Intl.NumberFormat('it-IT', {
+            style: 'decimal',
+          }).format(value);
+        }
+      }
+      return `${valueFormatted} ${valueFormatter ? valueFormatter : ''}`;
+    },
+    show: config.tooltip,
+    // formatter: (params: any) => {},
+  };
+
   console.log('dataSource', dataSource);
   let total = 0;
   try {
@@ -30,7 +59,9 @@ function PieChart({ data }: ChartPropsType) {
 
   const options = {
     title: {
-      text: `${config?.totalLabel || 'Total'}\n${total}`,
+      text: `${config?.totalLabel || 'Total'}\n${total} ${
+        config.valueFormatter || ''
+      }`,
       left: 'center',
       top: 'center',
     },
@@ -40,9 +71,7 @@ function PieChart({ data }: ChartPropsType) {
       fontWeight: '600',
       fontSize: 14,
     },
-    tooltip: {
-      show: config.tooltip,
-    },
+    tooltip,
     legend: {
       left: 'center',
       top: 'bottom',
