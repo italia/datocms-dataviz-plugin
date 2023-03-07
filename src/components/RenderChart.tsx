@@ -1,27 +1,17 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import BasicChart from './charts/BasicChart';
 import PieChart from './charts/PieChart';
+import GeoMapChart from './charts/GeoMapChart';
 import {
   toDataSource,
   getPieValues,
   getLineValues,
   getBarValues,
-  getAvailablePalettes,
-  getPalette,
 } from '../lib/utils';
 
-function RenderChart({
-  chart,
-  data,
-  config,
-  saveData,
-  prevData,
-  // saveFormatted,
-  // formattedData,
-}) {
+function RenderChart({ chart, data, config, saveData, prevData }) {
   function transformData(d, cfg, c) {
     if (!d) return null;
-    // console.log('add config');
     return toDataSource(d, cfg, c);
   }
 
@@ -40,20 +30,6 @@ function RenderChart({
         setCurrentValue(value);
         saveData(valueString);
       }
-
-      // const formatted =
-      //   chart === 'bar'
-      //     ? getBarValues(currentValue)
-      //     : chart === 'line'
-      //     ? getLineValues(currentValue)
-      //     : chart === 'pie'
-      //     ? getPieValues(currentValue)
-      //     : null;
-      // console.log('DATA', formatted);
-      // saveFormatted(JSON.stringify(formatted));
-      // } else {
-      //   saveData(null);
-      // saveFormatted(null);
     }
   }, [chart, data, config, prevData]);
 
@@ -66,6 +42,7 @@ function RenderChart({
             <BasicChart data={getLineValues(currentValue)} />
           )}
           {chart === 'pie' && <PieChart data={getPieValues(currentValue)} />}
+          {chart === 'map' && <GeoMapChart data={currentValue} id="sample" />}
         </>
       )}
     </div>

@@ -58,6 +58,7 @@ function PieChart({ data }: ChartPropsType) {
   } catch (error) {}
 
   const options = {
+    backgroundColor: config.background ? config.background : '#F2F7FC',
     title: {
       text: `${config?.totalLabel || 'Total'}\n${total} ${
         config.valueFormatter || ''
@@ -68,8 +69,9 @@ function PieChart({ data }: ChartPropsType) {
     color: config.colors,
     series: dataSource.series,
     textStyle: {
-      fontWeight: '600',
-      fontSize: 14,
+      fontFamily: 'Titillium Web, sans-serif',
+      fontWeight: 'bold',
+      fontSize: 12,
     },
     tooltip,
     legend: {
@@ -78,12 +80,14 @@ function PieChart({ data }: ChartPropsType) {
       show: config.legend,
     },
   };
+
+  const height = config?.h || 500;
   return (
     <ReactEcharts
       option={options}
       style={{
-        width: config.w,
-        height: config.h,
+        height: height,
+        width: '100%',
         maxWidth: '100%',
       }}
     />

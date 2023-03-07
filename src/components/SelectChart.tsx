@@ -6,6 +6,7 @@ function SelectChart({ chart, setChart }) {
         <option value="bar">Bar</option>
         <option value="line">Line</option>
         <option value="pie">Pie</option>
+        <option value="map">GeoMap</option>
       </select>
     </div>
   );

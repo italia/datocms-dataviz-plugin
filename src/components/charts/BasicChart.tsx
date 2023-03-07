@@ -144,7 +144,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
     };
 
     const options = {
-      backgroundColor: '#F2F7FC',
+      backgroundColor: config.background ? config.background : '#F2F7FC',
       color: config.colors,
       ...axis,
       series: data.dataSource.series.map((serie) => {
@@ -176,7 +176,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       tooltip,
       legend: {
         left: 'center',
-        top: 'tbottomp',
+        top: 'bottom',
         show: config.legend,
       },
       dataZoom,
