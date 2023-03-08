@@ -64,13 +64,7 @@ function GeoMapChart({ data, id }: ChartPropsType) {
       },
       series: data.dataSource.series.map((serie) => {
         return {
-          name: serie.name || 'GEO MAP',
-          type: 'map',
-          map: id,
-          label: {
-            show: true,
-          },
-          select: { disabled: true },
+          ...serie,
           emphasis: {
             // focus: "self",
             itemStyle: {
@@ -79,10 +73,10 @@ function GeoMapChart({ data, id }: ChartPropsType) {
               color: '#fff',
             },
           },
-          zoom: 1.2,
-          roam: 'scale',
+          name: serie.name || 'GEO MAP',
+          map: id,
           nameProperty: config.nameProperty ? config.nameProperty : 'NAME',
-          data: serie.data,
+          // data: serie.data,
         };
       }),
     };
@@ -90,18 +84,22 @@ function GeoMapChart({ data, id }: ChartPropsType) {
   }
 
   async function getGeoData() {
-    const url =
-      'https://www.datocms-assets.com/88680/1678208188-europe-geojson.json';
-    const response = await fetch(url);
-    console.log('response', response.status);
-    const raw: any = await response.json();
-    // console.log('length', raw.features.length);
-    setGeoData(raw);
+    if (data) {
+      const config: any = data.config;
+      const url: string = config?.geoJsonUrl || '';
+      if (url) {
+        const response = await fetch(url);
+        console.log('response', response.status);
+        const raw: any = await response.json();
+        // console.log('length', raw.features.length);
+        setGeoData(raw);
+      }
+    }
   }
 
   useEffect(() => {
     getGeoData();
-  }, []);
+  }, [data]);
 
   if (!data || !geoData) return <div>Loading...</div>;
 

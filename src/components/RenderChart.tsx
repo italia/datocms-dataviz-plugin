@@ -7,6 +7,7 @@ import {
   getPieValues,
   getLineValues,
   getBarValues,
+  getMapValues,
 } from '../lib/utils';
 
 function RenderChart({ chart, data, config, saveData, prevData }) {
@@ -42,7 +43,9 @@ function RenderChart({ chart, data, config, saveData, prevData }) {
             <BasicChart data={getLineValues(currentValue)} />
           )}
           {chart === 'pie' && <PieChart data={getPieValues(currentValue)} />}
-          {chart === 'map' && <GeoMapChart data={currentValue} id="sample" />}
+          {chart === 'map' && (
+            <GeoMapChart data={getMapValues(currentValue)} id="sample" />
+          )}
         </>
       )}
     </div>

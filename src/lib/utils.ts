@@ -1,4 +1,5 @@
 import { sampleData, palettes } from '../lib/constants';
+import { create } from 'zustand';
 
 export function getAvailablePalettes(numSeries) {
   const keys = Object.keys(palettes);
@@ -85,6 +86,35 @@ export function getPieValues(data) {
           return { name: row.name, value: row.data[0] };
         }),
       },
+    },
+  };
+}
+
+export function getMapValues(data) {
+  // const names = data.data[0];
+  const objectData = data.data.slice(1).map((row) => {
+    return {
+      name: row[0],
+      value: row[1],
+    };
+  });
+  console.log('objectData', objectData);
+  return {
+    ...data,
+    dataSource: {
+      categories: data.dataSource.categories,
+      series: [
+        {
+          type: 'map',
+          label: {
+            show: true,
+          },
+          zoom: 1.2,
+          roam: 'scale',
+          select: { disabled: true },
+          data: objectData,
+        },
+      ],
     },
   };
 }
