@@ -1,29 +1,52 @@
 import {
   connect,
   FieldIntentCtx,
+  RenderPageCtx,
   IntentCtx,
   Field,
   RenderFieldExtensionCtx,
   RenderItemFormOutletCtx,
   ItemType,
-} from 'datocms-plugin-sdk';
-import { render } from './render';
-import ConfigScreen from './entrypoints/ConfigScreen';
-import 'datocms-react-ui/styles.css';
-import ChartEditor from './components/ChartEditor';
-import { Canvas } from 'datocms-react-ui';
-import Kpi from './components/Kpi';
-import './index.css';
+} from "datocms-plugin-sdk";
+import { Canvas } from "datocms-react-ui";
+import ConfigScreen from "./entrypoints/ConfigScreen";
+import { render } from "./render";
+import "datocms-react-ui/styles.css";
 
-import 'bootstrap-italia/dist/css/bootstrap-italia.min.css';
+import SamplePage from "./components/SamplePage";
+import ChartEditor from "./components/ChartEditor";
+import Kpi from "./components/Kpi";
+import "./index.css";
+
+import "bootstrap-italia/dist/css/bootstrap-italia.min.css";
 connect({
+  mainNavigationTabs(ctx: IntentCtx) {
+    return [
+      {
+        label: "Dataviz Utils",
+        icon: "analytics",
+        pointsTo: {
+          pageId: "datavizzz",
+        },
+        placement: ["after", "settings"],
+      },
+    ];
+  },
+  renderPage(pageId, ctx: RenderPageCtx) {
+    switch (pageId) {
+      case "datavizzz":
+        return render(<SamplePage ctx={ctx} />);
+      case "settings":
+        return null;
+    }
+  },
   itemFormOutlets(itemType: ItemType, ctx: IntentCtx) {
-    if (itemType.attributes.api_key !== 'kpi_element') {
+    if (itemType.attributes.api_key !== "kpi_element") {
       return [];
     }
     return [
       {
-        id: 'myOutlet',
+        id: "myOutlet",
         initialHeight: 100,
       },
     ];
@@ -42,26 +65,27 @@ connect({
   },
   overrideFieldExtensions(field: Field, ctx: FieldIntentCtx) {
     if (
-      field.attributes.field_type === 'json' &&
-      field.attributes.api_key === 'chart_data'
+      field.attributes.field_type === "json" &&
+      field.attributes.api_key === "chart_data"
     ) {
       return {
-        editor: { id: 'chartEditor' },
+        editor: { id: "chartEditor" },
       };
     } else if (
-      field.attributes.field_type === 'json' &&
-      (field.attributes.api_key === 'chart_datasource'|| field.attributes.api_key === 'chart_config')
+      field.attributes.field_type === "json" &&
+      (field.attributes.api_key === "chart_datasource" ||
+        field.attributes.api_key === "chart_config")
     ) {
       return {
-        editor: { id: 'emptyEditor' },
+        editor: { id: "emptyEditor" },
       };
     }
   },
   renderFieldExtension(fieldExtensionId: string, ctx: RenderFieldExtensionCtx) {
     switch (fieldExtensionId) {
-      case 'chartEditor':
+      case "chartEditor":
         return render(<ChartEditor ctx={ctx} />);
-      case 'emptyEditor':
+      case "emptyEditor":
         return render(<div />);
     }
   },
