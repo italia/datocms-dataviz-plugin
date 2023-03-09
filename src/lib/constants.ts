@@ -74,43 +74,23 @@ export const fixedSettings = {
   },
 };
 
+export const defaultConfig = {
+  palette: '',
+  colors: [],
+  h: 500,
+  direction: 'vertical',
+  smooth: 0,
+  tooltip: 1,
+  legend: 1,
+  stacked: false,
+};
+
 export const sampleData: FieldDataType = {
-  config: {
-    totalLabel: '',
-    palette: '',
-    colors: [],
-    direction: 'vertical',
-    h: 500,
-    w: 900,
-    // kind: 'xy',
-    // serieKind: 'bar',
-    smooth: 0,
-    tooltip: 1,
-    legend: 1,
-    stacked: false,
-    zoom: 'none',
-    axisPointer: 'line',
-  },
+  config: defaultConfig,
   data: null,
   chart: 'bar',
   dataSource: {
     categories: [],
-    series: [
-      {
-        type: 'bar',
-        name: '2015',
-        data: [89.3, 92.1, 24.4, 85.4],
-      },
-      {
-        type: 'bar',
-        name: '2016',
-        data: [95.8, 89.4, 91.2, 76.9],
-      },
-      {
-        type: 'bar',
-        name: '2017',
-        data: [32.7, 83.1, 42.5, 38.1],
-      },
-    ],
+    series: [],
   },
 };

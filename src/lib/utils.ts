@@ -1,4 +1,4 @@
-import { sampleData, palettes } from '../lib/constants';
+import { defaultConfig, palettes } from '../lib/constants';
 import { create } from 'zustand';
 
 export function getAvailablePalettes(numSeries) {
@@ -18,57 +18,49 @@ export function transposeData(data) {
   return data[0].map((_, colIndex) => data.map((row) => row[colIndex]));
 }
 
-export function toDataSource(parsed, config = {}, chartType = 'bar') {
-  const categories = parsed[0].slice(1) || [];
-  const series = parsed.slice(1).map((row) => {
+export function toDataSource(data, config = {}, chart = 'bar') {
+  if (!config) {
+    config = { ...defaultConfig, ...config };
+  }
+  return { config, data, chart };
+}
+
+export function getBasicValues({ config, data, chart }) {
+  const categories = data[0].slice(1) || [];
+  const series = data.slice(1).map((row) => {
     const [name, ...data] = row;
     return {
-      type: chartType,
+      type: chart,
       name,
       data,
     };
   });
-  const dataSource = {
-    categories,
-    series,
-  };
-  const cfg = { config: { ...sampleData.config, ...config } };
-  const transformed = {
-    ...sampleData,
-    ...cfg,
-    dataSource,
-  };
-  // console.log('transformed', transformed);
-  return { ...transformed, data: parsed, chart: chartType };
-}
-
-export function getBarValues(data) {
   return {
-    ...data,
+    config,
+    data,
+    chart,
     dataSource: {
-      categories: data.dataSource.categories,
-      series: data.dataSource.series.map((s) => {
-        return { ...s, type: 'bar' };
+      categories,
+      series: series.map((s) => {
+        return { ...s, type: chart };
       }),
     },
   };
 }
 
-export function getLineValues(data) {
+export function getPieValues({ config, data, chart }) {
+  const series = data.slice(1).map((row) => {
+    const [name, ...data] = row;
+    return {
+      type: chart,
+      name,
+      data,
+    };
+  });
   return {
-    ...data,
-    dataSource: {
-      categories: data.dataSource.categories,
-      series: data.dataSource.series.map((s) => {
-        return { ...s, type: 'line' };
-      }),
-    },
-  };
-}
-
-export function getPieValues(data) {
-  return {
-    ...data,
+    config,
+    data,
+    chart,
     dataSource: {
       categories: [],
       series: {
@@ -82,7 +74,7 @@ export function getPieValues(data) {
         labelLine: {
           show: false,
         },
-        data: data.dataSource.series.map((row) => {
+        data: series.map((row) => {
           return { name: row.name, value: row.data[0] };
         }),
       },
@@ -90,19 +82,19 @@ export function getPieValues(data) {
   };
 }
 
-export function getMapValues(data) {
-  // const names = data.data[0];
-  const objectData = data.data.slice(1).map((row) => {
+export function getMapValues({ config, data, chart }) {
+  const objectData = data.slice(1).map((row) => {
     return {
       name: row[0],
       value: row[1],
     };
   });
-  console.log('objectData', objectData);
   return {
-    ...data,
+    config,
+    data,
+    chart,
     dataSource: {
-      categories: data.dataSource.categories,
+      categories: [],
       series: [
         {
           type: 'map',

@@ -34,26 +34,11 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const saveData = (data: string | null) => {
     console.log('???');
     if (JSON.stringify(currentValue) !== data) {
-      console.log('saveData');
       ctx.setFieldValue(ctx.fieldPath, data);
       // ctx.notice(`${ctx.fieldPath} Saved`);
-      console.log(`${ctx.fieldPath} Saved`, data);
+      console.log(`${ctx.fieldPath} Saved`);
     }
   };
-  // const currentFormatted = JSON.parse(
-  //   ctx.formValues['chart_datasource'] as string
-  // );
-  // const saveFormatted = (data: string | null) => {
-  //   if (
-  //     !currentFormatted ||
-  //     !data ||
-  //     JSON.stringify(currentFormatted) !== data
-  //   ) {
-  //     ctx.setFieldValue('chart_datasource', data);
-  //     // ctx.notice(`Formatted Datasource Saved`);
-  //     console.log('Formatted Datasource Saved', data);
-  //   }
-  // };
   const [isTableOpen, setTableOpen] = useState<boolean>(false);
   const [isConfigOpen, setConfigOpen] = useState<boolean>(true);
 
