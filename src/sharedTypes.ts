@@ -23,11 +23,12 @@ export type FieldDataType = {
   //   zoom: string;
   //   axisPointer: string;
   // };
+  // dataSource: {
+  //   categories: string[];
+  //   series: SerieType[];
+  // };
   config: object;
-  dataSource: {
-    categories: string[];
-    series: SerieType[];
-  };
+  dataSource: any;
   chart: string;
   data: MatrixType;
 };

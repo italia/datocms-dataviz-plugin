@@ -42,6 +42,11 @@ function GeoMapChart({ data, id }: ChartPropsType) {
       // formatter: (params: any) => {},
     };
 
+    const min = Math.min(...data.dataSource.series[0].data.map((d) => d.value));
+    const max = Math.max(...data.dataSource.series[0].data.map((d) => d.value));
+
+    console.log('min', min);
+    console.log('max', max);
     const options = {
       backgroundColor: config.background ? config.background : '#F2F7FC',
       color: config.colors,
@@ -52,25 +57,25 @@ function GeoMapChart({ data, id }: ChartPropsType) {
       },
       tooltip,
       visualMap: {
-        min: 0,
-        max: 500,
+        left: 'right',
+        min,
+        max,
         text: ['Max', 'Min'],
-        realtime: false,
         calculable: true,
         inRange: {
-          color: [config.colors[0], config.colors[config.colors.length - 1]],
+          color: config.colors,
         },
-        show: config.visualMap || false,
+        show: config.visualMap || true,
       },
       series: data.dataSource.series.map((serie) => {
         return {
           ...serie,
+          roam: true,
           emphasis: {
             // focus: "self",
             itemStyle: {
-              areaColor: config.background ? config.background : '#F2F7FC',
-              borderWidth: 0.5,
-              color: '#fff',
+              areaColor: '#D3D3D3',
+              borderWidth: 1,
             },
           },
           name: serie.name || 'GEO MAP',
@@ -101,7 +106,8 @@ function GeoMapChart({ data, id }: ChartPropsType) {
     getGeoData();
   }, [data]);
 
-  if (!data || !geoData) return <div>Loading...</div>;
+  if (!data) return <div>Caricamento...</div>;
+  if (!geoData) return <div>In attesa dei dati geo...</div>;
 
   const config: any = data.config || null;
   const height = config?.h || 500;

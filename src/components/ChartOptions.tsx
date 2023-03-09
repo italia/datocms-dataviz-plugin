@@ -230,7 +230,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       required: false,
       chartType: ['map'],
       otherProps: {
-        defaultValue: 'name',
+        defaultValue: 'NAME',
       },
       layout: '',
     },
