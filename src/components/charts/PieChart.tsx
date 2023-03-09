@@ -69,8 +69,8 @@ function PieChart({ data }: ChartPropsType) {
     color: config.colors,
     series: dataSource.series,
     textStyle: {
-      fontFamily: 'Titillium Web, sans-serif',
-      fontWeight: 'bold',
+      fontFamily: '"Titillium Web"',
+      fontWeight: 'semibold',
       fontSize: 12,
     },
     tooltip,
