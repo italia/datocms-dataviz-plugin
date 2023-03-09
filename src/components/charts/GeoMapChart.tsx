@@ -51,7 +51,7 @@ function GeoMapChart({ data, id }: ChartPropsType) {
       backgroundColor: config.background ? config.background : "#F2F7FC",
       color: config.colors,
       textStyle: {
-        fontFamily: "Titillium Web",
+        fontFamily: "Titillium Web, sans-serif",
         fontSize: 12,
       },
       tooltip,

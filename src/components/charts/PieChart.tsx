@@ -1,5 +1,5 @@
-import ReactEcharts from 'echarts-for-react';
-import { FieldDataType } from '../../sharedTypes';
+import ReactEcharts from "echarts-for-react";
+import { FieldDataType } from "../../sharedTypes";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -16,7 +16,7 @@ function PieChart({ data }: ChartPropsType) {
   const config: any = data.config;
 
   const tooltip = {
-    trigger: config.tooltipTrigger || 'item',
+    trigger: config.tooltipTrigger || "item",
     axisPointer: {
       type: config.axisPointer,
     },
@@ -25,31 +25,31 @@ function PieChart({ data }: ChartPropsType) {
       const valueFormatter = config.valueFormatter;
       let valueFormatted = value;
       if (formatter) {
-        if (formatter === 'percentage') {
+        if (formatter === "percentage") {
           valueFormatted = `${value}%`;
-        } else if (formatter === 'currency') {
-          valueFormatted = new Intl.NumberFormat('it-IT', {
-            style: 'currency',
-            currency: 'EUR',
+        } else if (formatter === "currency") {
+          valueFormatted = new Intl.NumberFormat("it-IT", {
+            style: "currency",
+            currency: "EUR",
           }).format(value);
-        } else if (formatter === 'number') {
-          valueFormatted = new Intl.NumberFormat('it-IT', {
-            style: 'decimal',
+        } else if (formatter === "number") {
+          valueFormatted = new Intl.NumberFormat("it-IT", {
+            style: "decimal",
           }).format(value);
         }
       }
-      return `${valueFormatted} ${valueFormatter ? valueFormatter : ''}`;
+      return `${valueFormatted} ${valueFormatter ? valueFormatter : ""}`;
     },
     show: config.tooltip,
     // formatter: (params: any) => {},
   };
 
-  console.log('dataSource', dataSource);
+  console.log("dataSource", dataSource);
   let total = 0;
   try {
     const serie: any = dataSource.series;
     let serieData: any;
-    if (typeof serie === 'object' && !Array.isArray(serie)) {
+    if (typeof serie === "object" && !Array.isArray(serie)) {
       serieData = serie.data;
     } else if (Array.isArray(serie)) {
       serieData = serie[0].data;
@@ -58,25 +58,24 @@ function PieChart({ data }: ChartPropsType) {
   } catch (error) {}
 
   const options = {
-    backgroundColor: config.background ? config.background : '#F2F7FC',
+    backgroundColor: config.background ? config.background : "#F2F7FC",
     title: {
-      text: `${config?.totalLabel || 'Total'}\n${total} ${
-        config.valueFormatter || ''
+      text: `${config?.totalLabel || "Total"}\n${total} ${
+        config.valueFormatter || ""
       }`,
-      left: 'center',
-      top: 'center',
+      left: "center",
+      top: "center",
     },
     color: config.colors,
     series: dataSource.series,
     textStyle: {
-      fontFamily: '"Titillium Web"',
-      fontWeight: 'semibold',
+      fontFamily: "Titillium Web, sans-serif",
       fontSize: 12,
     },
     tooltip,
     legend: {
-      left: 'center',
-      top: 'bottom',
+      left: "center",
+      top: "bottom",
       show: config.legend,
     },
   };
@@ -87,8 +86,8 @@ function PieChart({ data }: ChartPropsType) {
       option={options}
       style={{
         height: height,
-        width: '100%',
-        maxWidth: '100%',
+        width: "100%",
+        maxWidth: "100%",
       }}
     />
   );

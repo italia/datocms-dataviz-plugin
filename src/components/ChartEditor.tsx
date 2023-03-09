@@ -45,7 +45,10 @@ export default function ChartEditor({ ctx }: PropTypes) {
     }
   };
   const [isTableOpen, setTableOpen] = useState<boolean>(false);
-  const [isConfigOpen, setConfigOpen] = useState<boolean>(true);
+  const [isUploadOpen, setUploadOpen] = useState<boolean>(false);
+  const [isChooseOpen, setChooseOpen] = useState<boolean>(false);
+  const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
+  const [isPreviewOpen, setPreviewOpen] = useState<boolean>(true);
 
   const [state, send] = useMachine(stateMachine);
   const config: any = useStoreState((state) => state.config);
@@ -53,7 +56,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const chart = useStoreState((state) => state.chart);
   const setChart = useStoreState((state) => state.setChart);
   const data = useStoreState<MatrixType>(
-    (state) => (state.data as unknown) as MatrixType
+    (state) => state.data as unknown as MatrixType
   );
   const setData = useStoreState((state) => state.setData);
 
@@ -140,12 +143,12 @@ export default function ChartEditor({ ctx }: PropTypes) {
               onToggle: () => setTableOpen((v) => !v),
             }}
           >
-            <center>
+            <div>
               <DataTable data={data} reset={reset} transpose={transpose} />
-            </center>
+            </div>
           </Section>
         )}
-        <Section
+        {/* <Section
           title="Configure Chart"
           collapsible={{
             isOpen: isConfigOpen,
@@ -205,14 +208,63 @@ export default function ChartEditor({ ctx }: PropTypes) {
               )}
             </div>
           </div>
-        </Section>
-        <hr style={{ marginBottom: 10 }} />
-        {data != null && data[0] && (
-          <div style={{ marginTop: 10 }}>
-            <center>
-              <RenderChart ds={currentValue} />
-            </center>
+        </Section> */}
+
+        <Section
+          title="Upload file"
+          collapsible={{
+            isOpen: isUploadOpen,
+            onToggle: () => setUploadOpen((v) => !v),
+          }}
+        >
+          <div style={{ margin: "0 20px 40px" }}>
+            <CSVUpload setData={(d) => handleUploadData(d)} />
           </div>
+        </Section>
+
+        <Section
+          title="Choose type"
+          collapsible={{
+            isOpen: isChooseOpen,
+            onToggle: () => setChooseOpen((v) => !v),
+          }}
+        >
+          <div style={{ margin: "0 20px 40px" }}>
+            <SelectChart chart={chart} setChart={setChart} />
+          </div>
+        </Section>
+
+        <Section
+          title="Config chart"
+          collapsible={{
+            isOpen: isConfigOpen,
+            onToggle: () => setConfigOpen((v) => !v),
+          }}
+        >
+          <div style={{ margin: "0 20px 40px" }}>
+            <ChartOptions
+              config={config}
+              setConfig={setConfig}
+              chart={chart}
+              numSeries={data?.length - 1 || 0}
+            />
+          </div>
+        </Section>
+
+        {data != null && data[0] && (
+          <Section
+            title="Preview"
+            collapsible={{
+              isOpen: isPreviewOpen,
+              onToggle: () => setPreviewOpen((v) => !v),
+            }}
+          >
+            <div style={{ marginTop: 20 }}>
+              <center>
+                <RenderChart ds={currentValue} />
+              </center>
+            </div>
+          </Section>
         )}
       </>
     </Canvas>

@@ -2,6 +2,7 @@ import ReactEcharts from "echarts-for-react";
 import { FieldDataType } from "../../sharedTypes";
 import { useRef, useEffect, useState } from "react";
 import { saveAs } from "file-saver";
+import { Button } from "datocms-react-ui";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -218,11 +219,16 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           width: "100%", //data.config?.w,
           height: height,
           maxWidth: "100%",
+          marginBottom: "30px",
         }}
       />
-      <button onClick={() => downLoadImage(refCanvas.current, id)}>
+      <Button
+        fullWidth
+        type="submit"
+        onClick={() => downLoadImage(refCanvas.current, id)}
+      >
         Download
-      </button>
+      </Button>
     </>
   );
 }
