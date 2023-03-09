@@ -208,30 +208,51 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       otherProps: {},
       layout: '',
     },
-
     {
       label: 'GeoJson URL',
       name: 'geoJsonUrl',
       type: 'text',
       options: [],
-      required: false,
+      required: true,
       chartType: ['map'],
       otherProps: {
         defaultValue:
           'https://www.datocms-assets.com/88680/1678208188-europe-geojson.json',
       },
-      layout: '',
+      layout: 'single',
     },
     {
       label: 'Match Property Nome',
       name: 'nameProperty',
       type: 'text',
       options: [],
-      required: false,
+      required: true,
       chartType: ['map'],
       otherProps: {
         defaultValue: 'NAME',
       },
+      layout: '',
+    },
+    {
+      label: 'Nome Serie',
+      name: 'serieName',
+      type: 'text',
+      options: [],
+      required: false,
+      chartType: ['map'],
+      otherProps: {
+        defaultValue: '',
+      },
+      layout: '',
+    },
+    {
+      label: 'Show Visual Map',
+      name: 'visualMap',
+      type: 'checkbox',
+      options: [],
+      required: false,
+      chartType: ['map'],
+      otherProps: {},
       layout: '',
     },
   ];

@@ -65,7 +65,7 @@ function GeoMapChart({ data, id }: ChartPropsType) {
         inRange: {
           color: config.colors,
         },
-        show: config.visualMap || true,
+        show: config.visualMap || false,
       },
       series: data.dataSource.series.map((serie) => {
         return {
@@ -78,7 +78,7 @@ function GeoMapChart({ data, id }: ChartPropsType) {
               borderWidth: 1,
             },
           },
-          name: serie.name || 'GEO MAP',
+          name: config.serieName || '',
           map: id,
           nameProperty: config.nameProperty ? config.nameProperty : 'NAME',
           // data: serie.data,
