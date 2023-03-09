@@ -1,4 +1,4 @@
-import { RenderFieldExtensionCtx } from 'datocms-plugin-sdk';
+import { RenderFieldExtensionCtx } from "datocms-plugin-sdk";
 import {
   Canvas,
   Button,
@@ -9,21 +9,26 @@ import {
   ButtonGroup,
   ButtonGroupButton,
   Section,
-} from 'datocms-react-ui';
-import { useMachine } from '@xstate/react';
+} from "datocms-react-ui";
+import { useMachine } from "@xstate/react";
 
-import stateMachine from '../lib/stateMachine';
-import useStoreState from '../lib/store';
-import { getAvailablePalettes, getPalette, transposeData } from '../lib/utils';
+import stateMachine from "../lib/stateMachine";
+import useStoreState from "../lib/store";
+import {
+  getAvailablePalettes,
+  getPalette,
+  transposeData,
+  withDefaults,
+} from "../lib/utils";
 
-import DataTable from '../components/DataTable';
-import RenderChart from '../components/RenderChart';
-import CSVUpload from '../components/CSVUpload';
-import ChartOptions from '../components/ChartOptions';
-import SelectChart from '../components/SelectChart';
+import DataTable from "../components/DataTable";
+import RenderChart from "../components/RenderChart";
+import CSVUpload from "../components/CSVUpload";
+import ChartOptions from "../components/ChartOptions";
+import SelectChart from "../components/SelectChart";
 
-import { MatrixType } from '../sharedTypes';
-import { useState, useEffect, useCallback } from 'react';
+import { MatrixType } from "../sharedTypes";
+import { useState, useEffect, useCallback } from "react";
 
 type PropTypes = {
   ctx: RenderFieldExtensionCtx;
@@ -32,7 +37,7 @@ type PropTypes = {
 export default function ChartEditor({ ctx }: PropTypes) {
   const currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string);
   const saveData = (data: string | null) => {
-    console.log('???');
+    console.log("???");
     if (JSON.stringify(currentValue) !== data) {
       ctx.setFieldValue(ctx.fieldPath, data);
       // ctx.notice(`${ctx.fieldPath} Saved`);
@@ -52,21 +57,42 @@ export default function ChartEditor({ ctx }: PropTypes) {
   );
   const setData = useStoreState((state) => state.setData);
 
-  useEffect(() => {
-    if (currentValue.data && !data) {
-      setData(currentValue.data);
-      setConfig(currentValue.config);
-      setChart(currentValue.chart);
-      send('SETTINGS');
-      saveData(null);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (currentValue.data && !data) {
+  //     setData(currentValue.data);
+  //     setConfig(currentValue.config);
+  //     setChart(currentValue.chart);
+  //     send("SETTINGS");
+  //     // saveData(null);
+  //   }
+  // }, []);
 
   // useCallback(() => {
   //   if (data) {
   //     saveData(JSON.stringify({ data, config, chart }));
   //   }
   // }, [data, config, chart]);
+
+  useEffect(() => {
+    console.log("CHANGE");
+    if (chart && data && config) {
+      // let value = transformData(data, config, chart);
+      // const value = { config: { ...sampleData, ...config }, data, chart };
+      const value = withDefaults(data, config, chart);
+      const valueString = JSON.stringify(value);
+      const prevValue = JSON.stringify(currentValue);
+      if (valueString !== prevValue) {
+        console.dir(value);
+        saveData(valueString);
+      }
+    } else if (currentValue.data && !data) {
+      setData(currentValue.data);
+      setConfig(currentValue.config);
+      setChart(currentValue.chart);
+      send("SETTINGS");
+      // saveData(null);
+    }
+  }, [chart, data, config, currentValue]);
 
   function reset() {
     setData(null);
@@ -77,13 +103,13 @@ export default function ChartEditor({ ctx }: PropTypes) {
     reset();
     setData(data);
     setTableOpen(true);
-    send('CHOOSE');
+    send("CHOOSE");
   }
 
   function transpose() {
     setData(null);
     const transposed = transposeData(data);
-    setChart('');
+    setChart("");
     setTimeout(() => {
       handleChangeData(transposed);
     }, 300);
@@ -97,9 +123,9 @@ export default function ChartEditor({ ctx }: PropTypes) {
       config.colors = getPalette(palette);
       setConfig(config);
     }
-    setChart('');
+    setChart("");
     setData(d);
-    send('CHOOSE');
+    send("CHOOSE");
   }
   // const stateValue = state.value as string;
 
@@ -129,23 +155,23 @@ export default function ChartEditor({ ctx }: PropTypes) {
           <Toolbar>
             <ToolbarStack stackSize="l">
               <ToolbarTitle>Setup Chart</ToolbarTitle>
-              <div style={{ flex: '1' }} />
+              <div style={{ flex: "1" }} />
               <ButtonGroup>
                 <ButtonGroupButton
-                  selected={state.matches('upload')}
-                  onClick={() => send('UPLOAD')}
+                  selected={state.matches("upload")}
+                  onClick={() => send("UPLOAD")}
                 >
                   Upload
                 </ButtonGroupButton>
                 <ButtonGroupButton
-                  selected={state.matches('choose')}
-                  onClick={() => send('CHOOSE')}
+                  selected={state.matches("choose")}
+                  onClick={() => send("CHOOSE")}
                 >
                   Choose
                 </ButtonGroupButton>
                 <ButtonGroupButton
-                  selected={state.matches('settings')}
-                  onClick={() => send('SETTINGS')}
+                  selected={state.matches("settings")}
+                  onClick={() => send("SETTINGS")}
                 >
                   Configure
                 </ButtonGroupButton>
@@ -154,22 +180,22 @@ export default function ChartEditor({ ctx }: PropTypes) {
           </Toolbar>
           <div
             style={{
-              flex: '1',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              background: '#fff', //'var(--light-bg-color)',
-              padding: '10px',
+              flex: "1",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              background: "#fff", //'var(--light-bg-color)',
+              padding: "10px",
             }}
           >
             <div>
-              {state.matches('upload') && (
+              {state.matches("upload") && (
                 <CSVUpload setData={(d) => handleUploadData(d)} />
               )}
-              {state.matches('choose') && (
+              {state.matches("choose") && (
                 <SelectChart chart={chart} setChart={setChart} />
               )}
-              {state.matches('settings') && (
+              {state.matches("settings") && (
                 <ChartOptions
                   config={config}
                   setConfig={setConfig}
@@ -184,15 +210,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
         {data != null && data[0] && (
           <div style={{ marginTop: 10 }}>
             <center>
-              <RenderChart
-                chart={chart}
-                data={data}
-                config={config}
-                saveData={saveData}
-                prevData={currentValue}
-                // saveFormatted={saveFormatted}
-                // formattedData={currentFormatted}
-              />
+              <RenderChart ds={currentValue} />
             </center>
           </div>
         )}

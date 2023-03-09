@@ -1,5 +1,5 @@
-import { defaultConfig, palettes } from '../lib/constants';
-import { create } from 'zustand';
+import { defaultConfig, palettes } from "../lib/constants";
+import { create } from "zustand";
 
 export function getAvailablePalettes(numSeries) {
   const keys = Object.keys(palettes);
@@ -18,7 +18,7 @@ export function transposeData(data) {
   return data[0].map((_, colIndex) => data.map((row) => row[colIndex]));
 }
 
-export function toDataSource(data, config = {}, chart = 'bar') {
+export function withDefaults(data, config = {}, chart = "bar") {
   if (!config) {
     config = { ...defaultConfig, ...config };
   }
@@ -64,12 +64,12 @@ export function getPieValues({ config, data, chart }) {
     dataSource: {
       categories: [],
       series: {
-        type: 'pie',
-        radius: ['50%', '85%'],
+        type: "pie",
+        radius: ["50%", "85%"],
         avoidLabelOverlap: false,
         label: {
           show: true,
-          position: 'inside',
+          position: "inside",
         },
         labelLine: {
           show: false,
@@ -97,12 +97,12 @@ export function getMapValues({ config, data, chart }) {
       categories: [],
       series: [
         {
-          type: 'map',
+          type: "map",
           label: {
             show: true,
           },
           zoom: 1.2,
-          roam: 'scale',
+          roam: "scale",
           select: { disabled: true },
           data: objectData,
         },
@@ -131,11 +131,11 @@ export function generateRandomData(length, min, max) {
 
 // create a function to generate words from a string of words
 export function generateWords(words, length) {
-  const wordsArray = words.split(' ');
+  const wordsArray = words.split(" ");
   return Array.from(
     { length },
     () => wordsArray[getRandomInt(0, wordsArray.length - 1)]
-  ).join(' ');
+  ).join(" ");
 }
 
 //return a letter of the alphabet
