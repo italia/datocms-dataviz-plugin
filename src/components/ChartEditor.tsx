@@ -45,10 +45,10 @@ export default function ChartEditor({ ctx }: PropTypes) {
     }
   };
   const [isTableOpen, setTableOpen] = useState<boolean>(false);
-  const [isUploadOpen, setUploadOpen] = useState<boolean>(false);
-  const [isChooseOpen, setChooseOpen] = useState<boolean>(false);
   const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
-  const [isPreviewOpen, setPreviewOpen] = useState<boolean>(true);
+  // const [isUploadOpen, setUploadOpen] = useState<boolean>(false);
+  // const [isChooseOpen, setChooseOpen] = useState<boolean>(false);
+  // const [isPreviewOpen, setPreviewOpen] = useState<boolean>(true);
 
   const [state, send] = useMachine(stateMachine);
   const config: any = useStoreState((state) => state.config);
@@ -56,20 +56,9 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const chart = useStoreState((state) => state.chart);
   const setChart = useStoreState((state) => state.setChart);
   const data = useStoreState<MatrixType>(
-    (state) => state.data as unknown as MatrixType
+    (state) => (state.data as unknown) as MatrixType
   );
   const setData = useStoreState((state) => state.setData);
-
-  // useEffect(() => {
-  //   if (currentValue.data && !data) {
-  //     setData(currentValue.data);
-  //     setConfig(currentValue.config);
-  //     setChart(currentValue.chart);
-  //     send("SETTINGS");
-  //     // saveData(null);
-  //   }
-  // }, []);
-
   // useCallback(() => {
   //   if (data) {
   //     saveData(JSON.stringify({ data, config, chart }));
@@ -79,8 +68,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
   useEffect(() => {
     console.log("CHANGE");
     if (chart && data && config) {
-      // let value = transformData(data, config, chart);
-      // const value = { config: { ...sampleData, ...config }, data, chart };
       const value = withDefaults(data, config, chart);
       const valueString = JSON.stringify(value);
       const prevValue = JSON.stringify(currentValue);
@@ -148,7 +135,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
             </div>
           </Section>
         )}
-        {/* <Section
+        <Section
           title="Configure Chart"
           collapsible={{
             isOpen: isConfigOpen,
@@ -193,24 +180,30 @@ export default function ChartEditor({ ctx }: PropTypes) {
           >
             <div>
               {state.matches("upload") && (
-                <CSVUpload setData={(d) => handleUploadData(d)} />
+                <div style={{ margin: "0 20px 40px" }}>
+                  <CSVUpload setData={(d) => handleUploadData(d)} />
+                </div>
               )}
               {state.matches("choose") && (
-                <SelectChart chart={chart} setChart={setChart} />
+                <div style={{ margin: "0 20px 40px" }}>
+                  <SelectChart chart={chart} setChart={setChart} />
+                </div>
               )}
               {state.matches("settings") && (
-                <ChartOptions
-                  config={config}
-                  setConfig={setConfig}
-                  chart={chart}
-                  numSeries={data?.length - 1 || 0}
-                />
+                <div style={{ margin: "0 20px 40px" }}>
+                  <ChartOptions
+                    config={config}
+                    setConfig={setConfig}
+                    chart={chart}
+                    numSeries={data?.length - 1 || 0}
+                  />
+                </div>
               )}
             </div>
           </div>
-        </Section> */}
+        </Section>
 
-        <Section
+        {/* <Section
           title="Upload file"
           collapsible={{
             isOpen: isUploadOpen,
@@ -249,22 +242,22 @@ export default function ChartEditor({ ctx }: PropTypes) {
               numSeries={data?.length - 1 || 0}
             />
           </div>
-        </Section>
+        </Section> */}
 
         {data != null && data[0] && (
-          <Section
-            title="Preview"
-            collapsible={{
-              isOpen: isPreviewOpen,
-              onToggle: () => setPreviewOpen((v) => !v),
-            }}
-          >
-            <div style={{ marginTop: 20 }}>
-              <center>
-                <RenderChart ds={currentValue} />
-              </center>
-            </div>
-          </Section>
+          // <Section
+          //   title="Preview"
+          //   collapsible={{
+          //     isOpen: isPreviewOpen,
+          //     onToggle: () => setPreviewOpen((v) => !v),
+          //   }}
+          // >
+          <div style={{ marginTop: 20 }}>
+            <center>
+              <RenderChart ds={currentValue} />
+            </center>
+          </div>
+          // </Section>
         )}
       </>
     </Canvas>

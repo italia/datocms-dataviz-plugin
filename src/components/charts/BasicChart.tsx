@@ -223,8 +223,8 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         }}
       />
       <Button
-        fullWidth
         type="submit"
+        buttonSize="xxs"
         onClick={() => downLoadImage(refCanvas.current, id)}
       >
         Download
