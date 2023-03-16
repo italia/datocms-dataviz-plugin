@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
-import { sampleData } from './constants';
-import { MatrixType } from '../sharedTypes';
+import { create } from "zustand";
+import { devtools } from "zustand/middleware";
+import { sampleData } from "./constants";
+import { MatrixType } from "../sharedTypes";
 
 let store = (set: any) => ({
   data: 0,
@@ -12,6 +12,12 @@ let store = (set: any) => ({
   setChart: (value: string) => set(() => ({ chart: value })),
   setRawData: (value: any) => set(() => ({ rawData: value })),
   setData: (value: MatrixType) => set(() => ({ data: value })),
+  setAll: (value: any) =>
+    set(() => ({
+      chart: value.chart,
+      config: value.config,
+      data: value.data,
+    })),
 });
 
 const useStoreState = create(devtools(store));

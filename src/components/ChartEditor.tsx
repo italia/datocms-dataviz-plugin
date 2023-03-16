@@ -59,6 +59,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const data = useStoreState<MatrixType>(
     (state) => (state.data as unknown) as MatrixType
   );
+  const setAll = useStoreState((state) => state.setAll);
   const setData = useStoreState((state) => state.setData);
 
   // useEffect(() => {
@@ -86,18 +87,16 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   useEffect(() => {
     if (!data && currentValue.data) {
-      console.log("INIT");
+      console.log("INIT", currentValue);
       console.log("--------");
-      setData(currentValue.data);
-      setConfig(currentValue.config);
-      setChart(currentValue.chart);
+      setAll(currentValue);
     } else if (data) {
       console.log("SET DATA");
       const valueString = JSON.stringify(data);
       const prevValue = JSON.stringify(currentValue?.data || "");
       if (valueString !== prevValue) {
         saveData(str({ chart: "", config: {}, data }));
-        setChart(null);
+        setChart("");
         setConfig({});
       }
     }
@@ -111,15 +110,11 @@ export default function ChartEditor({ ctx }: PropTypes) {
   }, [chart]);
 
   useEffect(() => {
-    if (config) {
-      const valueString = JSON.stringify(config);
-      const prevValue = JSON.stringify(currentValue.config);
-      if (valueString !== prevValue) {
-        console.log("SET CONFIG");
-        saveData(str({ chart, config, data }));
-      }
+    if (config && data) {
+      console.log("SET CONFIG");
+      saveData(str({ chart, config, data }));
     }
-  }, [config]);
+  }, [config, data]);
 
   function doReset() {
     saveData(str({ config: {}, chart: "", data: null }));
@@ -282,19 +277,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
             />
           </div>
         </Section> */}
-
-        <div>
-          currentValue: <pre>{JSON.stringify(currentValue)}</pre>
-        </div>
-        <div>
-          chart: <pre>{JSON.stringify(chart)}</pre>
-        </div>
-        <div>
-          config: <pre>{JSON.stringify(config)}</pre>
-        </div>
-        <div>
-          DATA: <pre>{JSON.stringify(data)}</pre>
-        </div>
 
         {currentValue && currentValue.data != null && currentValue.data[0] && (
           // <Section

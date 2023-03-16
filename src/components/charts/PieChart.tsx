@@ -84,6 +84,7 @@ function PieChart({ data }: ChartPropsType) {
     },
     tooltip,
     legend: {
+      type: "scroll",
       left: "center",
       top: "bottom",
       show: config.legend,

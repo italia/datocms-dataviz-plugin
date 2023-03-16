@@ -118,7 +118,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
     const tooltip = {
       trigger: config.tooltipTrigger || "item",
       axisPointer: {
-        type: config.axisPointer,
+        type: "shadow",
       },
       valueFormatter: (value) => {
         const formatter = config.tooltipFormatter;
@@ -175,6 +175,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       },
       tooltip,
       legend: {
+        type: "scroll",
         left: "center",
         top: "bottom",
         show: config.legend,
