@@ -10,7 +10,26 @@ function getTotal(data: any) {
     return acc + Number(v.value);
   }, 0);
 }
-
+function format(value, config) {
+  const formatter = config.tooltipFormatter;
+  const valueFormatter = config.valueFormatter;
+  let valueFormatted = value;
+  if (formatter) {
+    if (formatter === "percentage") {
+      valueFormatted = `${value}%`;
+    } else if (formatter === "currency") {
+      valueFormatted = new Intl.NumberFormat("it-IT", {
+        style: "currency",
+        currency: "EUR",
+      }).format(value);
+    } else if (formatter === "number") {
+      valueFormatted = new Intl.NumberFormat("it-IT", {
+        style: "decimal",
+      }).format(value);
+    }
+  }
+  return `${valueFormatted} ${valueFormatter ? valueFormatter : ""}`;
+}
 function PieChart({ data }: ChartPropsType) {
   const { dataSource } = data;
   const config: any = data.config;
@@ -21,31 +40,14 @@ function PieChart({ data }: ChartPropsType) {
       type: config.axisPointer,
     },
     valueFormatter: (value) => {
-      const formatter = config.tooltipFormatter;
-      const valueFormatter = config.valueFormatter;
-      let valueFormatted = value;
-      if (formatter) {
-        if (formatter === "percentage") {
-          valueFormatted = `${value}%`;
-        } else if (formatter === "currency") {
-          valueFormatted = new Intl.NumberFormat("it-IT", {
-            style: "currency",
-            currency: "EUR",
-          }).format(value);
-        } else if (formatter === "number") {
-          valueFormatted = new Intl.NumberFormat("it-IT", {
-            style: "decimal",
-          }).format(value);
-        }
-      }
-      return `${valueFormatted} ${valueFormatter ? valueFormatter : ""}`;
+      return format(value, config);
     },
     show: config.tooltip,
     // formatter: (params: any) => {},
   };
 
   console.log("dataSource", dataSource);
-  let total = 0;
+  let total = "";
   try {
     const serie: any = dataSource.series;
     let serieData: any;
@@ -54,15 +56,14 @@ function PieChart({ data }: ChartPropsType) {
     } else if (Array.isArray(serie)) {
       serieData = serie[0].data;
     }
-    total = getTotal(serieData);
+    const totale = getTotal(serieData);
+    total = format(totale, config);
   } catch (error) {}
 
   let options = {
     backgroundColor: config.background ? config.background : "#F2F7FC",
     title: {
-      text: `${config?.totalLabel || "Total"}\n${total} ${
-        config.valueFormatter || ""
-      }`,
+      text: `${config?.totalLabel || "Totale"}\n${total ? total : "0"}`,
       left: "center",
       top: "center",
     },
@@ -77,16 +78,26 @@ function PieChart({ data }: ChartPropsType) {
       "#9a60b4",
       "#ea7ccc",
     ],
-    series: dataSource.series,
+    series: {
+      ...dataSource.series,
+      labelLine: {
+        show: config.labeLine,
+      },
+      label: {
+        show: true,
+        position: config.labeLine ? "outside" : "inside",
+      },
+    },
     textStyle: {
       fontFamily: "Titillium Web, sans-serif",
       fontSize: 12,
     },
     tooltip,
+
     legend: {
       type: "scroll",
       left: "center",
-      top: "bottom",
+      top: "auto",
       show: config.legend,
     },
   };

@@ -1,5 +1,5 @@
 import { defaultConfig, palettes } from "../lib/constants";
-import { create } from "zustand";
+// import { create } from "zustand";
 
 export function getAvailablePalettes(numSeries) {
   const keys = Object.keys(palettes);

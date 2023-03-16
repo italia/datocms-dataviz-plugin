@@ -44,7 +44,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
       console.log(`${ctx.fieldPath} SAVED`);
     }
   };
-  const [reset, setReset] = useState<boolean>(false);
   const [isTableOpen, setTableOpen] = useState<boolean>(false);
   const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
   // const [isUploadOpen, setUploadOpen] = useState<boolean>(false);
@@ -117,25 +116,27 @@ export default function ChartEditor({ ctx }: PropTypes) {
   }, [config, data]);
 
   function doReset() {
-    saveData(str({ config: {}, chart: "", data: null }));
-    setData(null);
-    send("UPLOAD");
+    saveData(str({ config: {}, chart: "" }));
+    setTimeout(() => {
+      setData(null);
+      send("UPLOAD");
+    }, 500);
   }
 
   function handleUploadData(data) {
-    setData(data);
-    setTableOpen(true);
-    send("CHOOSE");
+    saveData(str({ config: {}, chart: "" }));
+    setTimeout(() => {
+      setData(data);
+      setTableOpen(true);
+      send("CHOOSE");
+    }, 500);
   }
 
   function transpose() {
     // setData(null);
     const transposed = transposeData(data);
-    // setChart("");
-    // setTimeout(() => {
-    //   handleChangeData(transposed);
-    // }, 300);
     setData(transposed);
+    setChart("");
     send("CHOOSE");
   }
 

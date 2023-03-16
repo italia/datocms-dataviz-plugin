@@ -14,6 +14,15 @@ function BasicChart({ data }: ChartPropsType, id: string) {
 
   function getOptions(data: FieldDataType) {
     const config: any = data.config;
+    let grid = {
+      left: config.gridLeft || "10%",
+      right: config.gridRight || "10%",
+      height: config.gridHeight || "auto",
+      width: config.gridWidth || "auto",
+      bottom: config.gridBottom || 60,
+      top: config.gridTop || 60,
+    };
+    console.log("grid", grid);
     const zoom = config.zoom;
     let dataZoom = [];
     if (zoom !== "none") {
@@ -63,14 +72,14 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       ? {
           name: config.xLabel,
           nameLocation: "middle",
-          nameGap: 30,
+          nameGap: 50,
         }
       : {};
     let yName = config.yLabel
       ? {
           name: config.yLabel,
           nameLocation: "middle",
-          nameGap: 30,
+          nameGap: 50,
         }
       : {};
 
@@ -148,6 +157,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       backgroundColor: config.background ? config.background : "#F2F7FC",
       color: config.colors || null,
       ...axis,
+      grid,
       series: data.dataSource.series.map((serie) => {
         let rest = { stack: false, smooth: false };
         if (config.stack) {
@@ -162,7 +172,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           let smooth: any = config.smooth ? parseFloat(config.smooth) : false;
           rest = { ...rest, smooth };
         }
-
         // console.log('rest', rest);
         return {
           ...serie,
