@@ -146,7 +146,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
 
     const options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
-      color: config.colors,
+      color: config.colors || null,
       ...axis,
       series: data.dataSource.series.map((serie) => {
         let rest = { stack: false, smooth: false };

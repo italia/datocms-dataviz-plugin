@@ -41,9 +41,10 @@ export default function ChartEditor({ ctx }: PropTypes) {
     if (JSON.stringify(currentValue) !== data) {
       ctx.setFieldValue(ctx.fieldPath, data);
       // ctx.notice(`${ctx.fieldPath} Saved`);
-      console.log(`${ctx.fieldPath} Saved`);
+      console.log(`${ctx.fieldPath} SAVED`);
     }
   };
+  const [reset, setReset] = useState<boolean>(false);
   const [isTableOpen, setTableOpen] = useState<boolean>(false);
   const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
   // const [isUploadOpen, setUploadOpen] = useState<boolean>(false);
@@ -59,64 +60,102 @@ export default function ChartEditor({ ctx }: PropTypes) {
     (state) => (state.data as unknown) as MatrixType
   );
   const setData = useStoreState((state) => state.setData);
-  // useCallback(() => {
-  //   if (data) {
-  //     saveData(JSON.stringify({ data, config, chart }));
+
+  // useEffect(() => {
+  //   console.log("CHANGE");
+  //   if (chart && data && config) {
+  //     const value = withDefaults(data, config, chart);
+  //     const valueString = JSON.stringify(value);
+  //     const prevValue = JSON.stringify(currentValue);
+  //     if (valueString !== prevValue) {
+  //       console.dir(value);
+  //       saveData(valueString);
+  //     }
+  //   } else if (currentValue.data && !data) {
+  //     setData(currentValue.data);
+  //     setConfig(currentValue.config);
+  //     setChart(currentValue.chart);
+  //     send("SETTINGS");
+  //     // saveData(null);
   //   }
-  // }, [data, config, chart]);
+  // }, [chart, data, config, currentValue]);
+
+  function str(obj) {
+    return JSON.stringify(obj);
+  }
 
   useEffect(() => {
-    console.log("CHANGE");
-    if (chart && data && config) {
-      const value = withDefaults(data, config, chart);
-      const valueString = JSON.stringify(value);
-      const prevValue = JSON.stringify(currentValue);
-      if (valueString !== prevValue) {
-        console.dir(value);
-        saveData(valueString);
-      }
-    } else if (currentValue.data && !data) {
+    if (!data && currentValue.data) {
+      console.log("INIT");
+      console.log("--------");
       setData(currentValue.data);
       setConfig(currentValue.config);
       setChart(currentValue.chart);
-      send("SETTINGS");
-      // saveData(null);
+    } else if (data) {
+      console.log("SET DATA");
+      const valueString = JSON.stringify(data);
+      const prevValue = JSON.stringify(currentValue?.data || "");
+      if (valueString !== prevValue) {
+        saveData(str({ chart: "", config: {}, data }));
+        setChart(null);
+        setConfig({});
+      }
     }
-  }, [chart, data, config, currentValue]);
+  }, [data]);
 
-  function reset() {
+  useEffect(() => {
+    if (chart && chart !== currentValue?.chart) {
+      saveData(str({ chart, config: {}, data }));
+      setConfig({});
+    }
+  }, [chart]);
+
+  useEffect(() => {
+    if (config) {
+      const valueString = JSON.stringify(config);
+      const prevValue = JSON.stringify(currentValue.config);
+      if (valueString !== prevValue) {
+        console.log("SET CONFIG");
+        saveData(str({ chart, config, data }));
+      }
+    }
+  }, [config]);
+
+  function doReset() {
+    saveData(str({ config: {}, chart: "", data: null }));
     setData(null);
-    // saveData(null);
+    send("UPLOAD");
   }
 
   function handleUploadData(data) {
-    reset();
     setData(data);
     setTableOpen(true);
     send("CHOOSE");
   }
 
   function transpose() {
-    setData(null);
+    // setData(null);
     const transposed = transposeData(data);
-    setChart("");
-    setTimeout(() => {
-      handleChangeData(transposed);
-    }, 300);
-  }
-
-  function handleChangeData(d) {
-    if (!config.palette) {
-      const numSeries = d.length - 1;
-      let palette = getAvailablePalettes(numSeries)[0];
-      config.palette = palette;
-      config.colors = getPalette(palette);
-      setConfig(config);
-    }
-    setChart("");
-    setData(d);
+    // setChart("");
+    // setTimeout(() => {
+    //   handleChangeData(transposed);
+    // }, 300);
+    setData(transposed);
     send("CHOOSE");
   }
+
+  // function handleChangeData(d) {
+  //   if (!config.palette) {
+  //     const numSeries = d.length - 1;
+  //     let palette = getAvailablePalettes(numSeries)[0];
+  //     config.palette = palette;
+  //     config.colors = getPalette(palette);
+  //     setConfig(config);
+  //   }
+  //   setChart("");
+  //   setData(d);
+  //   send("CHOOSE");
+  // }
   // const stateValue = state.value as string;
 
   return (
@@ -131,7 +170,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
             }}
           >
             <div>
-              <DataTable data={data} reset={reset} transpose={transpose} />
+              <DataTable data={data} reset={doReset} transpose={transpose} />
             </div>
           </Section>
         )}
@@ -244,7 +283,20 @@ export default function ChartEditor({ ctx }: PropTypes) {
           </div>
         </Section> */}
 
-        {data != null && data[0] && (
+        <div>
+          currentValue: <pre>{JSON.stringify(currentValue)}</pre>
+        </div>
+        <div>
+          chart: <pre>{JSON.stringify(chart)}</pre>
+        </div>
+        <div>
+          config: <pre>{JSON.stringify(config)}</pre>
+        </div>
+        <div>
+          DATA: <pre>{JSON.stringify(data)}</pre>
+        </div>
+
+        {currentValue && currentValue.data != null && currentValue.data[0] && (
           // <Section
           //   title="Preview"
           //   collapsible={{

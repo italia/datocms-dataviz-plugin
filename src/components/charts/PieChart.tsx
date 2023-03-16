@@ -57,7 +57,7 @@ function PieChart({ data }: ChartPropsType) {
     total = getTotal(serieData);
   } catch (error) {}
 
-  const options = {
+  let options = {
     backgroundColor: config.background ? config.background : "#F2F7FC",
     title: {
       text: `${config?.totalLabel || "Total"}\n${total} ${
@@ -66,7 +66,17 @@ function PieChart({ data }: ChartPropsType) {
       left: "center",
       top: "center",
     },
-    color: config.colors,
+    color: config.colors || [
+      "#5470c6",
+      "#91cc75",
+      "#fac858",
+      "#ee6666",
+      "#73c0de",
+      "#3ba272",
+      "#fc8452",
+      "#9a60b4",
+      "#ea7ccc",
+    ],
     series: dataSource.series,
     textStyle: {
       fontFamily: "Titillium Web, sans-serif",
