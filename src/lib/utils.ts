@@ -5,11 +5,21 @@ export function getAvailablePalettes(numSeries) {
   const keys = Object.keys(palettes);
   const availabelPalettes = [
     ...keys.filter((k) => k.indexOf(`_${numSeries}_`) > -1),
-    ...keys.slice(0, 3),
+    ...keys.slice(0, 7),
   ].sort();
 
   return availabelPalettes;
 }
+
+export function getMapPalettes() {
+  const keys = Object.keys(palettes);
+  const availabelPalettes = [
+    ...keys.filter((k) => k.indexOf(`_${2}_`) > -1),
+    ...keys.slice(0, 7),
+  ].sort();
+  return availabelPalettes;
+}
+
 export function getPalette(palette) {
   return palettes[palette];
 }

@@ -1,7 +1,7 @@
 import { Button } from "datocms-react-ui";
 
 export default function DataTable({ data, reset, transpose }): JSX.Element {
-  let max = 20;
+  let max = 10;
   return (
     <div className="fontSize:12px">
       {data && data[0] && (

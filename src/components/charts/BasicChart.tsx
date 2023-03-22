@@ -9,7 +9,7 @@ type ChartPropsType = {
 };
 
 function BasicChart({ data }: ChartPropsType, id: string) {
-  const [forceReload, setForceReload] = useState(0);
+  // const [forceReload, setForceReload] = useState(0);
   const refCanvas = useRef<ReactEcharts>();
 
   function getOptions(data: FieldDataType) {
@@ -23,7 +23,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       top: config.gridTop || 60,
     };
     console.log("grid", grid);
-    const zoom = config.zoom;
+    const zoom = config.zoom || "none";
     let dataZoom = [];
     if (zoom !== "none") {
       const x = [
@@ -38,8 +38,8 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           show: true,
           start: 1,
           end: 100,
-          yAxisIndex: [0],
-          type: "inside",
+          xAxisIndex: [0],
+          type: "slider",
         },
       ];
       const y = [
@@ -47,8 +47,8 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           show: true,
           start: 1,
           end: 100,
-          xAxisIndex: [0],
-          type: "slider",
+          yAxisIndex: [0],
+          type: "inside",
         },
         {
           show: true,
@@ -67,6 +67,12 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         dataZoom = [...y];
       }
     }
+
+    let dataZoomOpt = ["both_axis", "x_axis", "y_axis"].includes(zoom)
+      ? { dataZoom }
+      : {};
+
+    console.log("dataZoomOpt", dataZoomOpt);
 
     let xName = config.xLabel
       ? {
@@ -153,7 +159,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       // formatter: (params: any) => {},
     };
 
-    const options = {
+    let options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
       color: config.colors || null,
       ...axis,
@@ -189,19 +195,25 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         top: "bottom",
         show: config.legend,
       },
-      dataZoom,
+      ...dataZoomOpt,
     };
+
     return options;
   }
 
   useEffect(() => {
     if (data && refCanvas.current) {
       const options: any = getOptions(data);
-      // console.log('basic chart options', options);
+      console.log("UPDATE", options);
       refCanvas.current?.getEchartsInstance().setOption(options);
-      setForceReload(forceReload + 1);
     }
   }, [data, refCanvas]);
+
+  // useEffect(() => {
+  //   if (forceReload) {
+  //     refCanvas.current?.getEchartsInstance().setOption(getOptions(data));
+  //   }
+  // }, [forceReload]);
 
   async function downLoadImage(element: any, id: string) {
     const echartInstance = element.getEchartsInstance();

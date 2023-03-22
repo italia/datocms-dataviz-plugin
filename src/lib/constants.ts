@@ -5,6 +5,17 @@ sample: ['#5c6f82', '#BFDFFF', '#207BD6', '#004D99', '#6AAAEB'],
 blue: ['#4392E0', '#207AD5', '#0066CC', '#004D99', '#004080', '#003366'],
 */
 export const palettes = {
+  default: [
+    "#5470c6",
+    "#91cc75",
+    "#fac858",
+    "#ee6666",
+    "#73c0de",
+    "#3ba272",
+    "#fc8452",
+    "#9a60b4",
+    "#ea7ccc",
+  ],
   divergente: [
     "#003366",
     "#004D99",
@@ -41,6 +52,9 @@ export const palettes = {
     "#B32D43",
     "#737373",
   ],
+  monocolore_a: Array(38).fill("#0066CC"),
+  monocolore_b: Array(38).fill("#004080"),
+  monocolore_c: Array(38).fill("#2F475E"),
 
   _1_a: ["#0066CC"],
   _1_b: ["#004080"],
@@ -78,11 +92,11 @@ export const fixedSettings = {
 export const defaultConfig = {
   palette: "",
   colors: [],
-  h: 500,
+  h: 350,
   direction: "vertical",
   smooth: 0,
-  tooltip: 1,
-  legend: 1,
+  tooltip: true,
+  legend: true,
   stacked: false,
 };
 

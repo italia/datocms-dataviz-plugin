@@ -1,11 +1,12 @@
 import { Button } from "datocms-react-ui";
 import { useForm } from "react-hook-form";
 import { palettes, getFields } from "../lib/constants";
-import { getAvailablePalettes } from "../lib/utils";
+import { getAvailablePalettes, getMapPalettes } from "../lib/utils";
 import ShowPalette from "./ShowPalette";
 
 function ChartOptions({ config, setConfig, chart, numSeries }) {
-  const availabelPalettes = getAvailablePalettes(numSeries);
+  const availabelPalettes =
+    chart === "map" ? getMapPalettes() : getAvailablePalettes(numSeries);
   const defaultPalette = availabelPalettes[0];
   const fields = getFields(availabelPalettes, defaultPalette);
   const {
