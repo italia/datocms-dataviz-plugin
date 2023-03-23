@@ -173,3 +173,24 @@ export function generateCategories(length) {
 export function generateItems(prefix, length) {
   return Array.from({ length }, (_, index) => `${prefix} ${index + 1}`);
 }
+
+export function formatTooltip(value, config) {
+  const formatter = config.tooltipFormatter;
+  const valueFormatter = config.valueFormatter;
+  let valueFormatted = value;
+  if (formatter) {
+    if (formatter === "percentage") {
+      valueFormatted = `${value}%`;
+    } else if (formatter === "currency") {
+      valueFormatted = new Intl.NumberFormat("it-IT", {
+        style: "currency",
+        currency: "EUR",
+      }).format(value);
+    } else if (formatter === "number") {
+      valueFormatted = new Intl.NumberFormat("it-IT", {
+        style: "decimal",
+      }).format(value);
+    }
+  }
+  return `${valueFormatted} ${valueFormatter ? valueFormatter : ""}\n`;
+}

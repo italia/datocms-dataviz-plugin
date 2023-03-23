@@ -2,7 +2,7 @@ import ReactEcharts from "echarts-for-react";
 import { FieldDataType } from "../../sharedTypes";
 import { useRef, useEffect, useState } from "react";
 import * as echarts from "echarts";
-import { log } from "../../lib/utils";
+import { log, formatTooltip } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -20,27 +20,9 @@ function GeoMapChart({ data, id }: ChartPropsType) {
     const tooltip = {
       trigger: "item",
       valueFormatter: (value) => {
-        const formatter = config.tooltipFormatter;
-        const valueFormatter = config.valueFormatter;
-        let valueFormatted = value;
-        if (formatter) {
-          if (formatter === "percentage") {
-            valueFormatted = `${value}%`;
-          } else if (formatter === "currency") {
-            valueFormatted = new Intl.NumberFormat("it-IT", {
-              style: "currency",
-              currency: "EUR",
-            }).format(value);
-          } else if (formatter === "number") {
-            valueFormatted = new Intl.NumberFormat("it-IT", {
-              style: "decimal",
-            }).format(value);
-          }
-        }
-        return `${valueFormatted} ${valueFormatter ? valueFormatter : ""}`;
+        return formatTooltip(value, config);
       },
       show: config.tooltip,
-      // formatter: (params: any) => {},
     };
 
     const min = Math.min(...data.dataSource.series[0].data.map((d) => d.value));
@@ -73,7 +55,7 @@ function GeoMapChart({ data, id }: ChartPropsType) {
           roam: true,
           emphasis: {
             itemStyle: {
-              areaColor: "#ddd",
+              areaColor: "#F2F7FC",
             },
           },
           name: config.serieName || "",
@@ -111,7 +93,7 @@ function GeoMapChart({ data, id }: ChartPropsType) {
   const height = config?.h || 500;
 
   return (
-    <>
+    <div style={{ textAlign: "left" }}>
       <ReactEcharts
         option={getOptions(data, geoData)}
         ref={refCanvas}
@@ -121,7 +103,7 @@ function GeoMapChart({ data, id }: ChartPropsType) {
           maxWidth: "100%",
         }}
       />
-    </>
+    </div>
   );
 }
 

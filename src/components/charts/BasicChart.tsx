@@ -3,7 +3,7 @@ import { FieldDataType } from "../../sharedTypes";
 import { useRef, useEffect } from "react";
 import { saveAs } from "file-saver";
 import { Button } from "datocms-react-ui";
-import { log } from "../../lib/utils";
+import { log, formatTooltip } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -137,24 +137,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         type: "shadow",
       },
       valueFormatter: (value) => {
-        const formatter = config.tooltipFormatter;
-        const valueFormatter = config.valueFormatter;
-        let valueFormatted = value;
-        if (formatter) {
-          if (formatter === "percentage") {
-            valueFormatted = `${value}%`;
-          } else if (formatter === "currency") {
-            valueFormatted = new Intl.NumberFormat("it-IT", {
-              style: "currency",
-              currency: "EUR",
-            }).format(value);
-          } else if (formatter === "number") {
-            valueFormatted = new Intl.NumberFormat("it-IT", {
-              style: "decimal",
-            }).format(value);
-          }
-        }
-        return `${valueFormatted} ${valueFormatter ? valueFormatter : ""}`;
+        return formatTooltip(value, config);
       },
       show: config.tooltip,
       // formatter: (params: any) => {},
@@ -198,7 +181,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       },
       ...dataZoomOpt,
     };
-
     return options;
   }
 
@@ -233,7 +215,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
   const config: any = data.config || null;
   const height = config?.h || 500;
   return (
-    <>
+    <div style={{ textAlign: "left" }}>
       <ReactEcharts
         // option={getOptions(data)}
         option={{}}
@@ -252,7 +234,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       >
         Download
       </Button>
-    </>
+    </div>
   );
 }
 
