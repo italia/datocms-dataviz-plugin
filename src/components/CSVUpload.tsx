@@ -1,4 +1,5 @@
 import Papa from "papaparse";
+import { log } from "../lib/utils";
 
 function UploadCSV({ setData }) {
   function uploadFile(event) {
@@ -8,7 +9,7 @@ function UploadCSV({ setData }) {
       header: false,
       skipEmptyLines: true,
       complete: (results) => {
-        console.log("RESULTS DATA", results.data);
+        // log("RESULTS DATA", results.data);
         setData(results.data);
       },
     });

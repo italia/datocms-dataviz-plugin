@@ -2,6 +2,7 @@ import ReactEcharts from "echarts-for-react";
 import { FieldDataType } from "../../sharedTypes";
 import { useRef, useEffect, useState } from "react";
 import * as echarts from "echarts";
+import { log } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -45,8 +46,8 @@ function GeoMapChart({ data, id }: ChartPropsType) {
     const min = Math.min(...data.dataSource.series[0].data.map((d) => d.value));
     const max = Math.max(...data.dataSource.series[0].data.map((d) => d.value));
 
-    console.log("min", min);
-    console.log("max", max);
+    log("min", min);
+    log("max", max);
     const options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
       color: config.colors,
@@ -91,9 +92,9 @@ function GeoMapChart({ data, id }: ChartPropsType) {
       const url: string = config?.geoJsonUrl || "";
       if (url) {
         const response = await fetch(url);
-        console.log("response", response.status);
+        log("response", response.status);
         const raw: any = await response.json();
-        // console.log('length', raw.features.length);
+        // log('length', raw.features.length);
         setGeoData(raw);
       }
     }

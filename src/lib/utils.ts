@@ -1,6 +1,18 @@
-import { defaultConfig, palettes } from "../lib/constants";
-// import { create } from "zustand";
+import { palettes } from "../lib/constants";
 
+export function log(...args) {
+  console.log(args);
+}
+
+// constant to check if config is empty
+const emptyConfig = {};
+
+// function to compare two objects deeply
+export function isEqual(a, b) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
+// function to get available palettes based on number of series + defaults
 export function getAvailablePalettes(numSeries) {
   const keys = Object.keys(palettes);
   const availabelPalettes = [
@@ -11,6 +23,7 @@ export function getAvailablePalettes(numSeries) {
   return availabelPalettes;
 }
 
+// function to get palette colors for map type, adds default colors
 export function getMapPalettes() {
   const keys = Object.keys(palettes);
   const availabelPalettes = [
@@ -20,21 +33,17 @@ export function getMapPalettes() {
   return availabelPalettes;
 }
 
+// function to get palette colors by name
 export function getPalette(palette) {
   return palettes[palette];
 }
 
+// transpose data matrix
 export function transposeData(data) {
   return data[0].map((_, colIndex) => data.map((row) => row[colIndex]));
 }
 
-export function withDefaults(data, config = {}, chart = "bar") {
-  if (!config) {
-    config = { ...defaultConfig, ...config };
-  }
-  return { config, data, chart };
-}
-
+// function to get values for basic charts
 export function getBasicValues({ config, data, chart }) {
   const categories = data[0].slice(1) || [];
   const series = data.slice(1).map((row) => {
@@ -58,6 +67,7 @@ export function getBasicValues({ config, data, chart }) {
   };
 }
 
+// function to get values for pie charts
 export function getPieValues({ config, data, chart }) {
   const series = data.slice(1).map((row) => {
     const [name, ...data] = row;
@@ -92,6 +102,7 @@ export function getPieValues({ config, data, chart }) {
   };
 }
 
+// function to get values for map charts
 export function getMapValues({ config, data, chart }) {
   const objectData = data.slice(1).map((row) => {
     return {
@@ -158,6 +169,7 @@ export function generateCategories(length) {
   return Array.from({ length }, (_, index) => getLetter(getRandomInt(0, 25)));
 }
 
+//generate a string given the the length from random letters of the alphabet
 export function generateItems(prefix, length) {
   return Array.from({ length }, (_, index) => `${prefix} ${index + 1}`);
 }

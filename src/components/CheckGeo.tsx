@@ -2,6 +2,7 @@ import { Canvas, Button } from "datocms-react-ui";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import DataTable from "./DataTable";
+import { log } from "../lib/utils";
 
 function ChartOptions() {
   const {
@@ -32,9 +33,9 @@ function ChartOptions() {
   async function getData(url) {
     if (url) {
       const response = await fetch(url);
-      console.log("response", response.status);
+      log("response", response.status);
       const raw: any = await response.json();
-      console.log("length", raw.features.length);
+      log("length", raw.features.length);
 
       const data = raw.features.slice(0, 20).map((feat, index) => {
         const { properties } = feat;
@@ -44,13 +45,13 @@ function ChartOptions() {
           return Object.values(properties);
         }
       });
-      console.log(data);
+      log(data);
       setGeoData(data);
     }
   }
 
   const onSubmit = async (data) => {
-    console.log(data);
+    log(data);
     await getData(data.geoJsonUrl);
   };
 

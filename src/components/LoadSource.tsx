@@ -1,12 +1,12 @@
-import { Button } from 'datocms-react-ui';
-import { useState } from 'react';
-
-import axios from 'axios';
+import { Button } from "datocms-react-ui";
+import { useState } from "react";
+import axios from "axios";
+import { log } from "../lib/utils";
 
 function TransformSource({ setRawData }) {
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState(
-    'https://raw.githubusercontent.com/teamdigitale/padigitale2026-opendata/main/data/candidature_altrienti_finanziate.json'
+    "https://raw.githubusercontent.com/teamdigitale/padigitale2026-opendata/main/data/candidature_altrienti_finanziate.json"
   );
 
   async function getData() {
@@ -18,7 +18,7 @@ function TransformSource({ setRawData }) {
         setRawData(data);
       }
     } catch (error) {
-      console.log(error);
+      log(error);
     } finally {
       setLoading(false);
     }

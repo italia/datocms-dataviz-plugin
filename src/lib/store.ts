@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { sampleData } from "./constants";
+import { defaultConfig } from "./constants";
 import { MatrixType } from "../sharedTypes";
 
 let store = (set: any) => ({
   data: 0,
   chart: null,
-  config: sampleData.config,
+  config: defaultConfig,
   rawData: null,
   setConfig: (value: object) => set(() => ({ config: value })),
   setChart: (value: string) => set(() => ({ chart: value })),

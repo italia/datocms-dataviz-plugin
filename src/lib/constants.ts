@@ -1,5 +1,4 @@
 import type { FieldDataType } from "../sharedTypes";
-import { withDefaults } from "./utils";
 /*
 sample: ['#5c6f82', '#BFDFFF', '#207BD6', '#004D99', '#6AAAEB'],
 blue: ['#4392E0', '#207AD5', '#0066CC', '#004D99', '#004080', '#003366'],
@@ -90,14 +89,17 @@ export const fixedSettings = {
 };
 
 export const defaultConfig = {
-  palette: "",
   colors: [],
+  direction: "horizontal",
   h: 350,
-  direction: "vertical",
-  smooth: 0,
-  tooltip: true,
+  labeLine: false,
   legend: true,
-  stacked: false,
+  palette: "default",
+  tooltip: true,
+  tooltipFormatter: "number",
+  valueFormatter: "",
+  totalLabel: "Totale",
+  tooltipTrigger: "axis",
 };
 
 export const sampleData: FieldDataType = {
@@ -201,17 +203,6 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     otherProps: { defaultValue: "axis" },
     layout: "",
   },
-  // {
-  //   label: 'Tooltip add value',
-  //   name: 'tooltipAdditionalValue',
-  //   type: 'select',
-  //   options: ['', 'total', 'percentage'],
-  //   required: false,
-  //   chartType: ['bar', 'line', 'pie', 'map'],
-  //   otherProps: {},
-  //   layout: '',
-  // },
-
   {
     label: "Grid",
     name: "Grid",

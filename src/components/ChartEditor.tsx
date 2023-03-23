@@ -1,24 +1,8 @@
 import { RenderFieldExtensionCtx } from "datocms-plugin-sdk";
-import {
-  Canvas,
-  Button,
-  SwitchField,
-  Toolbar,
-  ToolbarTitle,
-  ToolbarStack,
-  ButtonGroup,
-  ButtonGroupButton,
-  Section,
-} from "datocms-react-ui";
-// import { useMachine } from "@xstate/react";
-// import stateMachine from "../lib/stateMachine";
+import { Canvas, Section } from "datocms-react-ui";
 import useStoreState from "../lib/store";
-import {
-  getAvailablePalettes,
-  getPalette,
-  transposeData,
-  withDefaults,
-} from "../lib/utils";
+import { transposeData } from "../lib/utils";
+import { log } from "../lib/utils";
 
 import DataTable from "../components/DataTable";
 import RenderChart from "../components/RenderChart";
@@ -26,21 +10,25 @@ import CSVUpload from "../components/CSVUpload";
 import ChartOptions from "../components/ChartOptions";
 import SelectChart from "../components/SelectChart";
 
+import { isEqual } from "../lib/utils";
 import { MatrixType } from "../sharedTypes";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
+import { defaultConfig } from "../lib/constants";
 
 type PropTypes = {
   ctx: RenderFieldExtensionCtx;
 };
 
 export default function ChartEditor({ ctx }: PropTypes) {
-  const currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string);
+  const currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string) || {
+    config: {},
+  };
   const saveData = (data: string | null) => {
-    console.log("???");
+    log("???");
     if (JSON.stringify(currentValue) !== data) {
       ctx.setFieldValue(ctx.fieldPath, data);
       // ctx.notice(`${ctx.fieldPath} Saved`);
-      console.log(`${ctx.fieldPath} SAVED`);
+      log(`${ctx.fieldPath} SAVED`);
     }
   };
 
@@ -55,8 +43,8 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const setAll = useStoreState((state) => state.setAll);
   const setData = useStoreState((state) => state.setData);
 
-  const [isUploadOpen, setUploadOpen] = useState<boolean>(data ? false : true);
-  const [isChooseOpen, setChooseOpen] = useState<boolean>(chart ? false : true);
+  const [isUploadOpen, setUploadOpen] = useState<boolean>(true);
+  const [isChooseOpen, setChooseOpen] = useState<boolean>(true);
   const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
 
   function str(obj) {
@@ -65,13 +53,13 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   useEffect(() => {
     if (!data && currentValue.data) {
-      console.log("INIT", currentValue);
-      console.log("--------");
+      log("INIT", currentValue);
+      log("--------");
       setAll(currentValue);
       // setTableOpen(true);
       setUploadOpen(false);
     } else if (data) {
-      console.log("SET DATA");
+      log("SET DATA");
       const valueString = JSON.stringify(data);
       const prevValue = JSON.stringify(currentValue?.data || "");
       if (valueString !== prevValue) {
@@ -84,15 +72,17 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   useEffect(() => {
     if (chart && chart !== currentValue?.chart) {
+      log("CHANGE CHART", chart);
       saveData(str({ chart, config: {}, data }));
       setConfig({});
+      setChooseOpen(false);
+      setConfigOpen(true);
     }
-    setChooseOpen(false);
   }, [chart]);
 
   useEffect(() => {
     if (config && data) {
-      console.log("SET CONFIG");
+      log("SET CONFIG");
       saveData(str({ chart, config, data }));
     }
   }, [config, data]);

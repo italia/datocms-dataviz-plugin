@@ -1,14 +1,7 @@
-import { useEffect, useState } from "react";
 import BasicChart from "./charts/BasicChart";
 import PieChart from "./charts/PieChart";
 import GeoMapChart from "./charts/GeoMapChart";
-import { sampleData } from "../lib/constants";
-import {
-  withDefaults,
-  getPieValues,
-  getBasicValues,
-  getMapValues,
-} from "../lib/utils";
+import { getPieValues, getBasicValues, getMapValues } from "../lib/utils";
 
 function RenderChart({ ds }) {
   return (

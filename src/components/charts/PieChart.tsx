@@ -1,5 +1,6 @@
 import ReactEcharts from "echarts-for-react";
 import { FieldDataType } from "../../sharedTypes";
+import { log } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -46,7 +47,7 @@ function PieChart({ data }: ChartPropsType) {
     // formatter: (params: any) => {},
   };
 
-  console.log("dataSource", dataSource);
+  log("dataSource", dataSource);
   let total = "";
   try {
     const serie: any = dataSource.series;
@@ -97,7 +98,7 @@ function PieChart({ data }: ChartPropsType) {
     legend: {
       type: "scroll",
       left: "center",
-      top: "auto",
+      top: "bottom",
       show: config.legend,
     },
   };

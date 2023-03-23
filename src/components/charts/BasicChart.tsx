@@ -1,8 +1,9 @@
 import ReactEcharts from "echarts-for-react";
 import { FieldDataType } from "../../sharedTypes";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { saveAs } from "file-saver";
 import { Button } from "datocms-react-ui";
+import { log } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -22,7 +23,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       bottom: config.gridBottom || 60,
       top: config.gridTop || 60,
     };
-    console.log("grid", grid);
+    log("grid", grid);
     const zoom = config.zoom || "none";
     let dataZoom = [];
     if (zoom !== "none") {
@@ -72,7 +73,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       ? { dataZoom }
       : {};
 
-    console.log("dataZoomOpt", dataZoomOpt);
+    log("dataZoomOpt", dataZoomOpt);
 
     let xName = config.xLabel
       ? {
@@ -96,7 +97,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               ...xName,
               type: "category",
               data: data.dataSource.categories,
-              alignTicks: true,
+              axisTick: { show: false },
               // axisLabel: {
               //   rotate: 30,
               //   inside: false,
@@ -107,7 +108,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               ...yName,
               nameRotate: 90,
               type: "value",
-              alignTicks: true,
+              axisTick: { show: false },
             },
           }
         : {
@@ -116,12 +117,12 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               nameRotate: 90,
               type: "category",
               data: data.dataSource.categories,
-              alignTicks: true,
+              axisTick: { show: false },
             },
             xAxis: {
               ...yName,
               type: "value",
-              alignTicks: true,
+              axisTick: { show: false },
               // axisLabel: {
               //   rotate: 90,
               //   inside: true,
@@ -178,7 +179,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
           let smooth: any = config.smooth ? parseFloat(config.smooth) : false;
           rest = { ...rest, smooth };
         }
-        // console.log('rest', rest);
+        // log('rest', rest);
         return {
           ...serie,
           ...rest,
@@ -204,7 +205,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
   useEffect(() => {
     if (data && refCanvas.current) {
       const options: any = getOptions(data);
-      console.log("UPDATE", options);
+      log("UPDATE", options);
       refCanvas.current?.getEchartsInstance().setOption(options);
     }
   }, [data, refCanvas]);
@@ -217,15 +218,15 @@ function BasicChart({ data }: ChartPropsType, id: string) {
 
   async function downLoadImage(element: any, id: string) {
     const echartInstance = element.getEchartsInstance();
-    // // console.log('echartInstance', echartInstance);
+    // // log('echartInstance', echartInstance);
     const base64DataUrl = echartInstance.getDataURL();
 
     try {
       const blob = await fetch(base64DataUrl).then((res) => res.blob());
-      // // console.log('blob', blob);
+      // // log('blob', blob);
       saveAs(blob, `chart-${"" + Date.now()}.png`);
     } catch (error) {
-      console.log("error", error);
+      log("error", error);
     }
   }
 

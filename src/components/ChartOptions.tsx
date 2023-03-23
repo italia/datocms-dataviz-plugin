@@ -1,8 +1,9 @@
 import { Button } from "datocms-react-ui";
 import { useForm } from "react-hook-form";
-import { palettes, getFields } from "../lib/constants";
+import { palettes, getFields, defaultConfig } from "../lib/constants";
 import { getAvailablePalettes, getMapPalettes } from "../lib/utils";
 import ShowPalette from "./ShowPalette";
+import { log } from "../lib/utils";
 
 function ChartOptions({ config, setConfig, chart, numSeries }) {
   const availabelPalettes =
@@ -17,20 +18,20 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
   } = useForm({
     mode: "onBlur",
     defaultValues: {
+      ...defaultConfig,
       palette: defaultPalette,
-      h: 500,
       ...config,
     },
   });
   const watchPalette = watch("palette", defaultPalette);
 
   const onSubmit = (data) => {
-    console.log("SUBMIT", data);
+    log("SUBMIT", data);
     const { h, w, palette, ...rest } = data;
     const colors = palettes[palette];
-    console.log(palette, "colors", colors);
+    log(palette, "colors", colors);
     const newConfig = { h: Number(h), w: Number(w), ...rest, colors };
-    console.log("newConfig", newConfig);
+    log("newConfig", newConfig);
     setConfig(newConfig);
   };
   if (!chart) {
