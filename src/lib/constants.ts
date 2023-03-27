@@ -51,9 +51,9 @@ export const palettes = {
     "#B32D43",
     "#737373",
   ],
-  monocolore_a: Array(38).fill("#0066CC"),
-  monocolore_b: Array(38).fill("#004080"),
-  monocolore_c: Array(38).fill("#2F475E"),
+  monocolore_a: Array(30).fill("#0066CC"),
+  monocolore_b: Array(30).fill("#004080"),
+  monocolore_c: Array(30).fill("#2F475E"),
 
   _1_a: ["#0066CC"],
   _1_b: ["#004080"],
@@ -94,6 +94,7 @@ export const defaultConfig = {
   h: 350,
   labeLine: false,
   legend: true,
+  legendPosition: "bottom",
   palette: "default",
   tooltip: true,
   tooltipFormatter: "number",
@@ -118,7 +119,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     name: "Globals",
     type: "label",
     chartType: ["bar", "line", "pie", "map"],
-    layout: "single",
+    layout: "3",
   },
   {
     label: "Chart palette",
@@ -129,18 +130,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     required: false,
     chartType: ["bar", "line", "pie", "map"],
     defaultValue: defaultPalette,
-    layout: "",
-  },
-  {
-    label: "Show Legend",
-    name: "legend",
-    type: "checkbox",
-
-    options: [],
-    required: false,
-    chartType: ["bar", "line", "pie", "map"],
-    otherProps: { defaultChecked: true },
-    layout: "",
+    layout: "2",
   },
   {
     label: "Chart height",
@@ -155,11 +145,35 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     layout: "",
   },
   {
+    label: "Show Legend",
+    name: "legend",
+    type: "checkbox",
+
+    options: [],
+    required: false,
+    chartType: ["bar", "line", "pie"],
+    otherProps: { defaultChecked: true },
+    layout: "",
+  },
+  {
+    label: "Legend Position",
+    name: "legendPosition",
+    type: "select",
+    options: ["bottom", "top"],
+    required: false,
+    chartType: ["bar", "line", "pie"],
+    otherProps: {
+      defaultValue: "bottom",
+    },
+    layout: "",
+  },
+
+  {
     label: "Tooltip",
     name: "Tooltip",
     type: "label",
     chartType: ["bar", "line", "pie", "map"],
-    layout: "single",
+    layout: "3",
   },
   {
     label: "Show Tooltip",
@@ -169,7 +183,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     required: false,
     chartType: ["bar", "line", "pie", "map"],
     otherProps: { defaultChecked: true },
-    layout: "single",
+    layout: "3",
   },
   {
     label: "Tooltip Value Suffix",
@@ -208,7 +222,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     name: "Grid",
     type: "label",
     chartType: ["bar", "line"],
-    layout: "single",
+    layout: "3",
   },
   {
     label: "Grid height",
@@ -284,7 +298,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     name: "Axis",
     type: "label",
     chartType: ["bar", "line"],
-    layout: "single",
+    layout: "3",
   },
   {
     label: "X Axis Name",
@@ -306,44 +320,24 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     chartType: ["bar", "line"],
     layout: "",
   },
-
   {
-    label: "Bar Chart",
-    name: "Bar Chart",
-    type: "label",
-    chartType: ["bar"],
-    layout: "single",
-  },
-  {
-    label: "Direction",
-    name: "direction",
-    type: "select",
-    options: ["horizontal", "vertical"],
+    label: "Name Gap",
+    name: "nameGap",
+    type: "number",
+    options: [],
     otherProps: {
-      defaultValue: "horizontal",
+      defaultValue: 40,
     },
     required: false,
-    placeholder: "Chart Direction",
-    chartType: ["bar"],
+    chartType: ["bar", "line"],
     layout: "",
   },
-  {
-    label: "Stacked",
-    name: "stack",
-    type: "checkbox",
-    options: [],
-    required: false,
-    chartType: ["bar"],
-    otherProps: {},
-    layout: "",
-  },
-
   {
     label: "Line Chart",
     name: "Line Chart",
     type: "label",
     chartType: ["line"],
-    layout: "single",
+    layout: "3",
   },
   {
     label: "Data Zoom",
@@ -366,11 +360,42 @@ export const getFields = (availabelPalettes, defaultPalette) => [
   },
 
   {
+    label: "Bar Chart",
+    name: "Bar Chart",
+    type: "label",
+    chartType: ["bar"],
+    layout: "3",
+  },
+  {
+    label: "Direction",
+    name: "direction",
+    type: "select",
+    options: ["horizontal", "vertical"],
+    otherProps: {
+      defaultValue: "horizontal",
+    },
+    required: false,
+    placeholder: "Chart Direction",
+    chartType: ["bar", "line"],
+    layout: "",
+  },
+  {
+    label: "Stacked",
+    name: "stack",
+    type: "checkbox",
+    options: [],
+    required: false,
+    chartType: ["bar"],
+    otherProps: {},
+    layout: "",
+  },
+
+  {
     label: "Pie Chart",
     name: "Pie Chart",
     type: "label",
     chartType: ["pie"],
-    layout: "single",
+    layout: "3",
   },
   {
     label: "Total Label",
@@ -399,7 +424,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     name: "Geo Map Chart",
     type: "label",
     chartType: ["map"],
-    layout: "single",
+    layout: "3",
   },
   {
     label: "GeoJson URL",
@@ -411,7 +436,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     otherProps: {
       // defaultValue: "",
     },
-    layout: "single",
+    layout: "3",
   },
   {
     label: "Match Property Nome",

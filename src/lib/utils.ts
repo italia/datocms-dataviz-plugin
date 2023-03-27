@@ -1,7 +1,7 @@
 import { palettes } from "../lib/constants";
 
 export function log(...args) {
-  console.log(args);
+  console.log(...args);
 }
 
 // constant to check if config is empty
@@ -16,11 +16,11 @@ export function isEqual(a, b) {
 export function getAvailablePalettes(numSeries) {
   const keys = Object.keys(palettes);
   const availabelPalettes = [
+    ...keys.slice(1, 7),
     ...keys.filter((k) => k.indexOf(`_${numSeries}_`) > -1),
-    ...keys.slice(0, 7),
   ].sort();
 
-  return availabelPalettes;
+  return ["default", ...availabelPalettes];
 }
 
 // function to get palette colors for map type, adds default colors
@@ -36,6 +36,23 @@ export function getMapPalettes() {
 // function to get palette colors by name
 export function getPalette(palette) {
   return palettes[palette];
+}
+
+// move a column of the data matrix to first position
+export function moveDataColumn(data, columnName) {
+  log("columnName", columnName);
+  const columnIndex = data[0].indexOf(columnName);
+  console.log("columnIndex", columnIndex);
+  const newData = data.map((row) => {
+    const withouthCol = [
+      ...row.slice(0, columnIndex),
+      ...row.slice(columnIndex + 1),
+    ];
+    return [row[columnIndex], ...withouthCol];
+  });
+
+  log("moveDataColumn", newData);
+  return newData;
 }
 
 // transpose data matrix

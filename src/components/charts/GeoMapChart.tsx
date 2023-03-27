@@ -22,14 +22,14 @@ function GeoMapChart({ data, id }: ChartPropsType) {
       valueFormatter: (value) => {
         return formatTooltip(value, config);
       },
-      show: config.tooltip,
+      show: config.tooltip ?? true,
     };
 
     const min = Math.min(...data.dataSource.series[0].data.map((d) => d.value));
     const max = Math.max(...data.dataSource.series[0].data.map((d) => d.value));
 
-    log("min", min);
-    log("max", max);
+    // log("min", min);
+    // log("max", max);
     const options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
       color: config.colors,

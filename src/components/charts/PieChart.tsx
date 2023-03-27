@@ -21,7 +21,7 @@ function PieChart({ data }: ChartPropsType) {
     valueFormatter: (value) => {
       return formatTooltip(value, config);
     },
-    show: config.tooltip,
+    show: config.tooltip ?? true,
   };
 
   let total = "";
@@ -73,8 +73,8 @@ function PieChart({ data }: ChartPropsType) {
     legend: {
       type: "scroll",
       left: "center",
-      top: "bottom",
-      show: config.legend,
+      top: config?.legendPosition || "bottom",
+      show: config.legend ?? true,
     },
   };
 

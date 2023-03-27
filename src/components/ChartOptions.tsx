@@ -52,8 +52,8 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
             .map((field) => {
               if (["text", "email", "number"].includes(field.type)) {
                 let style = {};
-                if (field.layout === "single") {
-                  style = { gridColumn: "span 3" };
+                if (field.layout) {
+                  style = { gridColumn: `span ${field.layout}` };
                 }
                 return (
                   <div key={field.name} style={style}>
@@ -68,8 +68,8 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
                 );
               } else if (["checkbox"].includes(field.type)) {
                 let style = {};
-                if (field.layout === "single") {
-                  style = { gridColumn: "span 3" };
+                if (field.layout) {
+                  style = { gridColumn: `span ${field.layout}` };
                 }
                 return (
                   <div key={field.name} style={style}>
@@ -86,8 +86,8 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
                 );
               } else if (["select"].includes(field.type)) {
                 let style = {};
-                if (field.layout === "single") {
-                  style = { gridColumn: "span 3" };
+                if (field.layout) {
+                  style = { gridColumn: `span ${field.layout}` };
                 }
                 return (
                   <div key={field.name} style={style}>

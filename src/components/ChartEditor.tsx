@@ -97,7 +97,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
   }
 
   function handleUploadData(data) {
-    saveData(str({ config: {}, chart: "" }));
+    saveData(str({ config: {}, chart: "" })); // reset
     setTimeout(() => {
       setData(data);
       // // setTableOpen(true);
@@ -107,10 +107,8 @@ export default function ChartEditor({ ctx }: PropTypes) {
   }
 
   function transpose() {
-    // setData(null);
     const transposed = transposeData(data);
     setData(transposed);
-    setChart("");
     // send("CHOOSE");
   }
   const hasData = data != null && data[0] ? true : false;

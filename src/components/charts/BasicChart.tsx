@@ -23,7 +23,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       bottom: config.gridBottom || 60,
       top: config.gridTop || 60,
     };
-    log("grid", grid);
     const zoom = config.zoom || "none";
     let dataZoom = [];
     if (zoom !== "none") {
@@ -79,14 +78,14 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       ? {
           name: config.xLabel,
           nameLocation: "middle",
-          nameGap: 50,
+          nameGap: config.nameGap,
         }
       : {};
     let yName = config.yLabel
       ? {
           name: config.yLabel,
           nameLocation: "middle",
-          nameGap: 50,
+          nameGap: config.nameGap,
         }
       : {};
 
@@ -139,18 +138,28 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       valueFormatter: (value) => {
         return formatTooltip(value, config);
       },
-      show: config.tooltip,
+      show: config.tooltip ?? true,
       // formatter: (params: any) => {},
     };
 
     let options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
-      color: config.colors || null,
+      color: config.colors || [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc",
+      ],
       ...axis,
       grid,
       series: data.dataSource.series.map((serie) => {
         let rest = { stack: false, smooth: false };
-        if (config.stack) {
+        if (serie.type === "bar" && config.stack) {
           let stack: any = config.stack
             ? config.direction === "vertical"
               ? "x"
@@ -176,8 +185,8 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       legend: {
         type: "scroll",
         left: "center",
-        top: "bottom",
-        show: config.legend,
+        top: config?.legendPosition || "bottom",
+        show: config.legend ?? true,
       },
       ...dataZoomOpt,
     };
