@@ -358,6 +358,27 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     otherProps: { step: 0.1 },
     layout: "",
   },
+  {
+    label: "Show Area",
+    name: "showArea",
+    type: "checkbox",
+    options: [],
+    required: false,
+    chartType: ["line"],
+    otherProps: {},
+    layout: "",
+  },
+
+  {
+    label: "Show All Symbol",
+    name: "showAllSymbol",
+    type: "checkbox",
+    options: [],
+    required: false,
+    chartType: ["line"],
+    otherProps: {},
+    layout: "",
+  },
 
   {
     label: "Bar Chart",
@@ -470,6 +491,28 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     required: false,
     chartType: ["map"],
     otherProps: {},
+    layout: "",
+  },
+  {
+    label: "Show Labels on Map",
+    name: "showMapLabels",
+    type: "checkbox",
+    options: [],
+    required: false,
+    chartType: ["map"],
+    otherProps: {},
+    layout: "",
+  },
+  {
+    label: "Overlay Area Color",
+    name: "areaColor",
+    type: "color",
+    options: [],
+    required: false,
+    chartType: ["map"],
+    otherProps: {
+      defaultValue: "#F2F7FC",
+    },
     layout: "",
   },
 ];

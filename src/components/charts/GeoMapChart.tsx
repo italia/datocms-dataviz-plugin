@@ -52,10 +52,21 @@ function GeoMapChart({ data, id }: ChartPropsType) {
       series: data.dataSource.series.map((serie) => {
         return {
           ...serie,
+          label: {
+            show: config.showMapLabels ? true : false,
+            color: "auto",
+          },
+          zoom: 1.2,
+          // roam: "scale",
           roam: true,
+          select: { disabled: true },
           emphasis: {
+            label: {
+              show: config.showMapLabels,
+              color: "auto",
+            },
             itemStyle: {
-              areaColor: "#F2F7FC",
+              areaColor: config.areaColor || "#F2F7FC",
             },
           },
           name: config.serieName || "",

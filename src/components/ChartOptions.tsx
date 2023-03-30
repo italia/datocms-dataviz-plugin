@@ -50,7 +50,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
           {fields
             .filter((field) => field.chartType.includes(chart))
             .map((field) => {
-              if (["text", "email", "number"].includes(field.type)) {
+              if (["text", "email", "number", "color"].includes(field.type)) {
                 let style = {};
                 if (field.layout) {
                   style = { gridColumn: `span ${field.layout}` };

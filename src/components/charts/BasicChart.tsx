@@ -134,6 +134,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       trigger: config.tooltipTrigger || "item",
       axisPointer: {
         type: "shadow",
+        snap: true,
       },
       valueFormatter: (value) => {
         return formatTooltip(value, config);
@@ -170,6 +171,14 @@ function BasicChart({ data }: ChartPropsType, id: string) {
         if (serie.type === "line" && config.smooth) {
           let smooth: any = config.smooth ? parseFloat(config.smooth) : false;
           rest = { ...rest, smooth };
+        }
+        if (serie.type === "line" && config.showArea) {
+          const area = { areaStyle: {} };
+          rest = { ...rest, ...area };
+        }
+        if (serie.type === "line" && config.showAllSymbol) {
+          const symbols = { showAllSymbol: true || "auto" };
+          rest = { ...rest, ...symbols };
         }
         // log('rest', rest);
         return {
