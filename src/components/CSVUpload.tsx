@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Papa from "papaparse";
 import DataTable from "./DataTable";
 import { Button, SelectField } from "datocms-react-ui";
 
 import { log, transposeData, moveDataColumn } from "../lib/utils";
 
+type selectOptionType = {
+  value: string;
+  label: string;
+};
+
 function UploadCSV({ setData }) {
+  const [_, startTransition] = useTransition();
   const [rawData, setRawData] = useState<any>(null);
-  const [category, setCategory] = useState<any>(null);
-  const [series, setSeries] = useState<any>([]);
+  const [category, setCategory] = useState<selectOptionType | null>(null);
+  const [series, setSeries] = useState<selectOptionType[] | []>([]);
 
   function uploadFile(event) {
     let file = event.target.files[0];
@@ -17,18 +23,34 @@ function UploadCSV({ setData }) {
       header: false,
       skipEmptyLines: true,
       complete: (results) => {
-        log("RESULTS DATA", results.data);
-        setRawData(results.data);
+        const { data } = results;
+        log("RESULTS DATA", data);
+        const c = getFirstOfMAtrix(data);
+        const category = { value: c, label: c };
+        log("CATEGORY", category);
+        const cols = getCols(data[0]);
+        log("COLS", cols);
+        const series = cols.filter((i) => !isSameObject(i, category));
+        log("SERIES", series);
 
-        const category = results.data[0][0];
-        setCategory({ value: category, label: category });
-        setSeries(getCols(results.data[0].filter((i) => i != category?.value)));
+        startTransition(() => {
+          setRawData(data);
+          setCategory(category);
+          setSeries(series);
+        });
       },
     });
   }
 
+  function isSameObject(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  }
+  function getFirstOfMAtrix(matrix) {
+    return matrix[0][0]?.trim();
+  }
   function getCols(cols: string[]) {
-    return cols.map((col: string) => {
+    return cols.map((c: string) => {
+      const col = c.trim();
       return { value: col, label: col };
     });
   }
@@ -36,9 +58,10 @@ function UploadCSV({ setData }) {
   function transpose() {
     const transposed = transposeData(rawData);
     setRawData(transposed);
-    const category = transposed[0][0];
-    setCategory({ value: category, label: category });
-    setSeries(getCols(transposed[0].filter((i) => i !== category?.value)));
+    const c = getFirstOfMAtrix(transposed);
+    const category = { value: c, label: c };
+    setCategory(category);
+    setSeries(getCols(transposed[0]).filter((i) => !isSameObject(i, category)));
   }
 
   function filterData() {
@@ -46,7 +69,7 @@ function UploadCSV({ setData }) {
     const cols = [category, ...series].map((col) => col.value);
     const filtered = rawData.map((row) => {
       return row.filter((r, i) => {
-        return cols.includes(rawData[0][i]);
+        return cols.includes(rawData[0][i].trim());
       });
     });
     return filtered;
@@ -104,15 +127,15 @@ function UploadCSV({ setData }) {
               selectInputProps={{
                 isMulti: true,
                 options: getCols(rawData[0]).filter(
-                  (i) => i.value !== category?.value
+                  (i) => !isSameObject(i, category)
                 ),
               }}
-              onChange={(newValue) => setSeries(newValue)}
+              onChange={(newValue: selectOptionType[]) => setSeries(newValue)}
             />
           )}
 
           <div>
-            {series && category && series.length > 0 && (
+            {series && category?.value && series.length > 0 && (
               <Button
                 onClick={() => {
                   setData(filterData());

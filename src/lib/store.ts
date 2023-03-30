@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+
 import { defaultConfig } from "./constants";
 import { MatrixType } from "../sharedTypes";
 
@@ -20,5 +22,7 @@ let store = (set: any) => ({
     })),
 });
 
-const useStoreState = create(devtools(store));
+const useStoreState = create(
+  devtools(store, { name: "MyStore", trace: false })
+);
 export default useStoreState;

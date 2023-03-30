@@ -10,10 +10,8 @@ import CSVUpload from "../components/CSVUpload";
 import ChartOptions from "../components/ChartOptions";
 import SelectChart from "../components/SelectChart";
 
-import { isEqual } from "../lib/utils";
 import { MatrixType } from "../sharedTypes";
 import { useState, useEffect } from "react";
-import { defaultConfig } from "../lib/constants";
 
 type PropTypes = {
   ctx: RenderFieldExtensionCtx;
@@ -23,16 +21,15 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const currentValue = JSON.parse(ctx.formValues[ctx.fieldPath] as string) || {
     config: {},
   };
+
   const saveData = (data: string | null) => {
     log("???");
     if (JSON.stringify(currentValue) !== data) {
       ctx.setFieldValue(ctx.fieldPath, data);
-      // ctx.notice(`${ctx.fieldPath} Saved`);
       log(`${ctx.fieldPath} SAVED`);
     }
   };
 
-  // const [state, send] = useMachine(stateMachine);
   const config: any = useStoreState((state) => state.config);
   const setConfig = useStoreState((state) => state.setConfig);
   const chart = useStoreState((state) => state.chart);
@@ -44,7 +41,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
   const setData = useStoreState((state) => state.setData);
 
   const [isUploadOpen, setUploadOpen] = useState<boolean>(true);
-  const [isChooseOpen, setChooseOpen] = useState<boolean>(true);
+  const [isChooseOpen, setChooseOpen] = useState<boolean>(false);
   const [isConfigOpen, setConfigOpen] = useState<boolean>(false);
 
   function str(obj) {
@@ -90,9 +87,8 @@ export default function ChartEditor({ ctx }: PropTypes) {
   function doReset() {
     saveData(str({ config: {}, chart: "" }));
     setTimeout(() => {
-      setData(null);
+      setAll({ config: {}, chart: "", data: null });
       setUploadOpen(true);
-      // setTableOpen(false);
     }, 1000);
   }
 
@@ -100,17 +96,20 @@ export default function ChartEditor({ ctx }: PropTypes) {
     saveData(str({ config: {}, chart: "" })); // reset
     setTimeout(() => {
       setData(data);
-      // // setTableOpen(true);
-      // send("CHOOSE");
       setUploadOpen(false);
+      setChooseOpen(true);
     }, 500);
   }
 
   function transpose() {
     const transposed = transposeData(data);
-    setData(transposed);
-    // send("CHOOSE");
+    saveData(str({ config: {}, chart: "", data: transposed }));
+    setTimeout(() => {
+      setAll({ config: {}, chart: "", data: transposed });
+    }, 1000);
   }
+
+  // data check
   const hasData = data != null && data[0] ? true : false;
   return (
     <Canvas ctx={ctx}>
@@ -160,13 +159,16 @@ export default function ChartEditor({ ctx }: PropTypes) {
           </Section>
         )}
 
-        {currentValue && currentValue.data != null && currentValue.data[0] && (
-          <div style={{ marginTop: 20 }}>
-            <center>
-              <RenderChart ds={currentValue} />
-            </center>
-          </div>
-        )}
+        {currentValue &&
+          currentValue.chart &&
+          currentValue.data != null &&
+          currentValue.data[0] && (
+            <div style={{ marginTop: 20 }}>
+              <center>
+                <RenderChart ds={currentValue} />
+              </center>
+            </div>
+          )}
 
         {hasData && (
           <div style={{ margin: "20px auto" }}>
