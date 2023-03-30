@@ -2,6 +2,7 @@ import BasicChart from "./charts/BasicChart";
 import PieChart from "./charts/PieChart";
 import GeoMapChart from "./charts/GeoMapChart";
 import { getPieValues, getBasicValues, getMapValues } from "../lib/utils";
+import { memo } from "react";
 
 function RenderChart({ ds }) {
   return (
@@ -21,4 +22,4 @@ function RenderChart({ ds }) {
   );
 }
 
-export default RenderChart;
+export default memo(RenderChart);
