@@ -30,6 +30,8 @@ function GeoMapChart({ data, id }: ChartPropsType) {
 
     // log("min", min);
     // log("max", max);
+
+
     const options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
       color: config.colors,

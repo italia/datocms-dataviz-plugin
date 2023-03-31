@@ -209,3 +209,88 @@ export function formatTooltip(value, config) {
   }
   return `${valueFormatted} ${valueFormatter ? valueFormatter : ""}\n`;
 }
+
+//a function that given a color hex and a number of resourceLimits, generate different hex of same color
+export function generateColors(color, resourceLimits) {
+  const colors = [];
+  const colorHex = color.replace("#", "");
+  const colorInt = parseInt(colorHex, 16);
+  const step = Math.floor(colorInt / resourceLimits);
+  for (let i = 0; i < resourceLimits; i++) {
+    const newColor = colorInt - i * step;
+    const newColorHex = newColor.toString(16);
+    colors.push(`#${newColorHex}`);
+  }
+  return colors;
+}
+
+//a function that convert a hex color to hsla
+export function hexToHsla(hex, alpha = 1) {
+  let r = 0,
+    g = 0,
+    b = 0;
+  if (hex.length === 4) {
+    r = parseInt("0x" + hex[1] + hex[1], 16);
+    g = parseInt("0x" + hex[2] + hex[2], 16);
+    b = parseInt("0x" + hex[3] + hex[3], 16);
+  } else if (hex.length === 7) {
+    r = parseInt("0x" + hex[1] + hex[2], 16);
+    g = parseInt("0x" + hex[3] + hex[4], 16);
+    b = parseInt("0x" + hex[5] + hex[6], 16);
+  }
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  let h = 0,
+    s = 0,
+    l = (max + min) / 2;
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = (g - b) / d + (g < b ? 6 : 0);
+        break;
+      case g:
+        h = (b - r) / d + 2;
+        break;
+      case b:
+        h = (r - g) / d + 4;
+        break;
+    }
+    h /= 6;
+  }
+  h = Math.round(h * 360);
+  s = Math.round(s * 100);
+  l = Math.round(l * 100);
+  return `hsla(${h}, ${s}%, ${l}%, ${alpha})`;
+}
+
+//a function that given a hlsa color  reatutn a gradient as a list of colors, changing luminosity and saturation
+export function generateGradient(color, resourceLimits) {
+  let colors = [];
+  const [h, s, l, a] = color
+    .replace("hsla(", "")
+    .replace(")", "")
+    .split(",")
+    .map((v) => parseInt(v));
+  const step = Math.floor(l / resourceLimits);
+
+  for (let i = 0; i < resourceLimits; i++) {
+    const newL = l + i * step;
+    const newS = s - i * step;
+    colors.push(`hsla(${h}, ${newS}%, ${newL}%, ${a})`);
+  }
+  colors = colors.reverse();
+  colors.push(color);
+  for (let i = 0; i < resourceLimits; i++) {
+    const newL = l - i * step;
+    const newS = s + i * step;
+    colors.push(`hsla(${h}, ${newS}%, ${newL}%, ${a})`);
+  }
+  return colors;
+}

@@ -66,7 +66,7 @@ function PieChart({ data }: ChartPropsType) {
       },
     },
     textStyle: {
-      fontFamily: "Titillium Web, sans-serif",
+      fontFamily: "Titillium Web",
       fontSize: 12,
     },
     tooltip,

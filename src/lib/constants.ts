@@ -1,4 +1,5 @@
 import type { FieldDataType } from "../sharedTypes";
+import { generateColors, generateGradient, hexToHsla } from "./utils";
 /*
 sample: ['#5c6f82', '#BFDFFF', '#207BD6', '#004D99', '#6AAAEB'],
 blue: ['#4392E0', '#207AD5', '#0066CC', '#004D99', '#004080', '#003366'],
@@ -51,9 +52,10 @@ export const palettes = {
     "#B32D43",
     "#737373",
   ],
-  monocolore_a: Array(30).fill("#0066CC"),
-  monocolore_b: Array(30).fill("#004080"),
-  monocolore_c: Array(30).fill("#2F475E"),
+
+  monocolore_a: generateGradient(hexToHsla("#0066CC"), 15), //Array(30).fill("#0066CC"),
+  monocolore_b: generateGradient(hexToHsla("#004080"), 15),
+  monocolore_c: generateGradient(hexToHsla("#2F475E"), 15),
 
   _1_a: ["#0066CC"],
   _1_b: ["#004080"],

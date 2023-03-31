@@ -71,13 +71,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
     let dataZoomOpt = ["both_axis", "x_axis", "y_axis"].includes(zoom)
       ? { dataZoom }
       : {};
-    log("dataZoomOpt", dataZoomOpt);
-
-    const isLine = config?.dataSource?.series[0]?.type === "line";
-    log("isLine", isLine);
-    // if (!isLine) {
-    //   dataZoomOpt = {};
-    // }
 
     let xName = config.xLabel
       ? {
@@ -102,11 +95,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               type: "category",
               data: data.dataSource.categories,
               axisTick: { show: false },
-              // axisLabel: {
-              //   rotate: 30,
-              //   inside: false,
-              //   // margin: 8,
-              // },
             },
             yAxis: {
               ...yName,
@@ -127,11 +115,6 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               ...yName,
               type: "value",
               axisTick: { show: false },
-              // axisLabel: {
-              //   rotate: 90,
-              //   inside: true,
-              //   margin: 0,
-              // },
             },
           };
 
@@ -171,7 +154,12 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               ? "x"
               : "y"
             : false;
-          rest = { ...rest, stack };
+
+          rest = {
+            ...rest,
+            stack,
+            itemStyle: { borderColor: "white", borderWidth: 0.25 },
+          };
         }
         if (serie.type === "line") {
           if (config.smooth) {
