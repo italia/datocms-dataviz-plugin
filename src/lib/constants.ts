@@ -56,6 +56,7 @@ export const palettes = {
   monocolore_a: generateGradient(hexToHsla("#0066CC"), 15), //Array(30).fill("#0066CC"),
   monocolore_b: generateGradient(hexToHsla("#004080"), 15),
   monocolore_c: generateGradient(hexToHsla("#2F475E"), 15),
+  monocolore_d: generateGradient(hexToHsla("#20d8b5"), 15),
 
   _1_a: ["#0066CC"],
   _1_b: ["#004080"],
