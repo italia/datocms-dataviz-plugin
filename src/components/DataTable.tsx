@@ -3,17 +3,18 @@ import { Button } from "datocms-react-ui";
 export default function DataTable({ data, reset, transpose }): JSX.Element {
   let max = 10;
   return (
-    <div className="fontSize:12px">
+    <>
       {data && data[0] && (
         <div
           style={{
-            margin: "20px",
+            marginTop: 20,
+            width: "700px",
+            overflowX: "scroll",
           }}
         >
           <table
             style={{
               border: "1px solid gray",
-              width: "100%",
             }}
           >
             <thead>
@@ -79,6 +80,6 @@ export default function DataTable({ data, reset, transpose }): JSX.Element {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

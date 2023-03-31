@@ -165,7 +165,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
           currentValue.data[0] && (
             <div style={{ marginTop: 20 }}>
               <center>
-                <RenderChart ds={currentValue} />
+                <RenderChart ds={currentValue} config={config} />
               </center>
             </div>
           )}

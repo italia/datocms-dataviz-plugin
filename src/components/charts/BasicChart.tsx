@@ -71,8 +71,13 @@ function BasicChart({ data }: ChartPropsType, id: string) {
     let dataZoomOpt = ["both_axis", "x_axis", "y_axis"].includes(zoom)
       ? { dataZoom }
       : {};
-
     log("dataZoomOpt", dataZoomOpt);
+
+    const isLine = config?.dataSource?.series[0]?.type === "line";
+    log("isLine", isLine);
+    // if (!isLine) {
+    //   dataZoomOpt = {};
+    // }
 
     let xName = config.xLabel
       ? {
@@ -159,7 +164,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
       ...axis,
       grid,
       series: data.dataSource.series.map((serie) => {
-        let rest = { stack: false, smooth: false };
+        let rest = {};
         if (serie.type === "bar" && config.stack) {
           let stack: any = config.stack
             ? config.direction === "vertical"
@@ -168,17 +173,19 @@ function BasicChart({ data }: ChartPropsType, id: string) {
             : false;
           rest = { ...rest, stack };
         }
-        if (serie.type === "line" && config.smooth) {
-          let smooth: any = config.smooth ? parseFloat(config.smooth) : false;
-          rest = { ...rest, smooth };
-        }
-        if (serie.type === "line" && config.showArea) {
-          const area = { areaStyle: {} };
-          rest = { ...rest, ...area };
-        }
-        if (serie.type === "line" && config.showAllSymbol) {
-          const symbols = { showAllSymbol: true || "auto" };
-          rest = { ...rest, ...symbols };
+        if (serie.type === "line") {
+          if (config.smooth) {
+            let smooth: any = config.smooth ? parseFloat(config.smooth) : false;
+            rest = { ...rest, smooth };
+          }
+          if (config.showArea) {
+            const area = { areaStyle: {} };
+            rest = { ...rest, ...area };
+          }
+          if (config.showAllSymbol) {
+            const symbols = { showAllSymbol: true || "auto" };
+            rest = { ...rest, ...symbols };
+          }
         }
         // log('rest', rest);
         return {

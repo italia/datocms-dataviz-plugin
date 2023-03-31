@@ -4,11 +4,32 @@ import DataTable from "./DataTable";
 import { Button, SelectField } from "datocms-react-ui";
 
 import { log, transposeData, moveDataColumn } from "../lib/utils";
+import { MatrixType } from "../sharedTypes";
 
 type selectOptionType = {
   value: string;
   label: string;
 };
+
+function cleanupValue(v: string | number) {
+  if (!v) return 0;
+  try {
+    const value = parseFloat("" + v);
+    return value;
+  } catch (error) {
+    return 0;
+  }
+}
+
+function cleanupData(matrix: MatrixType) {
+  return matrix.map((row, index) => {
+    if (index === 0) return row;
+    return row.map((cell, j) => {
+      if (j == 0) return cell;
+      return cleanupValue(cell);
+    });
+  });
+}
 
 function UploadCSV({ setData }) {
   const [_, startTransition] = useTransition();
@@ -138,7 +159,7 @@ function UploadCSV({ setData }) {
             {series && category?.value && series.length > 0 && (
               <Button
                 onClick={() => {
-                  setData(filterData());
+                  setData(cleanupData(filterData()));
                 }}
               >
                 Save Data

@@ -2,9 +2,18 @@ import BasicChart from "./charts/BasicChart";
 import PieChart from "./charts/PieChart";
 import GeoMapChart from "./charts/GeoMapChart";
 import { getPieValues, getBasicValues, getMapValues } from "../lib/utils";
-import { memo } from "react";
+import { useEffect, useState, memo } from "react";
 
-function RenderChart({ ds }) {
+function RenderChart({ ds, config }) {
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, [config]);
+
+  if (loading) return null;
   return (
     <div className="w-full min-height-[800px]">
       {ds && (
@@ -22,4 +31,5 @@ function RenderChart({ ds }) {
   );
 }
 
-export default memo(RenderChart);
+// export default memo(RenderChart);
+export default RenderChart;
