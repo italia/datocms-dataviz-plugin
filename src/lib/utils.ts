@@ -102,8 +102,8 @@ export function getPieValues({ config, data, chart }) {
       categories: [],
       series: {
         type: "pie",
-        radius: ["50%", "85%"],
-        avoidLabelOverlap: false,
+        radius: ["45%", "75%"],
+        avoidLabelOverlap: true,
         label: {
           show: true,
           position: "inside",

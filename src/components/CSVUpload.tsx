@@ -103,15 +103,8 @@ function UploadCSV({ setData }) {
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "start",
-        alignItems: "center",
-        flexDirection: "column",
-      }}
-    >
-      <label style={{ width: "200px" }}>Upload a csv:</label>
+    <div>
+      <label style={{ width: "200px" }}>Carica CSV:</label>
       <input
         className="input"
         type="file"
@@ -131,7 +124,7 @@ function UploadCSV({ setData }) {
             name="category"
             id="category"
             label="category"
-            hint="Select one of the options"
+            hint="Selezione la colonna categoria"
             value={category}
             selectInputProps={{
               options: getCols(rawData[0]),
@@ -143,7 +136,7 @@ function UploadCSV({ setData }) {
               name="series"
               id="series"
               label="series"
-              hint="Select some of the options"
+              hint="Seleziona una o più serie"
               value={series}
               selectInputProps={{
                 isMulti: true,
@@ -162,7 +155,7 @@ function UploadCSV({ setData }) {
                   setData(cleanupData(filterData()));
                 }}
               >
-                Save Data
+                Salva Dati
               </Button>
             )}
           </div>

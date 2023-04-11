@@ -120,6 +120,12 @@ function BasicChart({ data }: ChartPropsType, id: string) {
 
     const tooltip = {
       trigger: config.tooltipTrigger || "item",
+      confine: true,
+      extraCssText: "z-index:1000;max-width:90%;white-space:pre-wrap;",
+      textStyle: {
+        overflow: "breakAll",
+        width: 150,
+      },
       axisPointer: {
         type: "shadow",
         snap: true,

@@ -45,6 +45,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
             display: "grid",
             gridTemplateColumns: "1fr 1fr 1fr",
             gridGap: 10,
+            fontSize: 14,
           }}
         >
           {fields
@@ -115,22 +116,31 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
               } else {
                 let style = {
                   marginTop: 10,
-                  paddingTop: 10,
-                  borderBottom: "1px solid #ccc",
+                  // borderBottom: "1px solid #fafafa",
                   gridColumn: "span 3",
                   fontWeight: "bold",
-                  fontSize: 24,
+                  fontSize: 16,
                 };
                 return (
                   <>
-                    <div style={style}>{field.name}</div>
+                    <div style={style}>
+                      <span
+                        style={{
+                          padding: 5,
+                          backgroundColor: "#eee",
+                          borderRadius: 5,
+                        }}
+                      >
+                        {field.name}
+                      </span>
+                    </div>
                   </>
                 );
               }
             })}
         </div>
         <div className="mt-5">
-          <Button fullWidth type="submit">
+          <Button fullWidth type="submit" buttonType="muted">
             Applica
           </Button>
         </div>

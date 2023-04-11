@@ -115,7 +115,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
     <Canvas ctx={ctx}>
       <>
         <Section
-          title="Upload"
+          title="Dati"
           collapsible={{
             isOpen: isUploadOpen,
             onToggle: () => setUploadOpen((v) => !v),
@@ -123,12 +123,23 @@ export default function ChartEditor({ ctx }: PropTypes) {
         >
           <div style={{ margin: "0 20px 20px" }}>
             <CSVUpload setData={(d) => handleUploadData(d)} />
+            {hasData && (
+              <div style={{ margin: "20px auto" }}>
+                <div>
+                  <DataTable
+                    data={data}
+                    reset={doReset}
+                    transpose={transpose}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </Section>
 
         {hasData && (
           <Section
-            title="Choose type"
+            title="Tipologia grafico"
             collapsible={{
               isOpen: isChooseOpen,
               onToggle: () => setChooseOpen((v) => !v),
@@ -142,7 +153,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
         {hasData && chart && (
           <Section
-            title="Config chart"
+            title="Configurazioni grafico"
             collapsible={{
               isOpen: isConfigOpen,
               onToggle: () => setConfigOpen((v) => !v),
@@ -169,14 +180,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
               </center>
             </div>
           )}
-
-        {hasData && (
-          <div style={{ margin: "20px auto" }}>
-            <div>
-              <DataTable data={data} reset={doReset} transpose={transpose} />
-            </div>
-          </div>
-        )}
       </>
     </Canvas>
   );

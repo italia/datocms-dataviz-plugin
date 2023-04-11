@@ -18,6 +18,12 @@ function PieChart({ data }: ChartPropsType) {
 
   const tooltip = {
     trigger: "item",
+    confine: true,
+    extraCssText: "z-index:1000;max-width:90%;white-space:pre-wrap;",
+    textStyle: {
+      overflow: "breakAll",
+      width: 150,
+    },
     valueFormatter: (value) => {
       return formatTooltip(value, config);
     },
@@ -42,7 +48,13 @@ function PieChart({ data }: ChartPropsType) {
     title: {
       text: `${config?.totalLabel || "Totale"}\n${total ? total : "0"}`,
       left: "center",
-      top: "center",
+      top: "50%",
+      textVerticalAlign: "middle",
+      textStyle: {
+        fontFamily: "Titillium Web",
+        fontWeight: "normal",
+        fontSize: 14,
+      },
     },
     color: config.colors || [
       "#5470c6",
