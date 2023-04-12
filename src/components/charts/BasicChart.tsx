@@ -7,16 +7,18 @@ import { log, formatTooltip } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
+  isMobile?: boolean;
 };
 
-function BasicChart({ data }: ChartPropsType, id: string) {
+function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
   // const [forceReload, setForceReload] = useState(0);
   const refCanvas = useRef<ReactEcharts>();
 
   function getOptions(data: FieldDataType) {
     const config: any = data.config;
+    const responsive: boolean = config.responsive || true;
     let grid = {
-      left: config.gridLeft || "10%",
+      left: isMobile && responsive ? 10 : config.gridLeft || "10%",
       right: config.gridRight || "10%",
       height: config.gridHeight || "auto",
       width: config.gridWidth || "auto",
@@ -101,6 +103,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               nameRotate: 90,
               type: "value",
               axisTick: { show: false },
+              axisLabel: { show: responsive ? !isMobile : true },
             },
           }
         : {
@@ -110,6 +113,7 @@ function BasicChart({ data }: ChartPropsType, id: string) {
               type: "category",
               data: data.dataSource.categories,
               axisTick: { show: false },
+              axisLabel: { show: responsive ? !isMobile : true },
             },
             xAxis: {
               ...yName,
@@ -167,6 +171,27 @@ function BasicChart({ data }: ChartPropsType, id: string) {
             itemStyle: { borderColor: "white", borderWidth: 0.25 },
           };
         }
+
+        // if (
+        //   serie.type === "bar" &&
+        //   isMobile &&
+        //   config.direction === "horizontal"
+        // ) {
+        //   rest = {
+        //     ...rest,
+        //     label: {
+        //       show: true,
+        //       formatter: "{b}",
+        //       position: "insideLeft",
+        //       verticalAlign: "top",
+        //     },
+        //     barWidth: "20%",
+        //     itemStyle: {
+        //       borderRadius: [0, 10, 10, 0],
+        //     },
+        //   };
+        // }
+
         if (serie.type === "line") {
           if (config.smooth) {
             let smooth: any = config.smooth ? parseFloat(config.smooth) : false;

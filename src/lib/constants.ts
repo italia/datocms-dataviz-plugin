@@ -104,6 +104,7 @@ export const defaultConfig = {
   valueFormatter: "",
   totalLabel: "Totale",
   tooltipTrigger: "axis",
+  responsive: true,
 };
 
 export const sampleData: FieldDataType = {

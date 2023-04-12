@@ -4,6 +4,7 @@ import { formatTooltip } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
+  isMobile?: boolean;
 };
 
 function getTotal(data: any) {
@@ -12,10 +13,10 @@ function getTotal(data: any) {
   }, 0);
 }
 
-function PieChart({ data }: ChartPropsType) {
+function PieChart({ data, isMobile = false }: ChartPropsType) {
   const { dataSource } = data;
   const config: any = data.config;
-
+  const responsive: boolean = config.responsive || true;
   const tooltip = {
     trigger: "item",
     confine: true,
@@ -52,7 +53,7 @@ function PieChart({ data }: ChartPropsType) {
       textVerticalAlign: "middle",
       textStyle: {
         fontFamily: "Titillium Web",
-        fontWeight: "normal",
+        fontWeight: "semibold",
         fontSize: 14,
       },
     },

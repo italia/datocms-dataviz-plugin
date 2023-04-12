@@ -7,9 +7,10 @@ import { log, formatTooltip } from "../../lib/utils";
 type ChartPropsType = {
   data: FieldDataType;
   id: string;
+  isMobile?: boolean;
 };
 
-function GeoMapChart({ data, id }: ChartPropsType) {
+function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
   const [geoData, setGeoData] = useState<any>(null);
   const refCanvas = useRef<ReactEcharts>();
 
@@ -30,7 +31,6 @@ function GeoMapChart({ data, id }: ChartPropsType) {
 
     // log("min", min);
     // log("max", max);
-
 
     const options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
