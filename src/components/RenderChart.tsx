@@ -2,7 +2,7 @@ import BasicChart from "./charts/BasicChart";
 import PieChart from "./charts/PieChart";
 import GeoMapChart from "./charts/GeoMapChart";
 import { getPieValues, getBasicValues, getMapValues } from "../lib/utils";
-import { useEffect, useState, useRef, memo } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function RenderChart({ ds, config }) {
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ function RenderChart({ ds, config }) {
 
   const wrapRef = useRef(null);
   const [width, setWidth] = useState(null);
-  const isMobile = width && width <= 460;
+  const isMobile = width && width <= 480;
 
   function setDimension() {
     setWidth(wrapRef?.current?.clientWidth);
@@ -55,5 +55,4 @@ function RenderChart({ ds, config }) {
   );
 }
 
-// export default memo(RenderChart);
 export default RenderChart;

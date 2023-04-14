@@ -16,7 +16,8 @@ function getTotal(data: any) {
 function PieChart({ data, isMobile = false }: ChartPropsType) {
   const { dataSource } = data;
   const config: any = data.config;
-  const responsive: boolean = config.responsive || true;
+  const responsive: boolean =
+    typeof config?.responsive === "undefined" ? true : config.responsive;
   const tooltip = {
     trigger: "item",
     confine: true,
@@ -91,13 +92,15 @@ function PieChart({ data, isMobile = false }: ChartPropsType) {
     },
   };
 
-  const height = config?.h || 500;
+  const h = config?.h || 350;
+  const chartHeight = responsive && isMobile ? (h / 100) * 80 : h;
+
   return (
     <div style={{ textAlign: "left" }}>
       <ReactEcharts
         option={options}
         style={{
-          height: height,
+          height: chartHeight,
           width: "100%",
           maxWidth: "100%",
         }}

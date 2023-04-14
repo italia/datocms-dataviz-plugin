@@ -16,7 +16,8 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
 
   function getOptions(data: FieldDataType) {
     const config: any = data.config;
-    const responsive: boolean = config.responsive || true;
+    const responsive: boolean =
+      typeof config.responsive === "undefined" ? true : config.responsive;
     let grid = {
       left: isMobile && responsive ? 10 : config.gridLeft || "10%",
       right: config.gridRight || "10%",
@@ -97,6 +98,9 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
               type: "category",
               data: data.dataSource.categories,
               axisTick: { show: false },
+              axisLabel: {
+                hideOverlap: true,
+              },
             },
             yAxis: {
               ...yName,
@@ -119,6 +123,9 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
               ...yName,
               type: "value",
               axisTick: { show: false },
+              axisLabel: {
+                hideOverlap: true,
+              },
             },
           };
 
