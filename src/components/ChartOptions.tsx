@@ -23,14 +23,14 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
       ...config,
     },
   });
-  const watchPalette = watch("palette", defaultPalette);
+  const watchPalette = watch("palette", config?.palette || defaultPalette);
 
   const onSubmit = (data) => {
     log("SUBMIT", data);
     const { h, w, palette, ...rest } = data;
     const colors = palettes[palette];
     log(palette, "colors", colors);
-    const newConfig = { h: Number(h), w: Number(w), ...rest, colors };
+    const newConfig = { h: Number(h), w: Number(w), ...rest, colors, palette };
     log("newConfig", newConfig);
     setConfig(newConfig);
   };
@@ -109,7 +109,9 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
                     </select>
                     {errors[field.name] && <span>This field is required</span>}
                     {field.name === "palette" && watchPalette && (
-                      <ShowPalette palette={palettes[watchPalette]} />
+                      <>
+                        <ShowPalette palette={palettes[watchPalette]} />
+                      </>
                     )}
                   </div>
                 );
