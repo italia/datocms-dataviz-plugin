@@ -1,8 +1,9 @@
-import ReactEcharts from "echarts-for-react";
-import { FieldDataType } from "../../sharedTypes";
-import { useRef, useEffect, useState } from "react";
 import * as echarts from "echarts";
+import ReactEcharts from "echarts-for-react";
+import { useRef, useEffect, useState } from "react";
+
 import { log, formatTooltip } from "../../lib/utils";
+import { FieldDataType } from "../../sharedTypes";
 
 type ChartPropsType = {
   data: FieldDataType;

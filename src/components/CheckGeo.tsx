@@ -1,42 +1,84 @@
-import { Canvas, Button } from "datocms-react-ui";
+import { useEffect, useState } from "react";
+import * as echarts from "echarts";
+import ReactEcharts from "echarts-for-react";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import DataTable from "./DataTable";
-import { log } from "../lib/utils";
+import { Canvas, Button } from "datocms-react-ui";
 
-function ChartOptions() {
+import DataTable from "./DataTable";
+import { log, transposeData } from "../lib/utils";
+import UploadCSV from "./UploadCSVSimple";
+import { match } from "assert";
+
+function PreviewGeoMapChart({ url, series, nameProperty }) {
+  const [data, setData] = useState(null);
+
+  async function getGeoData() {
+    if (url) {
+      const response = await fetch(url);
+      log("PreviewGeoMapChart", response.status);
+      const raw: any = await response.json();
+      log("features length", raw.features.length);
+      setData(raw);
+    }
+  }
+
+  useEffect(() => {
+    getGeoData();
+  }, []);
+
+  function getOptions(id, data) {
+    echarts.registerMap(id, data);
+    const options = {
+      series: series.map(({ data }) => {
+        return {
+          type: "map",
+          data,
+          map: id,
+          nameProperty,
+        };
+      }),
+    };
+    return options;
+  }
+  if (!data) return <div>In attesa dei dati geo...</div>;
+  return (
+    <div
+      style={{
+        textAlign: "left",
+        border: "1px solid lightgray",
+        width: 500,
+        height: 500,
+        maxWidth: "100%",
+      }}
+    >
+      <ReactEcharts
+        option={getOptions(url, data)}
+        style={{
+          width: 500,
+          height: 500,
+          maxWidth: "100%",
+        }}
+      />
+    </div>
+  );
+}
+
+export default function CheckGeo() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
-  const [geoData, setGeoData] = useState(null);
+  const [geoProps, setGeoProps] = useState(null);
+  const [geoUrl, setGeoUrl] = useState(null);
+  const [data, setData] = useState(null);
+  const [propertyName, setPropertyName] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const fields = [
-    {
-      label: "GeoJson URL",
-      name: "geoJsonUrl",
-      type: "text",
-      options: [],
-      required: true,
-      chartType: ["map"],
-      otherProps: {
-        defaultValue:
-          "https://www.datocms-assets.com/88680/1678208188-europe-geojson.json",
-      },
-      layout: "single",
-    },
-  ];
 
   async function getData(url) {
     if (url) {
       const response = await fetch(url);
-      log("response", response.status);
       const raw: any = await response.json();
-      log("length", raw.features.length);
-
       const data = raw.features.slice(0, 20).map((feat, index) => {
         const { properties } = feat;
         if (index === 0) {
@@ -46,106 +88,181 @@ function ChartOptions() {
         }
       });
       log(data);
-      setGeoData(data);
+      setGeoProps(data);
     }
   }
 
   const onSubmit = async (data) => {
     log(data);
+    setGeoUrl(data.geoJsonUrl);
     await getData(data.geoJsonUrl);
   };
+
+  function matrixToObjects(matrix) {
+    if (!matrix) return;
+    const [headers, ...rows] = matrix;
+    return rows.map((row) => {
+      return row.reduce((acc, value, index) => {
+        acc[headers[index]] = value;
+        return acc;
+      }, {});
+    });
+  }
+
+  function numMatches(rows1, rows2) {
+    return rows1.filter((r1) => rows2.includes(r1));
+  }
+
+  function compareTableObjs(tableObj1, tableObj2) {
+    const keys1 = Object.keys(tableObj1[0]);
+    const keys2 = Object.keys(tableObj2[0]);
+
+    const result = keys1.reduce((res, key) => {
+      const col1 = tableObj1.map((o) => o[key]);
+      const matches = keys2
+        .reduce((all, key) => {
+          const col2 = tableObj2.map((o) => o[key]);
+          const matches = numMatches(col1, col2);
+          if (matches?.length > 0) {
+            all = [...all, { name: key, numMatches: matches.length }];
+          }
+          return all;
+        }, [])
+        .filter((item) => item.numMatches > 0);
+
+      if (matches.length > 0) {
+        res = [
+          ...res,
+          { key, matches: matches.filter((item) => item.numMatches > 0) },
+        ];
+      }
+
+      return res;
+    }, []);
+
+    return result;
+  }
+
+  let columnMatches = [];
+
+  if (data && geoProps) {
+    columnMatches = compareTableObjs(
+      matrixToObjects(data),
+      matrixToObjects(geoProps)
+    );
+  }
 
   return (
     <div>
       {loading && <div>Loading...</div>}
-      {geoData && (
-        <DataTable data={geoData} reset={undefined} transpose={undefined} />
-      )}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gridGap: 10,
-          }}
-        >
-          {fields.map((field) => {
-            if (["text", "email", "number"].includes(field.type)) {
-              let style = {};
-              if (field.layout === "single") {
-                style = { gridColumn: "span 3" };
-              }
-              return (
-                <div key={field.name} style={style}>
-                  <label>{field.label}</label>
-                  <input
-                    type={field.type}
-                    {...register(field.name, { required: field.required })}
-                    {...field.otherProps}
-                  />
-                  {errors[field.name] && <span>This field is required</span>}
-                </div>
-              );
-            } else if (["checkbox"].includes(field.type)) {
-              let style = {};
-              if (field.layout === "single") {
-                style = { gridColumn: "span 3" };
-              }
-              return (
-                <div key={field.name} style={style}>
-                  <label>{field.label}</label>
-                  <div>
-                    <input
-                      type="checkbox"
-                      {...register(field.name, { required: field.required })}
-                      {...field.otherProps}
-                    />
+
+      <div style={{ display: "flex" }}>
+        {geoProps && (
+          <div>
+            <DataTable
+              data={geoProps}
+              reset={undefined}
+              transpose={undefined}
+            />
+          </div>
+        )}
+        {geoUrl && geoProps && (
+          <div style={{ marginLeft: 20 }}>
+            <p>
+              <select
+                onChange={(e) => setPropertyName(e.target.value)}
+                defaultValue={propertyName || geoProps[0][0]}
+                value={propertyName}
+              >
+                {geoProps[0].map((prop) => (
+                  <option key={prop} value={prop}>
+                    {prop}
+                  </option>
+                ))}
+              </select>
+            </p>
+            <PreviewGeoMapChart
+              url={geoUrl}
+              series={matrixToObjects(geoProps)}
+              nameProperty={propertyName || geoProps[0][0]}
+            />
+          </div>
+        )}
+      </div>
+      <div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              border: "1px solid lightgray",
+            }}
+          >
+            <div
+              key="geoJsonUrl"
+              style={{ fontSize: 14, padding: 4, margin: 4 }}
+            >
+              <label>GeoJson URL</label>
+              <input
+                style={{ minWidth: 250 }}
+                type={"text"}
+                {...register("geoJsonUrl", { required: true })}
+              />
+              {errors["geoJsonUrl"] && <span>This field is required</span>}
+            </div>
+            <div className="ml-5">
+              <Button buttonSize="xxs" type="submit">
+                Load Geo Json
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div
+        style={{
+          marginTop: 20,
+          marginBottom: 10,
+          border: "1px solid lightgray",
+          padding: 10,
+        }}
+      >
+        <UploadCSV setData={(d) => setData(d)} />
+      </div>
+      <div style={{ display: "flex" }}>
+        {data && (
+          <div>
+            <DataTable
+              data={data}
+              reset={() => setData(null)}
+              transpose={() => setData((d) => transposeData(d))}
+            />
+          </div>
+        )}
+        <div style={{ padding: 20 }}>
+          {columnMatches.length > 0 && (
+            <>
+              <h4>Data Matching Column</h4>
+              {columnMatches.map(({ key, matches }) => (
+                <>
+                  <h3>{key}</h3>
+                  <div key={key + "_matches"}>
+                    {matches.map(({ name, numMatches }) => (
+                      <Button
+                        buttonType="muted"
+                        buttonSize="xxs"
+                        key={key + "_" + name}
+                        onClick={() => setPropertyName(name)}
+                      >
+                        ({numMatches}){" matches with " + name + " property"}
+                      </Button>
+                    ))}
                   </div>
-                  {errors[field.name] && <span>This field is required</span>}
-                </div>
-              );
-            } else if (["select"].includes(field.type)) {
-              let style = {};
-              if (field.layout === "single") {
-                style = { gridColumn: "span 3" };
-              }
-              return (
-                <div key={field.name} style={style}>
-                  <div>{field.label}</div>
-                  <select
-                    className="my-2 p-2"
-                    style={{ width: "80%" }}
-                    {...register(field.name, { required: field.required })}
-                    {...field.otherProps}
-                  >
-                    {field.options.map((option) => {
-                      return (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </select>
-                  {errors[field.name] && <span>This field is required</span>}
-                </div>
-              );
-            } else {
-              let style = {};
-              if (field.layout === "single") {
-                style = { gridColumn: "span 3" };
-              }
-              return <div style={style}>{field.name}</div>;
-            }
-          })}
+                </>
+              ))}
+            </>
+          )}
         </div>
-        <div className="mt-5">
-          <Button fullWidth type="submit">
-            Applica
-          </Button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 }
-
-export default ChartOptions;
