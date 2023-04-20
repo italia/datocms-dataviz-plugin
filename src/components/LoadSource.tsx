@@ -5,9 +5,7 @@ import { log } from "../lib/utils";
 
 function TransformSource({ setRawData }) {
   const [loading, setLoading] = useState(false);
-  const [url, setUrl] = useState(
-    "https://raw.githubusercontent.com/teamdigitale/padigitale2026-opendata/main/data/candidature_altrienti_finanziate.json"
-  );
+  const [url, setUrl] = useState(null);
 
   async function getData() {
     setLoading(true);

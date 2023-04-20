@@ -14,7 +14,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isValid, isDirty, isValidating, isSubmitted },
+    formState: { errors },
   } = useForm({
     mode: "onBlur",
     defaultValues: {
