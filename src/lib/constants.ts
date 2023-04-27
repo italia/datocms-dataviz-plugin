@@ -215,6 +215,19 @@ export const getFields = (availabelPalettes, defaultPalette) => [
   },
 
   {
+    label: "Mostra labels",
+    name: "showPieLabels",
+    type: "checkbox",
+    options: [],
+    required: false,
+    chartType: ["pie"],
+    otherProps: {
+      defaultChecked: true,
+    },
+    layout: "",
+  },
+
+  {
     label: "Mostra label esterne",
     name: "labeLine",
     type: "checkbox",
@@ -223,6 +236,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     chartType: ["pie"],
     otherProps: {},
     layout: "",
+    dependsOn: "showPieLabels",
   },
 
   {
@@ -362,6 +376,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
       defaultValue: "bottom",
     },
     layout: "",
+    dependsOn: "legend",
   },
 
   {
@@ -379,7 +394,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     required: false,
     chartType: ["bar", "line", "pie", "map"],
     otherProps: { defaultChecked: true },
-    layout: "3",
+    layout: "",
   },
   {
     label: "Suffisso Valore",
@@ -390,6 +405,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     chartType: ["bar", "line", "pie", "map"],
     otherProps: {},
     layout: "",
+    dependsOn: "tooltip",
   },
   {
     label: "Formato Valore",
@@ -402,6 +418,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
       defaultValue: "number",
     },
     layout: "",
+    dependsOn: "tooltip",
   },
   {
     label: "Tooltip trigger",

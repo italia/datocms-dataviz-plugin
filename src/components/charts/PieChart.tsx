@@ -45,6 +45,7 @@ function PieChart({ data, isMobile = false }: ChartPropsType) {
     total = formatTooltip(totale, config);
   } catch (error) {}
 
+  const showLabels = config.showPieLabels === false ? false : true;
   let options = {
     backgroundColor: config.background ? config.background : "#F2F7FC",
     title: {
@@ -54,7 +55,7 @@ function PieChart({ data, isMobile = false }: ChartPropsType) {
       textVerticalAlign: "middle",
       textStyle: {
         fontFamily: "Titillium Web",
-        fontWeight: "semibold",
+        fontWeight: "bold",
         fontSize: 14,
       },
     },
@@ -72,10 +73,10 @@ function PieChart({ data, isMobile = false }: ChartPropsType) {
     series: {
       ...dataSource.series,
       labelLine: {
-        show: config.labeLine,
+        show: showLabels && config.labeLine,
       },
       label: {
-        show: true,
+        show: showLabels,
         position: config.labeLine ? "outside" : "inside",
       },
     },
