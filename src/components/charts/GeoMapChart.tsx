@@ -1,8 +1,7 @@
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { useRef, useEffect, useState } from "react";
-
-import { log, formatTooltip } from "../../lib/utils";
+import { formatTooltip } from "../../lib/utils";
 import { FieldDataType } from "../../sharedTypes";
 
 type ChartPropsType = {
@@ -30,9 +29,6 @@ function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
     const min = Math.min(...data.dataSource.series[0].data.map((d) => d.value));
     const max = Math.max(...data.dataSource.series[0].data.map((d) => d.value));
 
-    // log("min", min);
-    // log("max", max);
-
     const options = {
       backgroundColor: config.background ? config.background : "#F2F7FC",
       color: config.colors,
@@ -59,8 +55,7 @@ function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
             show: config.showMapLabels ? true : false,
             color: "auto",
           },
-          zoom: 1.2,
-          // roam: "scale",
+          zoom: 1.2, //"scale",
           roam: true,
           select: { disabled: true },
           emphasis: {
@@ -75,7 +70,6 @@ function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
           name: config.serieName || "",
           map: id,
           nameProperty: config.nameProperty ? config.nameProperty : "NAME",
-          // data: serie.data,
         };
       }),
     };
@@ -88,9 +82,7 @@ function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
       const url: string = config?.geoJsonUrl || "";
       if (url) {
         const response = await fetch(url);
-        log("response", response.status);
         const raw: any = await response.json();
-        // log('length', raw.features.length);
         setGeoData(raw);
       }
     }
@@ -112,7 +104,7 @@ function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
         option={getOptions(data, geoData)}
         ref={refCanvas}
         style={{
-          width: "100%", //data.config?.w,
+          width: "100%",
           height: height,
           maxWidth: "100%",
         }}

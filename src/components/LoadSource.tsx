@@ -23,24 +23,23 @@ function TransformSource({ setRawData }) {
   }
 
   return (
-    <div className="w-full my-10">
+    <div
+      style={{
+        marginTop: 10,
+        marginBottom: 10,
+        width: "100%",
+      }}
+    >
       {loading && <p>Loading...</p>}
       <div>
         <p>Url:</p>
         <input
-          className="border-2"
           type="text"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
         />
       </div>
-
-      <Button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => getData()}
-      >
-        fetch data
-      </Button>
+      <Button onClick={() => getData()}>fetch data</Button>
     </div>
   );
 }

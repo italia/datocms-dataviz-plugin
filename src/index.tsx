@@ -23,10 +23,10 @@ connect({
   mainNavigationTabs(ctx: IntentCtx) {
     return [
       {
-        label: "Dataviz Utils",
+        label: "Dataviz GeoMapChart utils",
         icon: "analytics",
         pointsTo: {
-          pageId: "datavizzz",
+          pageId: "dataviz",
         },
         placement: ["after", "settings"],
       },
@@ -34,7 +34,7 @@ connect({
   },
   renderPage(pageId, ctx: RenderPageCtx) {
     switch (pageId) {
-      case "datavizzz":
+      case "dataviz":
         return render(<SamplePage ctx={ctx} />);
       case "settings":
         return null;
@@ -46,7 +46,7 @@ connect({
     }
     return [
       {
-        id: "myOutlet",
+        id: "kpiOutlet",
         initialHeight: 100,
       },
     ];
@@ -83,9 +83,9 @@ connect({
   },
   renderFieldExtension(fieldExtensionId: string, ctx: RenderFieldExtensionCtx) {
     switch (fieldExtensionId) {
-      case "chartEditor":
+      case "chartEditor": // chart_data field editor
         return render(<ChartEditor ctx={ctx} />);
-      case "emptyEditor":
+      case "emptyEditor": // ghost editor to manage multiple json fields
         return render(<div />);
     }
   },

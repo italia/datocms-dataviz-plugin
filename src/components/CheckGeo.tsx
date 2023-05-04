@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
 import { useForm } from "react-hook-form";
-import { Canvas, Button } from "datocms-react-ui";
+import { Button } from "datocms-react-ui";
 
 import DataTable from "./DataTable";
-import { log, transposeData } from "../lib/utils";
+import { transposeData } from "../lib/utils";
 import UploadCSV from "./UploadCSVSimple";
-import { match } from "assert";
 
 function PreviewGeoMapChart({ url, series, nameProperty }) {
   const [data, setData] = useState(null);
@@ -15,9 +14,7 @@ function PreviewGeoMapChart({ url, series, nameProperty }) {
   async function getGeoData() {
     if (url) {
       const response = await fetch(url);
-      log("PreviewGeoMapChart", response.status);
       const raw: any = await response.json();
-      log("features length", raw.features.length);
       setData(raw);
     }
   }
@@ -87,13 +84,11 @@ export default function CheckGeo() {
           return Object.values(properties);
         }
       });
-      log(data);
       setGeoProps(data);
     }
   }
 
   const onSubmit = async (data) => {
-    log(data);
     setGeoUrl(data.geoJsonUrl);
     await getData(data.geoJsonUrl);
   };

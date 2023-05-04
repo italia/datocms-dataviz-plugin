@@ -3,7 +3,7 @@ import { FieldDataType } from "../../sharedTypes";
 import { useRef, useEffect } from "react";
 import { saveAs } from "file-saver";
 import { Button } from "datocms-react-ui";
-import { log, formatTooltip } from "../../lib/utils";
+import { formatTooltip } from "../../lib/utils";
 
 type ChartPropsType = {
   data: FieldDataType;
@@ -11,7 +11,6 @@ type ChartPropsType = {
 };
 
 function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
-  // const [forceReload, setForceReload] = useState(0);
   const refCanvas = useRef<ReactEcharts>();
 
   function getOptions(data: FieldDataType) {
@@ -145,7 +144,6 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
         return formatTooltip(value, config);
       },
       show: config.tooltip ?? true,
-      // formatter: (params: any) => {},
     };
 
     let options = {
@@ -178,27 +176,6 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
             itemStyle: { borderColor: "white", borderWidth: 0.25 },
           };
         }
-
-        // if (
-        //   serie.type === "bar" &&
-        //   isMobile &&
-        //   config.direction === "horizontal"
-        // ) {
-        //   rest = {
-        //     ...rest,
-        //     label: {
-        //       show: true,
-        //       formatter: "{b}",
-        //       position: "insideLeft",
-        //       verticalAlign: "top",
-        //     },
-        //     barWidth: "20%",
-        //     itemStyle: {
-        //       borderRadius: [0, 10, 10, 0],
-        //     },
-        //   };
-        // }
-
         if (serie.type === "line") {
           if (config.smooth) {
             let smooth: any = config.smooth ? parseFloat(config.smooth) : false;
@@ -213,7 +190,6 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
             rest = { ...rest, ...symbols };
           }
         }
-        // log('rest', rest);
         return {
           ...serie,
           ...rest,
@@ -238,28 +214,18 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
   useEffect(() => {
     if (data && refCanvas.current) {
       const options: any = getOptions(data);
-      log("UPDATE", options);
       refCanvas.current?.getEchartsInstance().setOption(options);
     }
   }, [data, refCanvas]);
 
-  // useEffect(() => {
-  //   if (forceReload) {
-  //     refCanvas.current?.getEchartsInstance().setOption(getOptions(data));
-  //   }
-  // }, [forceReload]);
-
   async function downLoadImage(element: any, id: string) {
     const echartInstance = element.getEchartsInstance();
-    // // log('echartInstance', echartInstance);
     const base64DataUrl = echartInstance.getDataURL();
-
     try {
       const blob = await fetch(base64DataUrl).then((res) => res.blob());
-      // // log('blob', blob);
       saveAs(blob, `chart-${"" + Date.now()}.png`);
     } catch (error) {
-      log("error", error);
+      console.log("error", error);
     }
   }
 
@@ -268,11 +234,10 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
   return (
     <div style={{ textAlign: "left" }}>
       <ReactEcharts
-        // option={getOptions(data)}
         option={{}}
         ref={refCanvas}
         style={{
-          width: "100%", //data.config?.w,
+          width: "100%",
           height: height,
           maxWidth: "100%",
           marginBottom: "30px",

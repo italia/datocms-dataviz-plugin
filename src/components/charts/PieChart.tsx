@@ -94,6 +94,8 @@ function PieChart({ data, isMobile = false }: ChartPropsType) {
   };
 
   const h = config?.h || 350;
+
+  // Responsive: reduce height on mobile of 20%
   const chartHeight = responsive && isMobile ? (h / 100) * 80 : h;
 
   return (

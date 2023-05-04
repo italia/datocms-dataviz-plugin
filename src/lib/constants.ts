@@ -1,9 +1,6 @@
 import type { FieldDataType } from "../sharedTypes";
-import { generateColors, generateGradient, hexToHsla } from "./utils";
-/*
-sample: ['#5c6f82', '#BFDFFF', '#207BD6', '#004D99', '#6AAAEB'],
-blue: ['#4392E0', '#207AD5', '#0066CC', '#004D99', '#004080', '#003366'],
-*/
+import { generateGradient, hexToHsla } from "./utils";
+
 export const palettes = {
   default: [
     "#5470c6",
@@ -53,10 +50,11 @@ export const palettes = {
     "#737373",
   ],
 
-  monocolore_a: generateGradient(hexToHsla("#0066CC"), 15), //Array(30).fill("#0066CC"),
+  monocolore_a: generateGradient(hexToHsla("#0066CC"), 15),
   monocolore_b: generateGradient(hexToHsla("#004080"), 15),
   monocolore_c: generateGradient(hexToHsla("#2F475E"), 15),
   monocolore_d: generateGradient(hexToHsla("#20d8b5"), 15),
+  //monocolore: Array(30).fill("#0066CC"),
 
   _1_a: ["#0066CC"],
   _1_b: ["#004080"],
@@ -254,7 +252,7 @@ export const getFields = (availabelPalettes, defaultPalette) => [
     required: true,
     chartType: ["map"],
     otherProps: {
-      // defaultValue: "",
+      defaultValue: "",
     },
     layout: "3",
   },

@@ -1,5 +1,4 @@
 import Papa from "papaparse";
-import { log } from "../lib/utils";
 
 function UploadCSVSimple({ setData }) {
   function uploadFile(event) {
@@ -10,14 +9,10 @@ function UploadCSVSimple({ setData }) {
       skipEmptyLines: true,
       complete: (results) => {
         const { data } = results;
-        log("RESULTS DATA", data);
         const c = getFirstOfMAtrix(data);
         const category = { value: c, label: c };
-        log("CATEGORY", category);
         const cols = getCols(data[0]);
-        log("COLS", cols);
         const series = cols.filter((i) => !isSameObject(i, category));
-        log("SERIES", series);
 
         setData(data);
       },

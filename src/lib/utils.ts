@@ -1,11 +1,9 @@
 import { palettes } from "../lib/constants";
 
 export function log(...args) {
+  return; // comment this line to enable logs
   console.log(...args);
 }
-
-// constant to check if config is empty
-const emptyConfig = {};
 
 // function to compare two objects deeply
 export function isEqual(a, b) {
@@ -40,9 +38,7 @@ export function getPalette(palette) {
 
 // move a column of the data matrix to first position
 export function moveDataColumn(data, columnName) {
-  log("columnName", columnName);
   const columnIndex = data[0].indexOf(columnName);
-  console.log("columnIndex", columnIndex);
   const newData = data.map((row) => {
     const withouthCol = [
       ...row.slice(0, columnIndex),
@@ -51,7 +47,6 @@ export function moveDataColumn(data, columnName) {
     return [row[columnIndex], ...withouthCol];
   });
 
-  log("moveDataColumn", newData);
   return newData;
 }
 

@@ -2,7 +2,6 @@ import { RenderFieldExtensionCtx } from "datocms-plugin-sdk";
 import { Canvas, Section } from "datocms-react-ui";
 import useStoreState from "../lib/store";
 import { transposeData } from "../lib/utils";
-import { log } from "../lib/utils";
 
 import DataTable from "../components/DataTable";
 import RenderChart from "../components/RenderChart";
@@ -23,10 +22,8 @@ export default function ChartEditor({ ctx }: PropTypes) {
   };
 
   const saveData = (data: string | null) => {
-    log("???");
     if (JSON.stringify(currentValue) !== data) {
       ctx.setFieldValue(ctx.fieldPath, data);
-      log(`${ctx.fieldPath} SAVED`);
     }
   };
 
@@ -50,13 +47,9 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   useEffect(() => {
     if (!data && currentValue.data) {
-      log("INIT", currentValue);
-      log("--------");
       setAll(currentValue);
-      // setTableOpen(true);
       setUploadOpen(false);
     } else if (data) {
-      log("SET DATA");
       const valueString = JSON.stringify(data);
       const prevValue = JSON.stringify(currentValue?.data || "");
       if (valueString !== prevValue) {
@@ -69,7 +62,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   useEffect(() => {
     if (chart && chart !== currentValue?.chart) {
-      log("CHANGE CHART", chart);
       saveData(str({ chart, config: {}, data }));
       setConfig({});
       setChooseOpen(false);
@@ -79,7 +71,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
 
   useEffect(() => {
     if (config && data) {
-      log("SET CONFIG");
       saveData(str({ chart, config, data }));
     }
   }, [config, data]);
@@ -93,7 +84,7 @@ export default function ChartEditor({ ctx }: PropTypes) {
   }
 
   function handleUploadData(data) {
-    saveData(str({ config: {}, chart: "" })); // reset
+    saveData(str({ config: {}, chart: "" }));
     setTimeout(() => {
       setData(data);
       setUploadOpen(false);
@@ -109,7 +100,6 @@ export default function ChartEditor({ ctx }: PropTypes) {
     }, 1000);
   }
 
-  // data check
   const hasData = data != null && data[0] ? true : false;
   return (
     <Canvas ctx={ctx}>

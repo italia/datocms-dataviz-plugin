@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { palettes, getFields, defaultConfig } from "../lib/constants";
 import { getAvailablePalettes, getMapPalettes } from "../lib/utils";
 import ShowPalette from "./ShowPalette";
-import { log } from "../lib/utils";
 
 function ChartOptions({ config, setConfig, chart, numSeries }) {
   const availabelPalettes =
@@ -30,12 +29,9 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
   const watchShowPieLabels = watch("showPieLabels", true);
 
   const onSubmit = (data) => {
-    log("SUBMIT", data);
     const { h, w, palette, ...rest } = data;
     const colors = palettes[palette];
-    log(palette, "colors", colors);
     const newConfig = { h: Number(h), w: Number(w), ...rest, colors, palette };
-    log("newConfig", newConfig);
     setConfig(newConfig);
   };
   if (!chart) {
@@ -149,7 +145,6 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
             } else {
               let style = {
                 marginTop: 10,
-                // borderBottom: "1px solid #fafafa",
                 gridColumn: "span 3",
                 fontWeight: "bold",
                 fontSize: 16,
