@@ -52,7 +52,10 @@ function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
         orient: config.visualMapOrient ?? "vertical",
         min,
         max,
-        text: [formatTooltip(min, config), formatTooltip(max, config)],
+        text: [
+          ` ${formatTooltip(min, config)} `,
+          ` ${formatTooltip(max, config)} `,
+        ],
         calculable: false,
         inRange: {
           color: config.colors,
