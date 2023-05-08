@@ -197,7 +197,7 @@ function BasicChart({ data, isMobile = false }: ChartPropsType, id: string) {
       }),
       textStyle: {
         fontFamily: "Titillium Web",
-        fontSize: 12,
+        fontSize: 14,
       },
       tooltip,
       legend: {

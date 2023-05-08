@@ -27,6 +27,7 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
   const watchToltip = watch("tooltip", true);
   const watchLegend = watch("legend", true);
   const watchShowPieLabels = watch("showPieLabels", true);
+  const watchVisualMap = watch("visualMap", true);
 
   const onSubmit = (data) => {
     const { h, w, palette, ...rest } = data;
@@ -54,6 +55,11 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
   if (!watchShowPieLabels) {
     filteredFields = filteredFields.filter(
       (field) => field.dependsOn !== "showPieLabels"
+    );
+  }
+  if (!watchVisualMap) {
+    filteredFields = filteredFields.filter(
+      (field) => field.dependsOn !== "visualMap"
     );
   }
   return (
@@ -86,11 +92,13 @@ function ChartOptions({ config, setConfig, chart, numSeries }) {
               return (
                 <div key={field.name} style={style}>
                   <label>{label}</label>
-                  <input
-                    type={field.type}
-                    {...field.otherProps}
-                    {...register(field.name, { required: field.required })}
-                  />
+                  <div>
+                    <input
+                      type={field.type}
+                      {...field.otherProps}
+                      {...register(field.name, { required: field.required })}
+                    />
+                  </div>
                   {errors[field.name] && <span>This field is required</span>}
                 </div>
               );
