@@ -57,7 +57,10 @@ function GeoMapChart({ data, id, isMobile = false }: ChartPropsType) {
           `${formatTooltip(min, config)} `,
         ],
         backgroundColor: "rgba(255,255,255,1)",
-        inverse: true,
+        inverse:
+          config.visualMapOrient && config.visualMapOrient == "vertical"
+            ? true
+            : false,
         textStyle: {
           fontSize: 11,
           lineHeight: 0,
