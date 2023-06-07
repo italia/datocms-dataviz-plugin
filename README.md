@@ -1,3 +1,3 @@
-# [Your plugin name]
+# Dataviz DatoCMS plugin
 
-[Describe what your plugin does, and how users you can configure it! Screenshots are always welcome!]
+This plugin allows you to create and configure charts and kpis, and integrate them into your content.
